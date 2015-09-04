@@ -39,7 +39,7 @@ class MainParamsParser(object):
                 try:
                     run_objs.append(aospy_user.to_run(run, model, proj))
                 except AttributeError as ae:
-                    print ae
+                    print(ae)
         if len(run_objs) == 1 and not isinstance(run_objs[0], (list, tuple)):
             return run_objs
         else:
@@ -81,13 +81,13 @@ class CalcSuite(object):
             ('Compute this data', self.compute),
             ('Print this data', self.print_table)
         )
-        print ''
+        print('')
         colorama.init()
         color_left = colorama.Fore.BLUE
         color_right = colorama.Fore.RESET
         for left, right in pairs:
-            print color_left, left, ':', color_right, right
-        print colorama.Style.RESET_ALL
+            print(color_left, left, ':', color_right, right)
+        print(colorama.Style.RESET_ALL)
 
     def prompt_user_verify(self):
         if not raw_input("Proceed using these parameters? ").lower() == 'y':
@@ -129,7 +129,7 @@ class CalcSuite(object):
             try:
                 calc_int = aospy.CalcInterface(**params)
             except AttributeError as ae:
-                print 'aospy warning:', ae
+                print('aospy warning:', ae)
             else:
                 calc = aospy.Calc(calc_int)
                 calcs.append(calc)
@@ -141,9 +141,9 @@ class CalcSuite(object):
     def print_results(self, calcs):
         for calc in calcs:
             for region in calc.region.values():
-                print [calc.load(self.dtype_out_time[0],
+                print([calc.load(self.dtype_out_time[0],
                                  # dtype_out_vert=params[-2],
-                                 region=region, plot_units=True)]
+                                 region=region, plot_units=True)])
 
 
 def main(main_params):
@@ -154,12 +154,12 @@ def main(main_params):
     cs.prompt_user_verify()
     param_combos = cs.create_params_all_calcs()
     calcs = cs.create_calcs(param_combos)
-    print '\n\tVariable time averages and statistics:'
+    print('\n\tVariable time averages and statistics:')
     if main_params.compute:
         cs.exec_calcs(calcs)
     if main_params.print_table[0]:
         cs.print_results(calcs)
-    print "Calculations finished."
+    print("Calculations finished.")
     return calcs
 
 if __name__ == '__main__':
