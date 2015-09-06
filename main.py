@@ -5,8 +5,15 @@ import itertools
 import colorama
 
 import aospy
-import aospy_user
 
+import aospy_user.regions
+import aospy_user.units
+import aospy_user.calcs
+import aospy_user.variables
+from aospy_user.runs.cases import *
+from aospy_user.models.models import *
+from aospy_user.projs.am2_2009_yim import *
+import aospy_user.obj_from_name as aospy_user
 
 class MainParams(object):
     """Container for parameters specified in main routine."""
@@ -90,7 +97,7 @@ class CalcSuite(object):
         print(colorama.Style.RESET_ALL)
 
     def prompt_user_verify(self):
-        if not raw_input("Proceed using these parameters? ").lower() == 'y':
+        if not input("Proceed using these parameters? ").lower() == 'y':
             raise IOError('\nExecution cancelled by user.')
 
     def create_params_all_calcs(self):
@@ -164,9 +171,12 @@ def main(main_params):
 
 if __name__ == '__main__':
     mp = MainParams()
-    mp.proj = 'dargan_test'
-    mp.model = ['dargan']
-    mp.run = ['dargan_control']
+#    mp.proj = 'dargan_test'
+    mp.proj = 'am2_2009_yim'
+#    mp.model = ['dargan']
+    mp.model = ['am2']
+#    mp.run = ['dargan_control']
+    mp.run = ['am2_control']
     mp.ens_mem = [None]
     mp.var = ['olr','skc_gz']
     # mp.yr_range = [(1983, 1983)]
@@ -175,8 +185,8 @@ if __name__ == '__main__':
     mp.intvl_in = ['monthly']
     mp.intvl_out = ['ann']
     mp.dtype_in_time = ['ts']
-    # mp.dtype_in_vert = [False]
-    mp.dtype_in_vert = ['sigma']
+    mp.dtype_in_vert = ['pressure']
+   # mp.dtype_in_vert = ['sigma']
     # mp.dtype_out_time = [('reg.av',)]
     mp.dtype_out_time = [('av', 'std', 'reg.av', 'reg.ts', 'reg.std')]
     # mp.dtype_out_vert = [False]

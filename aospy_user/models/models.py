@@ -1,5 +1,5 @@
 from aospy.model import Model
-from aospy_user import runs
+import aospy_user.runs.cases as runs
 
 am2 = Model(
     name='am2',

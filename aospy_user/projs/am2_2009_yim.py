@@ -1,5 +1,6 @@
 from aospy.proj import Proj
-from aospy_user import regions, models, variables
+from aospy_user import regions, variables
+import aospy_user.models.models as models
 
 am2_2009_yim = Proj(
     'am2_2009_yim',

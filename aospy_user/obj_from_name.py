@@ -1,7 +1,7 @@
 """obj_from_name: Get aospy objects given their name string"""
 import aospy
-from aospy_user import projs, regions, variables
-
+from aospy_user import regions, variables
+import aospy_user.projs.am2_2009_yim as projs
 
 def to_iterable(obj):
     """Return the object if already iterable, otherwise return it as a list."""
