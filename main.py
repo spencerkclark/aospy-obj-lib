@@ -181,14 +181,14 @@ if __name__ == '__main__':
     mp.var = ['olr','skc_gz']
     # mp.yr_range = [(1983, 1983)]
     mp.yr_range = ['default']
-    mp.region = 'all'
+    mp.region = 'tropics'
     mp.intvl_in = ['monthly']
     mp.intvl_out = ['ann']
     mp.dtype_in_time = ['ts']
     mp.dtype_in_vert = ['pressure']
    # mp.dtype_in_vert = ['sigma']
     # mp.dtype_out_time = [('reg.av',)]
-    mp.dtype_out_time = [('av', 'std', 'reg.av', 'reg.ts', 'reg.std')]
+    mp.dtype_out_time = [('av', 'std', 'reg.av_xray', 'reg.ts_xray', 'reg.std_xray')]
     # mp.dtype_out_vert = [False]
     mp.dtype_out_vert = [False]
     mp.level = [False]

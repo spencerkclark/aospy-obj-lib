@@ -1,4 +1,6 @@
 from aospy import Run
+import numpy as np
+import pandas as pd
 
 am2_control = Run(
     name='am2_control',
@@ -10,7 +12,10 @@ am2_control = Run(
     nc_start_yr=1,
     nc_end_yr=100,
     default_yr_range=(21,100),
-    read_mode='xray'
+    read_mode='xray',
+    nc_start_day=pd.to_datetime(np.datetime64('0021-01-01 00:00:00')),
+    nc_end_day=pd.to_datetime(np.datetime64('0100-01-01 00:00:00')),
+    default_time_range=(pd.to_datetime(np.datetime64('0021-01-01 00:00:00')), pd.to_datetime(np.datetime64('0100-01-01 00:00:00')))
 )
 
 # We're going to go with a test case here in the guise of treating an idealized case as OBS.

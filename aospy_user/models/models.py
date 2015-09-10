@@ -14,7 +14,8 @@ am2 = Model(
     nc_end_yr=100,
     default_yr_range=(21,100),
     runs=[runs.am2_control],
-    default_runs=[runs.am2_control]
+    default_runs=[runs.am2_control],
+    read_mode='xray'
 )
 
 dargan = Model(

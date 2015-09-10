@@ -13,15 +13,14 @@ from aospy.constants import (c_p, grav, kappa, L_f, L_v, r_e, Omega, p_trip,
 from aospy.utils import (level_thickness, to_pascal, to_radians,
                          integrate, int_dp_g, weight_by_delta)
 
-def skc_gz(temp, sphum, dp, p):
-    integrand = (R_a.value * (1.0 + 0.608 * sphum) * temp) / p
-    integrand = integrand * dp
-    gz = integrand.copy()
-    for k in range(len(dp['level'])):
-        gz[dict(level=k)] = integrand.isel(level=slice(k, None)).sum(dim='level')
+def skc_gz(temp, sphum, p, dp):
+    
+    segments = integrand * dp
+    for k in range(temp.shape[1]):
+        gz[:,k,:,:] = np.sum(segments[:,k:,:,:], axis=1)
     return gz     
 
-def skc_mse(temp, sphum, dp, p):
+def skc_mse(temp, sphum, p, dp):
     """ Returns the moist static energy at each gridbox.
     
     $m = c_p T + L_v q + gz$
@@ -42,5 +41,5 @@ def skc_mse(temp, sphum, dp, p):
     mse : array
         moist static energy
     """
-    return (c_p*temp + L_v*sphum + skc_gz(temp, sphum, dp, p))
+    return (c_p*temp + L_v*sphum + skc_gz(temp, sphum, p, dp))
 
