@@ -23,7 +23,7 @@ am2_control = Run(
 # for simple things like time averaging we can treat things that way. It is just an equal weighted 
 # average of the elements of the sequence.
 
-varia = ['olr', 'temp', 'sphum', 'ps']
+varia = ['olr', 'temp', 'sphum', 'ps', 'vcomp']
 
 dargan_control = Run(
     name='dargan_control',
@@ -34,8 +34,9 @@ dargan_control = Run(
     nc_dur=2,
     nc_start_yr=0,
     nc_end_yr=1,
-    default_yr_range=(1,1),
+    default_time_range=(pd.to_datetime(np.datetime64('0001-01-01 00:00:00')),pd.to_datetime(np.datetime64('0002-01-01 00:00:00'))),
     nc_dir_struc='one_dir',
     nc_files={v : '00000.1x20days.nc' for v in varia},
-    read_mode='netcdf4'
+    read_mode='xray',
+    idealized=True
 )

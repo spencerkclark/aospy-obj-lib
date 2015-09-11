@@ -28,5 +28,6 @@ dargan = Model(
     nc_end_yr=720,
     default_yr_range=(360,720),
     runs=[runs.dargan_control],
-    default_runs=[runs.dargan_control]
+    default_runs=[runs.dargan_control],
+    read_mode='xray'
 )

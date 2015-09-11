@@ -792,19 +792,83 @@ sfc_area = Var(
 # Calculations involving one or more model-native variables.
 
 
-skc_gz = Var(
-    name='skc_gz',
+gz = Var(
+    name='gz',
     domain='atmos',
-    description=('Test function skc'),
+    description=('Atmospheric Geopotential'),
     variables=(temp, sphum, 'dp', 'p'),
     def_time=True,
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    func=calcs.skc_gz,
+    func=calcs.gz,
     units=units.J_kg1
 )
 
+dse = Var(
+    name='dse',
+    domain='atmos',
+    description=('Dry Static Energy'),
+    variables=(temp, sphum, 'dp', 'p'),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.dse,
+    units=units.J_kg1
+)
+
+mse = Var(
+    name='mse',
+    domain='atmos',
+    description=('Moist Static Energy'),
+    variables=(temp, sphum, 'dp', 'p'),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.mse,
+    units=units.J_kg1
+)
+
+msf = Var(
+    name='msf',
+    domain='atmos',
+    description=('Eulerian meridional mass streamfunction'),
+    variables=(lat, 'dp', vcomp),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.msf,
+    units=units.kg_s1
+)
+
+msf_at_500_hPa = Var(
+    name='msf_500',
+    domain='atmos',
+    description=('Eulerian meridional mass streamfunction evaluated at 500 hPa'),
+    variables=(lat, 'dp', vcomp, 'p'),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.msf_at_500_hPa,
+    units=units.kg_s1
+)
+
+pfull = Var(
+    name='pfull',
+    domain='atmos',
+    description=('pressure at the level midpoints'),
+    variables=('p'),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.pfull,
+    units=units.Pa
+)
 
 master_vars_list = [
     alb_sfc, cld_amt, divg, esf, evap, hght, high_cld_amt, ice_wat, liq_wat,
@@ -814,7 +878,8 @@ master_vars_list = [
     sphum, sst, swdn_sfc, swdn_sfc_clr, swup_sfc, swup_sfc_clr, swdn_toa,
     swdn_toa_clr, swup_toa, swup_toa_clr, t_surf, tdt_conv, tdt_ls, tdt_lw,
     tdt_lw_clr, tdt_sw, tdt_sw_clr, tdt_vdif, temp, tot_cld_amt, ucomp, u_ref,
-    v_ref, vcomp, vort, wvp, lat, lon, level, pk, bk, sfc_area, skc_gz 
+    v_ref, vcomp, vort, wvp, lat, lon, level, pk, bk, sfc_area, gz, dse, mse, msf, pfull,
+    msf_at_500_hPa
 ]
 
 class variables(object):

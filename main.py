@@ -171,24 +171,24 @@ def main(main_params):
 
 if __name__ == '__main__':
     mp = MainParams()
-#    mp.proj = 'dargan_test'
-    mp.proj = 'am2_2009_yim'
-#    mp.model = ['dargan']
-    mp.model = ['am2']
-#    mp.run = ['dargan_control']
-    mp.run = ['am2_control']
+    mp.proj = 'dargan_test'
+#    mp.proj = 'am2_2009_yim'
+    mp.model = ['dargan']
+#    mp.model = ['am2']
+    mp.run = ['dargan_control']
+#    mp.run = ['am2_control']
     mp.ens_mem = [None]
-    mp.var = ['olr','skc_gz']
+    mp.var = ['msf_at_500_hPa']#, 'gz', 'mse', 'dse']
     # mp.yr_range = [(1983, 1983)]
     mp.yr_range = ['default']
     mp.region = 'tropics'
-    mp.intvl_in = ['monthly']
-    mp.intvl_out = ['ann']
+    mp.intvl_in = ['monthly'] # pp monthly tag
+    mp.intvl_out = ['ann'] # time reduction method
     mp.dtype_in_time = ['ts']
-    mp.dtype_in_vert = ['pressure']
-   # mp.dtype_in_vert = ['sigma']
+#    mp.dtype_in_vert = ['pressure']
+    mp.dtype_in_vert = ['sigma']
     # mp.dtype_out_time = [('reg.av',)]
-    mp.dtype_out_time = [('av', 'std', 'reg.av_xray', 'reg.ts_xray', 'reg.std_xray')]
+    mp.dtype_out_time = ['ts','av'], #'av', 'std', 'reg.av_xray', 'reg.ts_xray', 'reg.std_xray')]
     # mp.dtype_out_vert = [False]
     mp.dtype_out_vert = [False]
     mp.level = [False]
