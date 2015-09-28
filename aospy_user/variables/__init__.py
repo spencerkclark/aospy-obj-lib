@@ -789,6 +789,30 @@ sfc_area = Var(
     in_nc_grid=False
 )
 
+flux_t = Var(
+    name='flux_t',
+    units=units.W_m2,
+    domain='atmos',
+    description='Sensible heat flux from idealized model',
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
+
+flux_lhe = Var(
+    name='flux_lhe',
+    units=units.W_m2,
+    domain='atmos',
+    description='Latent heat flux',
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    in_nc_grid=False
+)
+
 # Calculations involving one or more model-native variables.
 
 
@@ -849,12 +873,51 @@ msf_at_500_hPa = Var(
     domain='atmos',
     description=('Eulerian meridional mass streamfunction evaluated at 500 hPa'),
     variables=(lat, 'dp', vcomp, 'p'),
-    def_time=True,
+    def_time=False,
     def_vert=False,
     def_lat=True,
     def_lon=False,
     func=calcs.msf_at_500_hPa,
     units=units.kg_s1
+)
+
+mmc_mse_flux = Var(
+    name='msef_mmc',
+    domain='atmos',
+    description=('Mean meridional circulation component of the moist static energy flux.'),
+    variables=(lat, temp, sphum, 'dp', 'p', vcomp),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.mmc_mse_flux,
+    units=units.W
+)
+
+gms = Var(
+    name='gms',
+    domain='atmos',
+    description=('Gross Moist Stability as defined in SH 2015.'),
+    variables=(lat, temp, sphum, 'dp', 'p', vcomp),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.gms,
+    units=units.K
+)
+
+msf_500_zeros = Var(
+    name='msf_500_zeros',
+    domain='atmos',
+    description=('Zeros of the 500 hPa streamfunction'),
+    variables=(lat, 'dp', vcomp, 'p'),
+    def_time=False, 
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.msf_500_zeros,
+    units=units.latlon
 )
 
 pfull = Var(
@@ -870,6 +933,80 @@ pfull = Var(
     units=units.Pa
 )
 
+aht = Var(
+    name='aht',
+    domain='atmos',
+    description=('atmospheric heat transport'),
+    variables=(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.aht,
+    units=units.W
+)
+
+eddy_mse_flux = Var(
+    name='eddy_mse_flux',
+    domain='atmos',
+    description=('eddy mse flux'),
+    variables=(lat, temp, sphum, 'dp', 'p', vcomp, swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.eddy_mse_flux,
+    units=units.W
+)
+
+condensation_rain = Var(
+    name='condensation_rain',
+    domain='atmos',
+    description=('condensation rain in idealized moist model'),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    units=units.kg_m2_s1
+)
+
+convection_rain = Var(
+    name='convection_rain',
+    domain='atmos',
+    description=('convection rain in idealized moist model'),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    units=units.kg_m2_s1
+)
+
+precip_extrema = Var(
+    name='precip_extrema',
+    domain='atmos',
+    description=('Locations of extreme zonal mean precipitation values'),
+    variables=(condensation_rain, convection_rain),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.precip_extrema,
+    units=units.latlon
+)
+
+precip = Var(
+    name='precip',
+    domain='atmos',
+    description=('Total precipitation rate (convective + condensation'),
+    variables=(condensation_rain, convection_rain),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.total_precip,
+    units=units.kg_m2_s1
+)
+
 master_vars_list = [
     alb_sfc, cld_amt, divg, esf, evap, hght, high_cld_amt, ice_wat, liq_wat,
     low_cld_amt, lwdn_sfc, lwdn_sfc_clr, lwup_sfc, lwup_sfc_clr, mc, mc_full,
@@ -879,7 +1016,8 @@ master_vars_list = [
     swdn_toa_clr, swup_toa, swup_toa_clr, t_surf, tdt_conv, tdt_ls, tdt_lw,
     tdt_lw_clr, tdt_sw, tdt_sw_clr, tdt_vdif, temp, tot_cld_amt, ucomp, u_ref,
     v_ref, vcomp, vort, wvp, lat, lon, level, pk, bk, sfc_area, gz, dse, mse, msf, pfull,
-    msf_at_500_hPa
+    msf_at_500_hPa, mmc_mse_flux, gms, msf_500_zeros, aht, eddy_mse_flux, condensation_rain, convection_rain,
+    precip_extrema, precip
 ]
 
 class variables(object):

@@ -11,6 +11,7 @@ import aospy_user.units
 import aospy_user.calcs
 import aospy_user.variables
 from aospy_user.runs.cases import *
+from aospy_user.runs.idealized import *
 from aospy_user.models.models import *
 from aospy_user.projs.am2_2009_yim import *
 import aospy_user.obj_from_name as aospy_user
@@ -47,6 +48,7 @@ class MainParamsParser(object):
                     run_objs.append(aospy_user.to_run(run, model, proj))
                 except AttributeError as ae:
                     print(ae)
+        print(run_objs)            
         if len(run_objs) == 1 and not isinstance(run_objs[0], (list, tuple)):
             return run_objs
         else:
@@ -171,24 +173,30 @@ def main(main_params):
 
 if __name__ == '__main__':
     mp = MainParams()
-    mp.proj = 'dargan_test'
-#    mp.proj = 'am2_2009_yim'
-    mp.model = ['dargan']
-#    mp.model = ['am2']
-    mp.run = ['dargan_control']
-#    mp.run = ['am2_control']
+#    mp.proj = 'dargan_test'
+    mp.proj = 'am2_2009_yim'
+#    mp.model = ['dargan']
+    mp.model = ['am2']
+#    mp.run = [('control_T85', 'extratropics_0.15_T85', 'extratropics_0.037_T85',
+#              'tropics_0.1_T85', 'tropics_0.025_T85')]
+#    mp.run = [('am2_control', 'am2_tropics', 'am2_extratropics', 'am2_tropics+extratropics')]
+    mp.run = [('am2_reyoi_control','am2_reyoi_extratropics_full', 'am2_reyoi_extratropics_sp', 'am2_reyoi_extratropics_u',
+               'am2_HadISST_control')]
     mp.ens_mem = [None]
-    mp.var = ['msf_at_500_hPa']#, 'gz', 'mse', 'dse']
+    mp.var = ['t_surf']
+#    mp.var = ['swdn_sfc', 'olr', 'lwdn_sfc', 'lwup_sfc']#, 'gz', 'mse', 'dse']
     # mp.yr_range = [(1983, 1983)]
     mp.yr_range = ['default']
     mp.region = 'tropics'
     mp.intvl_in = ['monthly'] # pp monthly tag
-    mp.intvl_out = ['ann'] # time reduction method
+    mp.intvl_out = ['ann']
+#    mp.intvl_out = [1,2,3,4,5,6,7,8,9,10,11,12] # time reduction method
     mp.dtype_in_time = ['ts']
-#    mp.dtype_in_vert = ['pressure']
-    mp.dtype_in_vert = ['sigma']
-    # mp.dtype_out_time = [('reg.av',)]
-    mp.dtype_out_time = ['ts','av'], #'av', 'std', 'reg.av_xray', 'reg.ts_xray', 'reg.std_xray')]
+    mp.dtype_in_vert = ['pressure']
+#    mp.dtype_in_vert = ['sigma']
+#    mp.dtype_out_time = [('',)]
+    mp.dtype_out_time = ['av']
+#    mp.dtype_out_time = ['znl.av'], #'av', 'std', 'reg.av_xray', 'reg.ts_xray', 'reg.std_xray')]
     # mp.dtype_out_vert = [False]
     mp.dtype_out_vert = [False]
     mp.level = [False]
