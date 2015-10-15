@@ -139,11 +139,76 @@ am2_reyoi_extratropics_sp = Run(
     idealized=False
 )
 
+am2_reyoi_tropics_sp_SI = Run(
+    name='am2_reyoi_tropics_sp_SI',
+    description=(
+        'Spatial Pattern SST anomaly pattern applied to REYOI fixed SST climatology.'),
+    direc_nc=('/archive/Spencer.Clark/am2/am2clim_reyoi_tropics_sp_SI/gfdl.ncrc2-default-prod/pp'),
+    nc_dur=17,
+    nc_start_yr=1982,
+    nc_end_yr=1998,
+    default_yr_range=(1982,1998),
+    read_mode='xray',
+    nc_start_day=pd.to_datetime(np.datetime64('1983-01-01 00:00:00')),
+    nc_end_day=pd.to_datetime(np.datetime64('1999-01-01 00:00:00')),
+    default_time_range=(pd.to_datetime(np.datetime64('1983-01-01 00:00:00')), pd.to_datetime(np.datetime64('1999-01-01 00:00:00'))),
+    idealized=False
+)
+
+am2_reyoi_tropics_full = Run(
+    name='am2_reyoi_tropics_full',
+    description=(
+        'Full SST anomaly pattern applied to REYOI fixed SST climatology.'),
+    direc_nc=('/archive/Spencer.Clark/am2/am2clim_reyoi_tropics_full/gfdl.ncrc2-default-prod/pp'),
+    nc_dur=17,
+    nc_start_yr=1982,
+    nc_end_yr=1998,
+    default_yr_range=(1982,1998),
+    read_mode='xray',
+    nc_start_day=pd.to_datetime(np.datetime64('1983-01-01 00:00:00')),
+    nc_end_day=pd.to_datetime(np.datetime64('1999-01-01 00:00:00')),
+    default_time_range=(pd.to_datetime(np.datetime64('1983-01-01 00:00:00')), pd.to_datetime(np.datetime64('1999-01-01 00:00:00'))),
+    idealized=False
+)
+
+am2_reyoi_extratropics_sp_SI = Run(
+    name='am2_reyoi_extratropics_sp_SI',
+    description=(
+        'Spatial Pattern SST anomaly pattern applied to REYOI fixed SST climatology. Fixed sea-ice.'),
+    direc_nc=('/archive/Spencer.Clark/am2/am2clim_reyoi_extratropics_sp_SI/gfdl.ncrc2-default-prod/pp'),
+    nc_dur=17,
+    nc_start_yr=1982,
+    nc_end_yr=1998,
+    default_yr_range=(1982,1998),
+    read_mode='xray',
+    nc_start_day=pd.to_datetime(np.datetime64('1983-01-01 00:00:00')),
+    nc_end_day=pd.to_datetime(np.datetime64('1999-01-01 00:00:00')),
+    default_time_range=(pd.to_datetime(np.datetime64('1983-01-01 00:00:00')), pd.to_datetime(np.datetime64('1999-01-01 00:00:00'))),
+    idealized=False
+)
+
+
 am2_reyoi_extratropics_u = Run(
     name='am2_reyoi_extratropics_u',
     description=(
         'Uniform SST anomaly pattern applied to REYOI fixed SST climatology.'),
     direc_nc=('/archive/Spencer.Clark/am2/am2clim_reyoi_extratropics_u/gfdl.ncrc2-default-prod/pp'),
+    nc_dur=17,
+    nc_start_yr=1982,
+    nc_end_yr=1998,
+    default_yr_range=(1982,1998),
+    read_mode='xray',
+    nc_start_day=pd.to_datetime(np.datetime64('1983-01-01 00:00:00')),
+    nc_end_day=pd.to_datetime(np.datetime64('1999-01-01 00:00:00')),
+    default_time_range=(pd.to_datetime(np.datetime64('1983-01-01 00:00:00')), pd.to_datetime(np.datetime64('1999-01-01 00:00:00'))),
+    idealized=False
+)
+
+am2_reyoi_tropics_u = Run(
+    name='am2_reyoi_tropics_u',
+    description=(
+        'Uniform SST anomaly pattern applied to REYOI fixed SST climatology.'),
+    direc_nc=('/archive/Spencer.Clark/am2/am2clim_reyoi_tropics_u/gfdl.ncrc2-default-prod/pp'),
     nc_dur=17,
     nc_start_yr=1982,
     nc_end_yr=1998,

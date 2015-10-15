@@ -12,8 +12,7 @@ from aospy.constants import (c_p, grav, kappa, L_f, L_v, r_e, Omega, p_trip,
                              T_trip, c_va, c_vv, c_vl, c_vs, R_a, R_v,
                              E_0v, E_0s, s_0v, s_0s)
 from aospy.utils import (level_thickness, to_pascal, to_radians,
-                         integrate, int_dp_g, weight_by_delta, vert_coord_name_xray,
-                         int_dp_g_xray, integrate_xray)
+                         integrate, int_dp_g, weight_by_delta, vert_coord_name)
 
 def pfull(p):
     """ Returns the pressure at the level midpoints."""
@@ -69,7 +68,7 @@ def msf(lat, dp, vcomp):
     except:
         pass
     dp = to_pascal(dp)
-    v = vert_coord_name_xray(dp)
+    v = vert_coord_name(dp)
     msf_ = vcomp.mean('lon').copy(deep=True) # Copy the DataArray (so we don't have to
     # set the coords ourselves. We then reassign values in the for loop.
     integrand = dp * vcomp.mean('lon')
@@ -102,7 +101,7 @@ def msf_at_500_hPa(lat, dp, vcomp, p):
         cols = inds.astype(np.intp)
         return np.reshape(x[rows, cols], reduced_shape)
     
-    v = vert_coord_name_xray(dp)
+    v = vert_coord_name(dp)
     try:
         p = p.mean('lon')
     except:
@@ -166,7 +165,7 @@ def gms(lat, temp, sphum, dp, p, vcomp):
     """
     Returns the gross moist stability as defined in SH 2015.
     """
-    v = vert_coord_name_xray(dp)
+    v = vert_coord_name(dp)
     return mmc_mse_flux(lat, temp, sphum, dp, p, vcomp) / (c_p.value * signed_max(msf(lat, dp, vcomp), v))
 
 def msf_500_zeros(lat, dp, vcomp, p):

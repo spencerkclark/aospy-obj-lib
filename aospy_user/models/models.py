@@ -16,10 +16,10 @@ am2 = Model(
     default_yr_range=(21,100),
     runs=[runs.am2_control, runs.am2_tropics, runs.am2_extratropics, runs.am2_tropics_and_extratropics,
           runs.am2_reyoi_extratropics_full, runs.am2_reyoi_extratropics_sp, runs.am2_reyoi_extratropics_u, runs.am2_reyoi_control,
-          runs.am2_HadISST_control],
+          runs.am2_HadISST_control,runs.am2_reyoi_tropics_sp_SI, runs.am2_reyoi_extratropics_sp_SI,runs.am2_reyoi_tropics_full, runs.am2_reyoi_tropics_u],
     default_runs=[runs.am2_control, runs.am2_tropics, runs.am2_extratropics, runs.am2_tropics_and_extratropics,
                   runs.am2_reyoi_extratropics_full, runs.am2_reyoi_extratropics_sp, runs.am2_reyoi_extratropics_u, runs.am2_reyoi_control,
-                  runs.am2_HadISST_control],
+                  runs.am2_HadISST_control, runs.am2_reyoi_extratropics_sp_SI, runs.am2_reyoi_tropics_sp_SI, runs.am2_reyoi_tropics_full, runs.am2_reyoi_tropics_u],
     read_mode='xray'
 )
 

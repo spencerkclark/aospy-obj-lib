@@ -994,8 +994,8 @@ precip_extrema = Var(
     units=units.latlon
 )
 
-precip = Var(
-    name='precip',
+precip_im = Var(
+    name='precip_im',
     domain='atmos',
     description=('Total precipitation rate (convective + condensation'),
     variables=(condensation_rain, convection_rain),
@@ -1017,7 +1017,7 @@ master_vars_list = [
     tdt_lw_clr, tdt_sw, tdt_sw_clr, tdt_vdif, temp, tot_cld_amt, ucomp, u_ref,
     v_ref, vcomp, vort, wvp, lat, lon, level, pk, bk, sfc_area, gz, dse, mse, msf, pfull,
     msf_at_500_hPa, mmc_mse_flux, gms, msf_500_zeros, aht, eddy_mse_flux, condensation_rain, convection_rain,
-    precip_extrema, precip
+    precip_extrema, precip_im
 ]
 
 class variables(object):

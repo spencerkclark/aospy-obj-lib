@@ -180,22 +180,24 @@ if __name__ == '__main__':
 #    mp.run = [('control_T85', 'extratropics_0.15_T85', 'extratropics_0.037_T85',
 #              'tropics_0.1_T85', 'tropics_0.025_T85')]
 #    mp.run = [('am2_control', 'am2_tropics', 'am2_extratropics', 'am2_tropics+extratropics')]
-    mp.run = [('am2_reyoi_control','am2_reyoi_extratropics_full', 'am2_reyoi_extratropics_sp', 'am2_reyoi_extratropics_u',
-               'am2_HadISST_control')]
+    mp.run = [('am2_reyoi_control','am2_reyoi_extratropics_full', 'am2_reyoi_extratropics_sp_SI','am2_reyoi_tropics_sp_SI', 'am2_reyoi_extratropics_u',
+               'am2_HadISST_control', 'am2_reyoi_tropics_u', 'am2_reyoi_tropics_full')]
     mp.ens_mem = [None]
-    mp.var = ['t_surf']
+    mp.var = ['precip']
 #    mp.var = ['swdn_sfc', 'olr', 'lwdn_sfc', 'lwup_sfc']#, 'gz', 'mse', 'dse']
     # mp.yr_range = [(1983, 1983)]
     mp.yr_range = ['default']
-    mp.region = 'tropics'
+    mp.region = 'sahel3'
     mp.intvl_in = ['monthly'] # pp monthly tag
-    mp.intvl_out = ['ann']
+#    mp.intvl_out = ['ann']
+    mp.intvl_out = ['jja']
 #    mp.intvl_out = [1,2,3,4,5,6,7,8,9,10,11,12] # time reduction method
     mp.dtype_in_time = ['ts']
     mp.dtype_in_vert = ['pressure']
 #    mp.dtype_in_vert = ['sigma']
 #    mp.dtype_out_time = [('',)]
-    mp.dtype_out_time = ['av']
+#    mp.dtype_out_time = ['av']
+    mp.dtype_out_time = ['znl.av','reg.av_xray', 'reg.ts_xray', 'reg.std_xray']
 #    mp.dtype_out_time = ['znl.av'], #'av', 'std', 'reg.av_xray', 'reg.ts_xray', 'reg.std_xray')]
     # mp.dtype_out_vert = [False]
     mp.dtype_out_vert = [False]
