@@ -21,7 +21,7 @@ W = Units(
 s = Units(
     units=r's',
     plot_units=r'day',
-    plot_units_conv=1. / seconds_in_day
+    plot_units_conv=1. / seconds_in_day.value
 )
 s1 = Units(
     units=r's$^{-1}$',
@@ -80,7 +80,7 @@ J_kg1 = Units(
 J_kg1_s1 = Units(
     units=r'J kg$^{-1}$ s$^{-1}$',
     plot_units='K day$^{-1}',
-    plot_units_conv=seconds_in_day / c_p,
+    plot_units_conv=seconds_in_day.value / c_p.value,
     vert_int_units='W m$^{-2}$',
     vert_int_plot_units='W m$^{-2}$',
     vert_int_plot_units_conv=1
