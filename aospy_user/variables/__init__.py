@@ -859,7 +859,7 @@ msf = Var(
     name='msf',
     domain='atmos',
     description=('Eulerian meridional mass streamfunction'),
-    variables=(lat, 'dp', vcomp),
+    variables=(vcomp, 'dp'),
     def_time=True,
     def_vert=True,
     def_lat=True,
@@ -872,7 +872,7 @@ msf_at_500_hPa = Var(
     name='msf_500',
     domain='atmos',
     description=('Eulerian meridional mass streamfunction evaluated at 500 hPa'),
-    variables=(lat, 'dp', vcomp, 'p'),
+    variables=(vcomp, 'dp', 'p'),
     def_time=False,
     def_vert=False,
     def_lat=True,
@@ -885,7 +885,7 @@ mmc_mse_flux = Var(
     name='msef_mmc',
     domain='atmos',
     description=('Mean meridional circulation component of the moist static energy flux.'),
-    variables=(lat, temp, sphum, 'dp', 'p', vcomp),
+    variables=(temp, sphum, vcomp, 'dp', 'p'),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -898,7 +898,7 @@ gms = Var(
     name='gms',
     domain='atmos',
     description=('Gross Moist Stability as defined in SH 2015.'),
-    variables=(lat, temp, sphum, 'dp', 'p', vcomp),
+    variables=(temp, sphum, vcomp, 'dp', 'p'),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -911,7 +911,7 @@ msf_500_zeros = Var(
     name='msf_500_zeros',
     domain='atmos',
     description=('Zeros of the 500 hPa streamfunction'),
-    variables=(lat, 'dp', vcomp, 'p'),
+    variables=(vcomp, 'dp', 'p'),
     def_time=False, 
     def_vert=False,
     def_lat=True,
@@ -950,7 +950,7 @@ eddy_mse_flux = Var(
     name='eddy_mse_flux',
     domain='atmos',
     description=('eddy mse flux'),
-    variables=(lat, temp, sphum, 'dp', 'p', vcomp, swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area),
+    variables=(temp, sphum, vcomp, swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area, 'dp', 'p'),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -994,6 +994,19 @@ precip_extrema = Var(
     units=units.latlon
 )
 
+precip_extrema_gcm = Var(
+    name='precip_extrema_gcm',
+    domain='atmos',
+    description=('Locations of extreme zonal mean precipitation values'),
+    variables=(precip),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.precip_extrema_gcm,
+    units=units.latlon
+)
+
 precip_im = Var(
     name='precip_im',
     domain='atmos',
@@ -1017,7 +1030,7 @@ master_vars_list = [
     tdt_lw_clr, tdt_sw, tdt_sw_clr, tdt_vdif, temp, tot_cld_amt, ucomp, u_ref,
     v_ref, vcomp, vort, wvp, lat, lon, level, pk, bk, sfc_area, gz, dse, mse, msf, pfull,
     msf_at_500_hPa, mmc_mse_flux, gms, msf_500_zeros, aht, eddy_mse_flux, condensation_rain, convection_rain,
-    precip_extrema, precip_im
+    precip_extrema, precip_im, precip_extrema_gcm
 ]
 
 class variables(object):

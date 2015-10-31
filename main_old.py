@@ -5,18 +5,16 @@ import itertools
 import colorama
 
 import aospy
-#import aospy_user
 
 import aospy_user.regions
 import aospy_user.units
 import aospy_user.calcs
 import aospy_user.variables
 from aospy_user.runs.cases import *
-from aospy_user.runs.idealized import *
+#from aospy_user.runs.idealized import *
 from aospy_user.models.models import *
-from aospy_user.projs.itcz import *
+from aospy_user.projs.am2_2009_yim import *
 import aospy_user.obj_from_name as aospy_user
-
 
 class MainParams(object):
     """Container for parameters specified in main routine."""
@@ -50,9 +48,9 @@ class MainParamsParser(object):
                     run_objs.append(aospy_user.to_run(run, model, proj))
                 except AttributeError as ae:
                     print(ae)
-        # If flat list, return the list.  If nested, then flatten it.
-        if all([isinstance(r, aospy.Run) for r in run_objs]):
-            return [run_objs[0]]
+        print(run_objs)            
+        if len(run_objs) == 1 and not isinstance(run_objs[0], (list, tuple)):
+            return run_objs
         else:
             return list(itertools.chain.from_iterable(run_objs))
 
@@ -79,7 +77,7 @@ class CalcSuite(object):
             ('Runs', self.run),
             ('Ensemble members', self.ens_mem),
             ('Variables', self.var),
-            ('Year ranges', self.date_range),
+            ('Year ranges', self.yr_range),
             ('Geographical regions', [r.values() for r in self.region]),
             ('Time interval of input data', self.intvl_in),
             ('Time interval for averaging', self.intvl_out),
@@ -88,17 +86,17 @@ class CalcSuite(object):
             ('Output data time type', self.dtype_out_time),
             ('Output data vertical type', self.dtype_out_vert),
             ('Vertical levels', self.level),
-            ('Year chunks', self.chunk_len),
+            ('Year chunks', self.yr_chunk_len),
             ('Compute this data', self.compute),
             ('Print this data', self.print_table)
         )
-        print('')
+        print ''
         colorama.init()
         color_left = colorama.Fore.BLUE
         color_right = colorama.Fore.RESET
         for left, right in pairs:
-            print(color_left, left, ':', color_right, right)
-        print(colorama.Style.RESET_ALL)
+            print color_left, left, ':', color_right, right
+        print colorama.Style.RESET_ALL
 
     def prompt_user_verify(self):
         if not raw_input("Proceed using these parameters? ").lower() == 'y':
@@ -110,7 +108,7 @@ class CalcSuite(object):
                       'run',
                       'ens_mem',
                       'var',
-                      'date_range',
+                      'yr_range',
                       'level',
                       'region',
                       'intvl_in',
@@ -120,7 +118,7 @@ class CalcSuite(object):
                       'dtype_in_vert',
                       'dtype_out_vert',
                       'verbose',
-                      'chunk_len')
+                      'yr_chunk_len')
         attrs = tuple([getattr(self, name) for name in attr_names])
 
         # Each permutation becomes a dictionary, with the keys being the attr
@@ -133,31 +131,16 @@ class CalcSuite(object):
             param_combos.append(dict(zip(attr_names, permutation)))
         return param_combos
 
-    def create_calcs(self, param_combos, exec_calcs=False, print_table=False):
+    def create_calcs(self, param_combos):
         """Iterate through given parameter combos, creating needed Calcs."""
         calcs = []
         for params in param_combos:
             try:
                 calc_int = aospy.CalcInterface(**params)
-            # except AttributeError as ae:
-                # print('aospy warning:', ae)
-            except:
-                raise
+            except AttributeError as ae:
+                print('aospy warning:', ae)
             else:
                 calc = aospy.Calc(calc_int)
-                if exec_calcs:
-                    try:
-                        calc.compute()
-                    except:
-                        raise
-                        # print('Calc %s failed.  Skipping.' % calc)
-                    else:
-                        if print_table:
-                            pass
-                            #print("%.1f" % calc.load('reg.av', False,
-                            #                         calc_int.region['sahel'],
-                            #                         plot_units=False))
-
                 calcs.append(calc)
         return calcs
 
@@ -179,86 +162,50 @@ def main(main_params):
     cs.print_params()
     cs.prompt_user_verify()
     param_combos = cs.create_params_all_calcs()
-    calcs = cs.create_calcs(param_combos, exec_calcs=True, print_table=True)
+    calcs = cs.create_calcs(param_combos)
     print('\n\tVariable time averages and statistics:')
-    # if main_params.compute:
-        # cs.exec_calcs(calcs)
-    # if main_params.print_table:
-        # cs.print_results(calcs)
+    if main_params.compute:
+        cs.exec_calcs(calcs)
+    if main_params.print_table[0]:
+        cs.print_results(calcs)
     print("Calculations finished.")
     return calcs
 
 if __name__ == '__main__':
-
-    cmip_models_h = ['bcc_csm1-1',
-                     'cccma_canam4',
-                     # 'cesm1-cam5',
-                     'cnrc-cm5',
-                     'hadgem2-a',
-                     'ichec-ec-earth',
-                     'ipsl-cm5a-lr',
-                     'ipsl-cm5b-lr',
-                     'lasg-cess-fgoals-g2',
-                     'miroc5',
-                     'mpi-esm-lr',
-                     'mpi-esm-mr',
-                     'mri-cgcm3',
-                     'ncar-ccsm4']
-    cmip_models_p = ['bcc_csm1-1',
-                     'cccma_canam4',
-                     'cesm1-cam5',
-                     'cnrc-cm5',
-                     # 'hadgem2-a',
-                     'ichec-ec-earth',
-                     'ipsl-cm5a-lr',
-                     'ipsl-cm5b-lr',
-                     'lasg-cess-fgoals-g2',
-                     'miroc5',
-                     'mpi-esm-lr',
-                     'mpi-esm-mr',
-                     'mri-cgcm3',
-                     'ncar-ccsm4']
-
     mp = MainParams()
-#    mp.proj = 'am2_2009_yim'
-    mp.proj = 'dargan_test'
-#    mp.model = ['am2']
-#    mp.model = ['am2_reyoi']
-    mp.model = ['dargan_T42']
-#    mp.run = [('am2_control','am2_tropics', 'am2_extratropics','am2_tropics+extratropics')]
-#    mp.run = [('am2_HadISST_control', 'am2_reyoi_extratropics_sp_SI', 'am2_reyoi_tropics_sp_SI')]
-    mp.run = ['default']
-    mp.ens_mem = [False]
-    # mp.var = ['t_surf']
-    mp.var = ['olr']#, 'mse_vert_advec_upwind']
-    #mp.date_range = [('1983-01-01', '2012-12-31')]
-#    mp.date_range = [('0021-01-01', '0081-01-01')]
-#    mp.date_range = [('1983-01-01', '1999-01-01')]
-    mp.date_range = [('0001-12-27', '0002-12-22')]
-    mp.region = 'sahel'
-#    mp.intvl_in = ['monthly']
-    mp.intvl_in = ['20-day']
+#    mp.proj = 'dargan_test'
+    mp.proj = 'am2_2009_yim'
+#    mp.model = ['dargan']
+    mp.model = ['am2']
+#    mp.run = [('control_T85', 'extratropics_0.15_T85', 'extratropics_0.037_T85',
+#              'tropics_0.1_T85', 'tropics_0.025_T85')]
+#    mp.run = [('am2_control', 'am2_tropics', 'am2_extratropics', 'am2_tropics+extratropics')]
+    mp.run = [('am2_control', 'am2_tropics')]
+#    mp.run = [('am2_reyoi_control','am2_reyoi_extratropics_full', 'am2_reyoi_extratropics_sp_SI','am2_reyoi_tropics_sp_SI', 'am2_reyoi_extratropics_u',
+#               'am2_HadISST_control', 'am2_reyoi_tropics_u', 'am2_reyoi_tropics_full')]
+    mp.ens_mem = [None]
+    mp.var = ['precip']
+#    mp.var = ['swdn_sfc', 'olr', 'lwdn_sfc', 'lwup_sfc']#, 'gz', 'mse', 'dse']
+    # mp.yr_range = [(1983, 1983)]
+    mp.yr_range = ['default']
+    mp.region = 'sahel3'
+    mp.intvl_in = ['monthly'] # pp monthly tag
     mp.intvl_out = ['ann']
+#    mp.intvl_out = ['jja']
+#    mp.intvl_out = [1,2,3,4,5,6,7,8,9,10,11,12] # time reduction method
     mp.dtype_in_time = ['ts']
-    mp.dtype_in_vert = [False]
-#    mp.dtype_in_vert = ['pressure']
-    mp.dtype_in_vert = ['sigma']
-    # mp.dtype_out_time = [('reg.av',)]
-    mp.dtype_out_time = [('av')]
-#    mp.dtype_out_time = [('av','reg.std','reg.av','reg.ts')]
+    mp.dtype_in_vert = ['pressure']
+#    mp.dtype_in_vert = ['sigma']
+#    mp.dtype_out_time = [('',)]
+    mp.dtype_out_time = ['av']
+#    mp.dtype_out_time = ['znl.av','reg.av_xray', 'reg.ts_xray', 'reg.std_xray']
+#    mp.dtype_out_time = ['znl.av'], #'av', 'std', 'reg.av_xray', 'reg.ts_xray', 'reg.std_xray')]
+    # mp.dtype_out_vert = [False]
     mp.dtype_out_vert = [False]
-    # mp.dtype_out_vert = ['vert_int']
     mp.level = [False]
-    mp.chunk_len = [False]
+    mp.yr_chunk_len = [False]
+    mp.compute = [True]
     mp.verbose = [True]
-    mp.compute = True
-    mp.print_table = False
+    mp.print_table = [False]
 
     calcs = main(mp)
-
-    # Unusual dates seem to work -- test
-    # mp.intvl_out = [12]
-    # mp.dtype_out_time = [('ts')]
-    # This returns three points for Dec; this is expected
-    # the number of days is at the end of the averaging period in the
-    # idealized model.
