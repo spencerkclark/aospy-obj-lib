@@ -5,7 +5,7 @@ import itertools
 import colorama
 
 import aospy
-#import aospy_user
+# import aospy_user
 
 import aospy_user.regions
 import aospy_user.units
@@ -14,7 +14,7 @@ import aospy_user.variables
 from aospy_user.runs.cases import *
 from aospy_user.runs.idealized import *
 from aospy_user.models.models import *
-from aospy_user.projs.itcz import *
+from aospy_user.projs.pre_generals import *
 import aospy_user.obj_from_name as aospy_user
 
 
@@ -190,64 +190,37 @@ def main(main_params):
 
 if __name__ == '__main__':
 
-    cmip_models_h = ['bcc_csm1-1',
-                     'cccma_canam4',
-                     # 'cesm1-cam5',
-                     'cnrc-cm5',
-                     'hadgem2-a',
-                     'ichec-ec-earth',
-                     'ipsl-cm5a-lr',
-                     'ipsl-cm5b-lr',
-                     'lasg-cess-fgoals-g2',
-                     'miroc5',
-                     'mpi-esm-lr',
-                     'mpi-esm-mr',
-                     'mri-cgcm3',
-                     'ncar-ccsm4']
-    cmip_models_p = ['bcc_csm1-1',
-                     'cccma_canam4',
-                     'cesm1-cam5',
-                     'cnrc-cm5',
-                     # 'hadgem2-a',
-                     'ichec-ec-earth',
-                     'ipsl-cm5a-lr',
-                     'ipsl-cm5b-lr',
-                     'lasg-cess-fgoals-g2',
-                     'miroc5',
-                     'mpi-esm-lr',
-                     'mpi-esm-mr',
-                     'mri-cgcm3',
-                     'ncar-ccsm4']
-
     mp = MainParams()
-#    mp.proj = 'am2_2009_yim'
-    mp.proj = 'dargan_test'
+    mp.proj = 'itcz'
+#    mp.proj = 'dargan_test'
 #    mp.model = ['am2']
-#    mp.model = ['am2_reyoi']
-    mp.model = ['dargan_T42']
+    mp.model = ['am2_reyoi']
+#    mp.model = ['dargan']
 #    mp.run = [('am2_control','am2_tropics', 'am2_extratropics','am2_tropics+extratropics')]
 #    mp.run = [('am2_HadISST_control', 'am2_reyoi_extratropics_sp_SI', 'am2_reyoi_tropics_sp_SI')]
     mp.run = ['default']
     mp.ens_mem = [False]
-    # mp.var = ['t_surf']
-    mp.var = ['olr']#, 'mse_vert_advec_upwind']
+    mp.var = ['t_surf', 'precip']
+#    mp.var = ['olr','t_surf','swdn_toa','lwdn_sfc','swdn_sfc','lwup_sfc','evap','precip',
+#              'swup_toa','swup_toa_clr','swdn_sfc_clr','lwup_sfc_clr','lwdn_sfc_clr',
+#              ]#, 'mse_vert_advec_upwind']
     #mp.date_range = [('1983-01-01', '2012-12-31')]
 #    mp.date_range = [('0021-01-01', '0081-01-01')]
-#    mp.date_range = [('1983-01-01', '1999-01-01')]
-    mp.date_range = [('0001-12-27', '0002-12-22')]
-    mp.region = 'sahel'
-#    mp.intvl_in = ['monthly']
-    mp.intvl_in = ['20-day']
-    mp.intvl_out = ['ann']
+    mp.date_range = [('1983-01-01', '1998-12-31')]
+#    mp.date_range = [('0001-12-27', '0002-12-22')]
+    mp.region = ['globe', 'land', 'sahel']
+    mp.intvl_in = ['monthly']
+#    mp.intvl_in = ['20-day']
+    mp.intvl_out = [1,2,3,4,5,6,7,8,9,10,11,12]
     mp.dtype_in_time = ['ts']
     mp.dtype_in_vert = [False]
-#    mp.dtype_in_vert = ['pressure']
-    mp.dtype_in_vert = ['sigma']
+    mp.dtype_in_vert = ['pressure']
+#    mp.dtype_in_vert = ['sigma']
     # mp.dtype_out_time = [('reg.av',)]
-    mp.dtype_out_time = [('av')]
+    mp.dtype_out_time = [('av', 'reg.av', 'reg.ts')]
 #    mp.dtype_out_time = [('av','reg.std','reg.av','reg.ts')]
+#    mp.dtype_out_vert = ['vert_int']
     mp.dtype_out_vert = [False]
-    # mp.dtype_out_vert = ['vert_int']
     mp.level = [False]
     mp.chunk_len = [False]
     mp.verbose = [True]

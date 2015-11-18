@@ -3,6 +3,83 @@ from aospy.constants import c_p, r_e
 from aospy.var import Var
 from aospy_user import calcs, units
 
+p = Var(
+    name='p',
+    units=units.Pa,
+    domain='atmos',
+    description='Pressure of model half levels.',
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
+
+ps = Var(
+    name='ps',
+    units=units.Pa,
+    domain='atmos',
+    description='Surface pressure.',
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
+bk = Var(
+    name='bk',
+    units=units.Pa,
+    domain='atmos_level',
+    description='Sigma part of hybrid sigma coordinate.',
+    def_time=False,
+    def_vert=True,
+    def_lat=False,
+    def_lon=False,
+    in_nc_grid=True
+)
+pk = Var(
+    name='pk',
+    units=units.Pa,
+    domain='atmos_level',
+    description='Pressure part of hybrid sigma coordinate.',
+    def_time=False,
+    def_vert=True,
+    def_lat=False,
+    def_lon=False,
+    in_nc_grid=True
+)
+
+
+temp = Var(
+    name='temp',
+    alt_names=('ta',),
+    units=units.K,
+    domain='atmos',
+    description='Air temperature.',
+    def_time=True,
+    def_vert='pfull',
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False,
+    colormap='RdBu_r'
+)
+dp = Var(
+    name='dp',
+    domain='atmos',
+    description=('Pressure thickness of model levels.  For data interpolated '
+                 'to uniform pressure levels, this does not vary in time or '
+                 'space.  For data on model native coordinates, this varies '
+                 'in space and time due to the spatiotemporal variations in '
+                 'surface pressure.'),
+    variables=(ps, bk, pk, temp),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False,
+    func=calcs.dp,
+    units=units.Pa,
+)
 
 alb_sfc = Var(
     name='alb_sfc',
@@ -153,7 +230,7 @@ lwup_sfc_clr = Var(
 )
 hght = Var(
     name='hght',
-    alt_names=('zg',),
+    alt_names=('zg','height_half'),
     units=units.m,
     domain='atmos',
     description='Geopotential height.',
@@ -813,14 +890,86 @@ flux_lhe = Var(
     in_nc_grid=False
 )
 
-# Calculations involving one or more model-native variables.
+umse_vint = Var(
+    name='umse_vint',
+    domain='atmos',
+    description=('u*mse integrated vertically in the idealized model'),
+    units=units.m3_s3_v,
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
 
+vmse_vint = Var(
+    name='vmse_vint',
+    domain='atmos',
+    description=('v*mse integrated vertically in the idealized model'),
+    units=units.m3_s3_v,
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
+
+omega_mse_vint = Var(
+    name='omega_mse_vint',
+    domain='atmos',
+    description=('omega*mse integrated vertically in the idealized model'),
+    units=units.J_Pa_kg_s_v,
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
+
+
+umse = Var(
+    name='umse',
+    domain='atmos',
+    description=('u*mse in idealized model'),
+    units=units.m3_s3,
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
+
+vmse = Var(
+    name='vmse',
+    domain='atmos',
+    description=('v*mse in idealized model'),
+    units=units.m3_s3,
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
+
+omega_mse = Var(
+    name='omega_mse',
+    domain='atmos',
+    description=('omega*mse in idealized model'),
+    units=units.J_Pa_kg_s,
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    in_nc_grid=False
+)
+
+# Calculations involving one or more model-native variables.
 
 gz = Var(
     name='gz',
     domain='atmos',
     description=('Atmospheric Geopotential'),
-    variables=(temp, sphum, 'dp', 'p'),
+    variables=(temp, sphum, dp, p),
     def_time=True,
     def_vert=True,
     def_lat=True,
@@ -833,7 +982,7 @@ dse = Var(
     name='dse',
     domain='atmos',
     description=('Dry Static Energy'),
-    variables=(temp, sphum, 'dp', 'p'),
+    variables=(temp, sphum, dp, p),
     def_time=True,
     def_vert=True,
     def_lat=True,
@@ -846,7 +995,7 @@ mse = Var(
     name='mse',
     domain='atmos',
     description=('Moist Static Energy'),
-    variables=(temp, sphum, 'dp', 'p'),
+    variables=(temp, sphum, dp, p),
     def_time=True,
     def_vert=True,
     def_lat=True,
@@ -859,7 +1008,7 @@ msf = Var(
     name='msf',
     domain='atmos',
     description=('Eulerian meridional mass streamfunction'),
-    variables=(vcomp, 'dp'),
+    variables=(vcomp, dp),
     def_time=True,
     def_vert=True,
     def_lat=True,
@@ -872,7 +1021,7 @@ msf_at_500_hPa = Var(
     name='msf_500',
     domain='atmos',
     description=('Eulerian meridional mass streamfunction evaluated at 500 hPa'),
-    variables=(vcomp, 'dp', 'p'),
+    variables=(vcomp, dp, p),
     def_time=False,
     def_vert=False,
     def_lat=True,
@@ -885,7 +1034,7 @@ mmc_mse_flux = Var(
     name='msef_mmc',
     domain='atmos',
     description=('Mean meridional circulation component of the moist static energy flux.'),
-    variables=(temp, sphum, vcomp, 'dp', 'p'),
+    variables=(temp, sphum, vcomp, dp, p),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -898,7 +1047,7 @@ gms = Var(
     name='gms',
     domain='atmos',
     description=('Gross Moist Stability as defined in SH 2015.'),
-    variables=(temp, sphum, vcomp, 'dp', 'p'),
+    variables=(temp, sphum, vcomp, dp, p),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -911,8 +1060,8 @@ msf_500_zeros = Var(
     name='msf_500_zeros',
     domain='atmos',
     description=('Zeros of the 500 hPa streamfunction'),
-    variables=(vcomp, 'dp', 'p'),
-    def_time=False, 
+    variables=(vcomp, dp, p),
+    def_time=False,
     def_vert=False,
     def_lat=True,
     def_lon=False,
@@ -924,7 +1073,7 @@ pfull = Var(
     name='pfull',
     domain='atmos',
     description=('pressure at the level midpoints'),
-    variables=('p'),
+    variables=(p),
     def_time=True,
     def_vert=True,
     def_lat=True,
@@ -950,7 +1099,7 @@ eddy_mse_flux = Var(
     name='eddy_mse_flux',
     domain='atmos',
     description=('eddy mse flux'),
-    variables=(temp, sphum, vcomp, swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area, 'dp', 'p'),
+    variables=(temp, sphum, vcomp, swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area, dp, p),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -1018,6 +1167,110 @@ precip_im = Var(
     def_lon=True,
     func=calcs.total_precip,
     units=units.kg_m2_s1
+)
+
+dmv_dx_im = Var(
+    name='dmv_dx_im',
+    domain='atmos',
+    description=('Zonal flux divergence of mse.'),
+    variables=(umse,),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.mse_zonal_flux_divg_im,
+    units=units.W
+)
+
+dmv_dx_v_im = Var(
+    name='dmv_dx_v_im',
+    domain='atmos',
+    description=('Vertical integral of zonal flux divergence of mse.'),
+    variables=(umse_vint,),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.mse_zonal_flux_divg_v_im,
+    units=units.W
+)
+
+dmv_dy_v_im = Var(
+    name='dmv_dy_v_im',
+    domain='atmos',
+    description=('Vertical integral of meridional flux divergence of mse.'),
+    variables=(vmse_vint,),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.mse_merid_flux_divg_v_im,
+    units=units.W
+)
+
+dmv_dy_im = Var(
+    name='dmv_dy_im',
+    domain='atmos',
+    description=('Meridional flux divergence of mse.'),
+    variables=(vmse,),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.mse_merid_flux_divg_im,
+    units=units.W
+)
+
+dmv_dx = Var(
+    name='dmv_dx',
+    domain='atmos',
+    description=('Zonal flux divergence of mse.'),
+    variables=(ucomp, temp, sphum, dp, p),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.mse_zonal_flux_divg,
+    units=units.W
+)
+
+dmv_dy = Var(
+    name='dmv_dy',
+    domain='atmos',
+    description=('Meridional flux divergence of mse.'),
+    variables=(vcomp, temp, sphum, dp, p),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.mse_merid_flux_divg,
+    units=units.W
+)
+
+Q_sfc_im = Var(
+    name='Q_sfc_im',
+    domain='atmos',
+    description=('Heat flux at the surface in idealized model.'),
+    variables=(swdn_sfc, lwdn_sfc, lwup_sfc, flux_t, flux_lhe),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.Q_sfc_im,
+    units=units.W_m2
+)
+
+Q_toa_im = Var(
+    name='Q_toa_im',
+    domain='atmos',
+    description=('Heat flux at the TOA in idealized model.'),
+    variables=(swdn_sfc, olr),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.Q_toa_im,
+    units=units.W_m2
 )
 
 master_vars_list = [

@@ -15,8 +15,8 @@ am2_control = Run(
 #    default_yr_range=(21,80),
 #    read_mode='xray',
     data_in_start_date='0001-01-01',
-    data_in_end_date='0081-01-01',
-    default_date_range=('0021-01-01', '0081-01-01'),
+    data_in_end_date='0080-12-31',
+    default_date_range=('0021-01-01', '0080-12-31'),
     idealized=False
 )
 
@@ -32,8 +32,8 @@ am2_tropics = Run(
 #    default_yr_range=(21,80),
 #    read_mode='xray',
     data_in_start_date='0001-01-01',
-    data_in_end_date='0081-01-01',
-    default_date_range=('0021-01-01','0081-01-01'),
+    data_in_end_date='0080-12-31',
+    default_date_range=('0021-01-01','0080-12-31'),
     idealized=False
 )
 
@@ -49,8 +49,8 @@ am2_extratropics = Run(
 #    default_yr_range=(21,80),
 #    read_mode='xray',
     data_in_start_date='0001-01-01',
-    data_in_end_date='0081-01-01',
-    default_date_range=('0021-01-01','0081-01-01'),
+    data_in_end_date='0080-12-31',
+    default_date_range=('0021-01-01','0080-12-31'),
     idealized=False
 )
 
@@ -66,8 +66,8 @@ am2_tropics_and_extratropics = Run(
 #    default_yr_range=(21,80),
 #    read_mode='xray',
     data_in_start_date='0001-01-01',
-    data_in_end_date='0081-01-01',
-    default_date_range=('0021-01-01','0081-01-01'),
+    data_in_end_date='0080-12-31',
+    default_date_range=('0021-01-01','0080-12-31'),
     idealized=False
 )
 
@@ -87,8 +87,8 @@ am2_HadISST_control = Run(
 #    default_yr_range=(1983, 1998),
 #    read_mode='xray',
     data_in_start_date='1983-01-01',
-    data_in_end_date='1999-01-01',
-    default_date_range=('1983-01-01','1999-01-01'),
+    data_in_end_date='1998-12-31',
+    default_date_range=('1983-01-01','1998-12-31'),
     idealized=False
 )
 
@@ -103,8 +103,8 @@ am2_reyoi_control = Run(
 #    default_yr_range=(1983, 2012),
 #    read_mode='xray',
     data_in_start_date='1982-01-01',
-    data_in_end_date='1999-01-01',
-    default_date_range=('1983-01-01','1999-01-01'),
+    data_in_end_date='1998-12-31',
+    default_date_range=('1983-01-01','1998-12-31'),
     idealized=False
 )
 
@@ -119,8 +119,8 @@ am2_reyoi_extratropics_full = Run(
 #    default_yr_range=(1982,1998),
 #    read_mode='xray',
     data_in_start_date='1982-01-01',
-    data_in_end_date='1999-01-01',
-    default_date_range=('1983-01-01','1999-01-01'),
+    data_in_end_date='1998-12-31',
+    default_date_range=('1983-01-01','1998-12-31'),
     idealized=False
 )
 
@@ -135,8 +135,8 @@ am2_reyoi_extratropics_sp = Run(
 #    default_yr_range=(1982,1998),
 #    read_mode='xray',
     data_in_start_date='1982-01-01',
-    data_in_end_date='1999-01-01',
-    default_date_range=('1983-01-01','1999-01-01'),
+    data_in_end_date='1998-12-31',
+    default_date_range=('1983-01-01','1998-12-31'),
     idealized=False
 )
 
@@ -147,8 +147,8 @@ am2_reyoi_tropics_sp_SI = Run(
      data_in_direc=('/archive/Spencer.Clark/am2/am2clim_reyoi_tropics_sp_SI/gfdl.ncrc2-default-prod/pp'),
      data_in_dur=17,
      data_in_start_date='1982-01-01',
-     data_in_end_date='1999-01-01',
-     default_date_range=('1983-01-01','1999-01-01'),
+     data_in_end_date='1998-12-31',
+     default_date_range=('1983-01-01','1998-12-31'),
      idealized=False
 )
 
@@ -159,8 +159,8 @@ am2_reyoi_tropics_full = Run(
     data_in_direc=('/archive/Spencer.Clark/am2/am2clim_reyoi_tropics_full/gfdl.ncrc2-default-prod/pp'),
     data_in_dur=17,
     data_in_start_date='1982-01-01',
-    data_in_end_date='1999-01-01',
-    default_date_range=('1983-01-01','1999-01-01'),
+    data_in_end_date='1998-12-31',
+    default_date_range=('1983-01-01','1998-12-31'),
     idealized=False
 )
 
@@ -171,8 +171,8 @@ am2_reyoi_extratropics_sp_SI = Run(
     data_in_direc=('/archive/Spencer.Clark/am2/am2clim_reyoi_extratropics_sp_SI/gfdl.ncrc2-default-prod/pp'),
     data_in_dur=17,
     data_in_start_date='1982-01-01',
-    data_in_end_date='1999-01-01',
-    default_date_range=('1983-01-01','1999-01-01'),
+    data_in_end_date='1998-12-31',
+    default_date_range=('1983-01-01','1998-12-31'),
     idealized=False
 )
 
@@ -183,8 +183,8 @@ am2_reyoi_extratropics_u = Run(
     data_in_direc=('/archive/Spencer.Clark/am2/am2clim_reyoi_extratropics_u/gfdl.ncrc2-default-prod/pp'),
     data_in_dur=17,
     data_in_start_date='1982-01-01',
-    data_in_end_date='1999-01-01',
-    default_date_range=('1983-01-01','1999-01-01'),
+    data_in_end_date='1998-12-31',
+    default_date_range=('1983-01-01','1998-12-31'),
     idealized=False
 )
 
@@ -195,15 +195,15 @@ am2_reyoi_tropics_u = Run(
     data_in_direc=('/archive/Spencer.Clark/am2/am2clim_reyoi_tropics_u/gfdl.ncrc2-default-prod/pp'),
     data_in_dur=17,
     data_in_start_date='1982-01-01',
-    data_in_end_date='1999-01-01',
-    default_date_range=('1983-01-01','1999-01-01'),
+    data_in_end_date='1998-12-31',
+    default_date_range=('1983-01-01','1998-12-31'),
     idealized=False
 )
 
 
 # # We're going to go with a test case here in the guise of treating an idealized case as OBS.
-# # Since there is no seasonal cycle, the time is fairly irrelevant -- not entirely true, but 
-# # for simple things like time averaging we can treat things that way. It is just an equal weighted 
+# # Since there is no seasonal cycle, the time is fairly irrelevant -- not entirely true, but
+# # for simple things like time averaging we can treat things that way. It is just an equal weighted
 # # average of the elements of the sequence.
 
 # varia = ['olr', 'temp', 'sphum', 'ps', 'vcomp', 'swdn_sfc', 'olr', 'lwdn_sfc', 'lwup_sfc', 'flux_t', 'flux_lhe',

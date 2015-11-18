@@ -77,6 +77,26 @@ J_kg1 = Units(
     vert_int_plot_units='10$^6$ J m$^{-2}$',
     vert_int_plot_units_conv=1e-6
 )
+
+m3_s3 = Units(
+    units=r'm$^3$ s$^{-1}$',
+    vert_int_units=r'm$^3$ s$^{-1}$ Pa'
+)
+
+m3_s3_v = Units(
+    units=r'm$^3$ s$^{-1}$ Pa'
+)
+
+J_Pa_kg_s_v = Units(
+    units=r'J Pa$^2$ kg$^{-1}$ s$^{-1}$'
+)
+
+J_Pa_kg_s = Units(
+    units=r'J Pa kg$^{-1}$ s$^{-1}$',
+    vert_int_units=r'J Pa$^2$ kg$^{-1}$ s$^{-1}$'
+)
+
+
 J_kg1_s1 = Units(
     units=r'J kg$^{-1}$ s$^{-1}$',
     plot_units='K day$^{-1}',

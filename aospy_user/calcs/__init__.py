@@ -12,7 +12,12 @@ from aospy.constants import (c_p, grav, kappa, L_f, L_v, r_e, Omega, p_trip,
                              T_trip, c_va, c_vv, c_vl, c_vs, R_a, R_v,
                              E_0v, E_0s, s_0v, s_0s)
 from aospy.utils import (level_thickness, to_pascal, to_radians,
-                         integrate, int_dp_g)# weight_by_delta) #vert_coord_name)
+                         integrate, int_dp_g, dp_from_ps)# weight_by_delta) #vert_coord_name)
+
+
+def dp(ps, bk, pk, arr):
+    """Pressure thickness of hybrid coordinate levels from surface pressure."""
+    return dp_from_ps(bk, pk, ps, arr[PFULL_STR])
 
 # Take advantage of Spencer Hill's numerical functions.
 from .numerics import (
@@ -33,37 +38,43 @@ from .numerics import (
     d_dp_from_eta
 )
 
+from .interpolation import (
+    zeros_xray,
+    interp1d_pt_xray,
+    interp1d_xray
+)
+
 def vert_coord_name(dp):
     for name in ['level', 'pfull']:
         if name in dp.coords:
             return name
-    return None 
+    return None
 
 def pfull(p):
     """ Returns the pressure at the level midpoints."""
-    return to_pascal(p) 
+    return to_pascal(p)
 
 def gz(temp, sphum, dp, p):
     integrand = (R_a.value * (1.0 + 0.608 * sphum) * temp) / p
     integrand = integrand * dp
     gz = integrand.copy()
 
-    v = vert_coord_name_xray(dp)
+    v = vert_coord_name(dp)
 
     for k in range(len(dp[v])):
         gz[{v : k}] = integrand.isel(**{v : slice(k, None)}).sum(dim=v)
-    return gz     
+    return gz
 
 def dse(temp, sphum, dp, p):
     """ Returns the dry static energy at each gridbox.
-    
+
     $s = c_p T + gz$
     """
     return (c_p.value * temp + gz(temp, sphum, dp, p))
 
 def mse(temp, sphum, dp, p):
     """ Returns the moist static energy at each gridbox.
-    
+
     $m = c_p T + L_v q + gz$
 
     Parameters
@@ -83,10 +94,10 @@ def mse(temp, sphum, dp, p):
         moist static energy
     """
     return (dse(temp, sphum, dp, p) + L_v.value*sphum)
- 
+
 def msf(vcomp, dp):
-    """ Returns the mean meridional mass streamfunction. 
-    
+    """ Returns the mean meridional mass streamfunction.
+
     """
     try:
         dp = dp.mean('lon')
@@ -101,7 +112,7 @@ def msf(vcomp, dp):
         msf_[{v : k}] = integrand.isel(**{v : slice(k, None)}).sum(dim=v)
     msf_ *= 2. * r_e.value * np.pi * np.cos(np.deg2rad(vcomp.lat)) / grav.value
     return msf_
-  
+
 def msf_at_500_hPa(vcomp, dp, p):
     """ Returns the time mean meridional mass streamfunction at 500 hPa.
     """
@@ -114,7 +125,7 @@ def msf_at_500_hPa(vcomp, dp, p):
         axis : int
             axis to collapse
         indices : array
-            array containing indices in each column you would like to 
+            array containing indices in each column you would like to
             evaluate at (to collapse the array)
         """
         collapse_dim_len = x.shape[axis]
@@ -125,13 +136,13 @@ def msf_at_500_hPa(vcomp, dp, p):
         rows = np.array(np.arange(x.shape[0]), dtype=np.intp)
         cols = inds.astype(np.intp)
         return np.reshape(x[rows, cols], reduced_shape)
-    
+
     v = vert_coord_name(dp)
     try:
         p = p.mean('lon')
     except:
         pass
-    
+
     p = to_pascal(p)
     #p = p.mean('time')
     to_min = np.abs(p/100. - 500)
@@ -146,8 +157,8 @@ def msf_at_500_hPa(vcomp, dp, p):
 
 def correct_vcomp(vcomp, dp):
     """
-    Applies the SH 2015 correction to the meridional velocity to ensure mass 
-    balance in the MSE flux. 
+    Applies the SH 2015 correction to the meridional velocity to ensure mass
+    balance in the MSE flux.
     """
     vcomp = vcomp.mean('lon')
     vplus = vcomp.copy(deep=True)
@@ -163,7 +174,7 @@ def correct_vcomp(vcomp, dp):
     return (vplus + factor*vminus)
 
 def mmc_mse_flux(temp, sphum, vcomp, dp, p):
-    """ 
+    """
     Computes the mean meridional circulation component of the MSE flux.
     """
     mse_ = mse(temp, sphum, dp, p).mean('lon').mean('time')
@@ -173,7 +184,7 @@ def mmc_mse_flux(temp, sphum, vcomp, dp, p):
     except:
         pass
     return 2. * np.pi * r_e.value * np.cos(np.deg2rad(temp.lat)) * int_dp_g_xray(mse_*v, dp)
-    
+
 def signed_max(data, dim):
     """
     Returns the signed maximum value along a given axis.
@@ -191,6 +202,23 @@ def gms(lat, temp, sphum, vcomp, dp, p):
     Returns the gross moist stability as defined in SH 2015.
     """
     return mmc_mse_flux(lat, temp, sphum, vcomp, dp, p) / (c_p.value * signed_max(msf(vcomp, dp), v))
+
+def zeros(field, dim='lat'):
+    """Returns the interpolated zeros of a field.
+    This can be applied to a time or longitude dependent field.
+    """
+    field_ = field.copy(deep=True)
+    signs = np.sign(field_)
+    mask = signs.diff('lat', label='lower') != 0
+    mask = mask.diff('lat', label='upper')
+    mask_full = xray.DataArray(np.zeros(field_.values.shape).astype(bool),
+                               coords = field_.coords)
+    mask_full[dict(lat=slice(1,-1))] = mask
+    field_.values = np.ma.masked_array(field_.values, np.invert(mask_full))
+    lat_diff = xray.DataArray(field_.lat.values, coords=[field_.lat.values],
+                              dims=['lat']).diff('lat', label='lower')
+    b = field_.diff('lat', label='lower') / lat_diff
+    return (lat_diff.lat - (field_[dict(lat=slice(None, -1))] / b)).dropna('lat')
 
 def msf_500_zeros(vcomp, dp, p):
     """
@@ -217,7 +245,7 @@ def msf_500_zeros(vcomp, dp, p):
 
     # Mask msf_ appropriately.
     msf_.values= np.ma.masked_array(msf_.values, np.invert(mask_full))
-    
+
     # For whatever reason you cannot do a diff on a coordinate. Thus we create
     # a DataArray with the lat values renamed as a new variable.
     lat_diff = xray.DataArray(msf_['lat'].values, coords=[msf_['lat'].values],
@@ -260,52 +288,53 @@ def eddy_mse_flux(temp, sphum, vcomp, swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t,
     return aht(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area).mean('time') - mmc_mse_flux(temp, sphum, vcomp, dp, p)
 
 def precip_extrema(condensation_rain, convection_rain):
-    """
-    Find the locations of precipitation extrema in the zonal mean using interpolation method.
+    """Find the locations of precipitation extrema in the zonal mean using an
+    interpolation method.
     """
     # Take the zonal and time mean of the total.
     total_rain = (condensation_rain + convection_rain).mean('lon').mean('time')
-    lats = xray.DataArray(total_rain['lat'].values, coords=[total_rain['lat'].values], dims=['lat'])
+    return zeros(d_dy_from_lat(total_rain, r_e, vec_field=False), dim='lat')
+#     lats = xray.DataArray(total_rain['lat'].values, coords=[total_rain['lat'].values], dims=['lat'])
 
-    # Take the central difference first derivative.
-    dummy = total_rain.diff('lat', n=1, label='upper')
-    dummy = dummy.diff('lat', n=1, label='lower')
-    
-    # Now dummy has the coordinates and dimensions we want for the central difference.
-    dummy.values = total_rain[dict(lat=slice(2,None))].values - total_rain[dict(lat=slice(None,-2))].values
-    
-    # Now we need the denominator.
-    lat = dummy.copy(deep=True)
-    lat.values = lats[dict(lat=slice(2,None))].values - lats[dict(lat=slice(None,-2))].values
+#     # Take the central difference first derivative.
+#     dummy = total_rain.diff('lat', n=1, label='upper')
+#     dummy = dummy.diff('lat', n=1, label='lower')
 
-    rain_central_diff = dummy / lat
-    
-    # Now interpolate to find the zeros of the derivative.
-    # Now find the zeros.
-    signs = rain_central_diff.copy(deep=True)
-    rcd = np.array(rain_central_diff.values)
-    signs.values = np.sign(rcd)
+#     # Now dummy has the coordinates and dimensions we want for the central difference.
+#     dummy.values = total_rain[dict(lat=slice(2,None))].values - total_rain[dict(lat=slice(None,-2))].values
 
-    # Take two diffs, one preserving lower, the other preserving upper for the lat coord.
-    # This leaves everything but the values surrounding the zero masked.
-    mask = signs.diff('lat', label='lower') != 0
-    mask = mask.diff('lat', label='upper')
+#     # Now we need the denominator.
+#     lat = dummy.copy(deep=True)
+#     lat.values = lats[dict(lat=slice(2,None))].values - lats[dict(lat=slice(None,-2))].values
 
-    # Initialize the mask as all False's.
-    mask_full = rain_central_diff.copy(deep=True)
-    mask_full.values = np.zeros(rain_central_diff.values.shape).astype(bool)
-    mask_full[dict(lat=slice(1,-1))] = mask
+#     rain_central_diff = dummy / lat
 
-    # Mask msf_ appropriately.
-    rain_central_diff.values= np.ma.masked_array(rain_central_diff.values, np.invert(mask_full))
+#     # Now interpolate to find the zeros of the derivative.
+#     # Now find the zeros.
+#     signs = rain_central_diff.copy(deep=True)
+#     rcd = np.array(rain_central_diff.values)
+#     signs.values = np.sign(rcd)
 
-    # For whatever reason you cannot do a diff on a coordinate. Thus we create
-    # a DataArray with the lat values renamed as a new variable.
-    lat_diff = xray.DataArray(rain_central_diff['lat'].values, coords=[rain_central_diff['lat'].values],
-                                      dims=['lat'])
-    b = rain_central_diff.diff('lat', label='lower') / lat_diff.diff('lat', label='lower')
-#    print((rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))]) / b)    
-    return (rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))])/ b
+#     # Take two diffs, one preserving lower, the other preserving upper for the lat coord.
+#     # This leaves everything but the values surrounding the zero masked.
+#     mask = signs.diff('lat', label='lower') != 0
+#     mask = mask.diff('lat', label='upper')
+
+#     # Initialize the mask as all False's.
+#     mask_full = rain_central_diff.copy(deep=True)
+#     mask_full.values = np.zeros(rain_central_diff.values.shape).astype(bool)
+#     mask_full[dict(lat=slice(1,-1))] = mask
+
+#     # Mask msf_ appropriately.
+#     rain_central_diff.values= np.ma.masked_array(rain_central_diff.values, np.invert(mask_full))
+
+#     # For whatever reason you cannot do a diff on a coordinate. Thus we create
+#     # a DataArray with the lat values renamed as a new variable.
+#     lat_diff = xray.DataArray(rain_central_diff['lat'].values, coords=[rain_central_diff['lat'].values],
+#                                       dims=['lat'])
+#     b = rain_central_diff.diff('lat', label='lower') / lat_diff.diff('lat', label='lower')
+# #    print((rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))]) / b)
+#     return (rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))])/ b
 
 def precip_extrema_gcm(precip):
     """
@@ -318,16 +347,16 @@ def precip_extrema_gcm(precip):
     # Take the central difference first derivative.
     dummy = total_rain.diff('lat', n=1, label='upper')
     dummy = dummy.diff('lat', n=1, label='lower')
-    
+
     # Now dummy has the coordinates and dimensions we want for the central difference.
     dummy.values = total_rain[dict(lat=slice(2,None))].values - total_rain[dict(lat=slice(None,-2))].values
-    
+
     # Now we need the denominator.
     lat = dummy.copy(deep=True)
     lat.values = lats[dict(lat=slice(2,None))].values - lats[dict(lat=slice(None,-2))].values
 
     rain_central_diff = dummy / lat
-    
+
     # Now interpolate to find the zeros of the derivative.
     # Now find the zeros.
     signs = rain_central_diff.copy(deep=True)
@@ -352,9 +381,9 @@ def precip_extrema_gcm(precip):
     lat_diff = xray.DataArray(rain_central_diff['lat'].values, coords=[rain_central_diff['lat'].values],
                                       dims=['lat'])
     b = rain_central_diff.diff('lat', label='lower') / lat_diff.diff('lat', label='lower')
-#    print((rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))]) / b)    
+#    print((rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))]) / b)
     return (rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))])/ b
-    
+
 
 def total_precip(condensation_rain, convection_rain):
     """
@@ -377,10 +406,10 @@ def d_dtheta(field, div=False):
 
     dtheta_v = field['lat'].isel(lat=slice(2,None)) - field.lat.isel(lat=slice(None,-2)).values
     dtheta = xray.DataArray(np.deg2rad(dtheta_v), {'lat' : field.lat.isel(lat=slice(1,-1)).values})
-    
+
     dfield = field.copy(deep=True) # Make a copy for easy dimension preservation.
     dfield[dict(lat=slice(1,-1))] = upper_bound - lower_bound
-    #dfield[dict(lat=0)] = 
+    #dfield[dict(lat=0)] =
 
     return (1./(r_e.value * np.cos(np.deg2rad(field.lat.isel(lat=slice(1,-1)))))) * (dfield / dtheta)
 
@@ -388,14 +417,14 @@ def d_dphi(field):
     """
     Computes the longitude derivative using the central difference method.
     """
-    upper_bound = field.isel(lon=slice(2,None))   
+    upper_bound = field.isel(lon=slice(2,None))
     upper_bound['lon'] = field['lon'].isel(lon=slice(1,-1))
     lower_bound = field.isel(lon=slice(None,-2))
     lower_bound['lon'] = field['lon'].isel(lon=slice(1,-1))
-    
+
     dphi_v = field['lon'].isel(lon=slice(2,None)).values - field['lon'].isel(lon=slice(None,-2)).values
     dphi = xray.DataArray(dphi_v, {'lon' : field['lon'].isel(lon=slice(1,-1)).values}) * np.pi / 180.0
-    
+
     dfield = upper_bound - lower_bound
     return (1.0 / r_e.value) * dfield / dphi
 
@@ -407,14 +436,14 @@ def d_dp(field, pf):
     lower_bound['pfull'] = field['pfull'].isel(pfull=slice(1,-1))
     upper_bound = field.isel(pfull=slice(None, -2))
     upper_bound['pfull'] = field['pfull'].isel(pfull=slice(1,-1))
-    
+
     dp_u = pf.isel(pfull=slice(None, -2))
     dp_u['pfull'] = field['pfull'].isel(pfull=slice(1,-1))
     dp_l = pf.isel(pfull=slice(2, None))
     dp_l['pfull'] = field['pfull'].isel(pfull=slice(1,-1))
 
     dp = dp_u - dp_l
-    
+
     dfield = field.copy(deep=True)
     dfield[dict(pfull=slice(1,-1))] = (upper_bound - lower_bound) / dp
 
@@ -423,7 +452,7 @@ def d_dp(field, pf):
                                     (pf[dict(pfull=1)].values - pf[dict(pfull=0)].values)
     dfield[dict(pfull=-1)].values = (field[dict(pfull=-1)].values - field[dict(pfull=-2)].values) /\
                                     (pf[dict(pfull=-1)].values - pf[dict(pfull=-2)].values)
-    
+
     return dfield
 
 def div_v(ucomp, vcomp, omega, p):
@@ -431,3 +460,57 @@ def div_v(ucomp, vcomp, omega, p):
     Computes the divergence of the velocity field in spherical coords.
     """
     return d_dphi(ucomp) + d_dtheta(vcomp, div=True) + d_dp(omega, p)
+
+
+def field_merid_flux_divg(arr, v, radius):
+    """
+    Meridional flux divergence of a field.
+    """
+    return d_dy_from_lat(v * arr, radius, vec_field=True)
+
+
+def field_zonal_flux_divg(arr, u, radius):
+    """
+    Zonal flux divergence of a field.
+    """
+    return d_dx_from_latlon(u * arr, radius)
+
+
+def field_vert_flux_divg(arr, omega, p):
+    """
+    Vertical flux divergence of a field.
+    """
+    return d_dp_from_p(omega * arr, p)
+
+
+def mse_zonal_flux_divg(u, temp, sphum, dp, p):
+    mse_ = mse(temp, sphum, dp, p)
+    return field_zonal_flux_divg(mse_, u, r_e.value)
+
+
+def mse_merid_flux_divg(v, temp, sphum, dp, p):
+    mse_ = mse(temp, sphum, dp, p)
+    return field_merid_flux_divg(mse_, v, r_e.value)
+
+
+def mse_zonal_flux_divg_im(umse):
+    return d_dx_from_latlon(umse, r_e.value)
+
+
+def mse_merid_flux_divg_im(vmse):
+    return d_dy_from_lat(vmse, r_e.value, vec_field=True)
+
+
+def mse_zonal_flux_divg_v_im(umse_vint):
+    return d_dx_from_latlon(umse_vint, r_e.value)
+
+
+def mse_merid_flux_divg_v_im(vmse_vint):
+    return d_dy_from_lat(vmse_vint, r_e.value, vec_field=True)
+
+
+def Q_diff(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc, lwup_sfc,
+           shflx, evap):
+    """Net radiation at TOA"""
+    return (swdn_toa - olr - swup_toa - (swdn_sfc + lwdn_sfc - swup_sfc -
+                                         lwup_sfc - shflx - (L_v * evap)))
