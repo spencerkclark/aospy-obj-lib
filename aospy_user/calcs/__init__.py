@@ -4,7 +4,6 @@ Except for helper functions, all assume input variables with the first axis
 denoting time and the subsequent axes either (pressure, lat, lon) or, if not
 vertically defined, (lat, lon).
 """
-import scipy.stats
 import numpy as np
 import xray
 
@@ -12,7 +11,7 @@ from aospy.constants import (c_p, grav, kappa, L_f, L_v, r_e, Omega, p_trip,
                              T_trip, c_va, c_vv, c_vl, c_vs, R_a, R_v,
                              E_0v, E_0s, s_0v, s_0s)
 from aospy.utils import (level_thickness, to_pascal, to_radians,
-                         integrate, int_dp_g, dp_from_ps)# weight_by_delta) #vert_coord_name)
+                         integrate, int_dp_g, dp_from_ps, vert_coord_name)
 
 
 def dp(ps, bk, pk, arr):
@@ -44,26 +43,30 @@ from .interpolation import (
     interp1d_xray
 )
 
-def vert_coord_name(dp):
-    for name in ['level', 'pfull']:
-        if name in dp.coords:
-            return name
-    return None
+
+def dp_sigma(temp, dp):
+    return dp
+
+def net_sw(swdn_toa, swup_toa):
+    """Net shortwave radiation at TOA"""
+    return swdn_toa - swup_toa
+
 
 def pfull(p):
     """ Returns the pressure at the level midpoints."""
     return to_pascal(p)
 
+
 def gz(temp, sphum, dp, p):
     integrand = (R_a.value * (1.0 + 0.608 * sphum) * temp) / p
     integrand = integrand * dp
-    gz = integrand.copy()
-
+    gz = integrand.copy(deep=True)
     v = vert_coord_name(dp)
-
+    print(v)
     for k in range(len(dp[v])):
-        gz[{v : k}] = integrand.isel(**{v : slice(k, None)}).sum(dim=v)
+        gz[{v: k}] = integrand.isel(**{v: slice(k, None)}).sum(dim=v)
     return gz
+
 
 def dse(temp, sphum, dp, p):
     """ Returns the dry static energy at each gridbox.
@@ -71,6 +74,7 @@ def dse(temp, sphum, dp, p):
     $s = c_p T + gz$
     """
     return (c_p.value * temp + gz(temp, sphum, dp, p))
+
 
 def mse(temp, sphum, dp, p):
     """ Returns the moist static energy at each gridbox.
@@ -93,11 +97,12 @@ def mse(temp, sphum, dp, p):
     mse : array
         moist static energy
     """
-    return (dse(temp, sphum, dp, p) + L_v.value*sphum)
+    return (dse(temp, sphum, dp, p) + L_v.value * sphum)
+
 
 def msf(vcomp, dp):
-    """ Returns the mean meridional mass streamfunction.
-
+    """ Returns the mean meridional mass streamfunction. We take
+    the zonal mean first and then take the time mean.
     """
     try:
         dp = dp.mean('lon')
@@ -105,16 +110,18 @@ def msf(vcomp, dp):
         pass
     dp = to_pascal(dp)
     v = vert_coord_name(dp)
-    msf_ = vcomp.mean('lon').copy(deep=True) # Copy the DataArray (so we don't have to
-    # set the coords ourselves. We then reassign values in the for loop.
+
+    msf_ = vcomp.mean('lon').copy(deep=True)
     integrand = dp * vcomp.mean('lon')
     for k in range(len(dp[v])):
-        msf_[{v : k}] = integrand.isel(**{v : slice(k, None)}).sum(dim=v)
+        msf_[{v: k}] = integrand.isel(**{v: slice(k, None)}).sum(dim=v)
     msf_ *= 2. * r_e.value * np.pi * np.cos(np.deg2rad(vcomp.lat)) / grav.value
     return msf_
 
+
 def msf_at_500_hPa(vcomp, dp, p):
     """ Returns the time mean meridional mass streamfunction at 500 hPa.
+    Use this only in post-processing.
     """
     def eval_at_index(x, axis, indices=None):
         """
@@ -144,7 +151,6 @@ def msf_at_500_hPa(vcomp, dp, p):
         pass
 
     p = to_pascal(p)
-    #p = p.mean('time')
     to_min = np.abs(p/100. - 500)
     try:
         to_min = to_min.mean('time')
@@ -154,6 +160,7 @@ def msf_at_500_hPa(vcomp, dp, p):
     msf_ = msf(vcomp, dp)
     msf_ = msf_.mean('time') # Take the time mean beforehand.
     return msf_.reduce(eval_at_index, dim=v, indices=inds)
+
 
 def correct_vcomp(vcomp, dp):
     """
@@ -170,12 +177,25 @@ def correct_vcomp(vcomp, dp):
         dp = dp.mean('lon')
     except:
         pass
-    factor = -1. * int_dp_g_xray(vplus, dp) / int_dp_g_xray(vminus, dp)
-    return (vplus + factor*vminus)
+    factor = -1. * int_dp_g(vplus, dp) / int_dp_g(vminus, dp)
+    return (vplus + factor * vminus)
 
+
+def total_mse_flux_im(temp, sphum, height, vcomp, dp):
+    """
+    Computes the full mse transport in the zonal mean sense for a specific
+    timestep in the idealized moist model.
+    """
+    # Take the zonal mean of the mse.
+    mse_ = (c_p.value * temp) + (L_v.value * sphum) + height
+    return int_dp_g(mse_ * correct_vcomp(vcomp, dp), dp)
+
+
+# Deprecated.
 def mmc_mse_flux(temp, sphum, vcomp, dp, p):
     """
     Computes the mean meridional circulation component of the MSE flux.
+    This should again be a post-processing step.
     """
     mse_ = mse(temp, sphum, dp, p).mean('lon').mean('time')
     v = correct_vcomp(vcomp, dp).mean('time')
@@ -185,6 +205,8 @@ def mmc_mse_flux(temp, sphum, vcomp, dp, p):
         pass
     return 2. * np.pi * r_e.value * np.cos(np.deg2rad(temp.lat)) * int_dp_g_xray(mse_*v, dp)
 
+
+# Deprecated.
 def signed_max(data, dim):
     """
     Returns the signed maximum value along a given axis.
@@ -193,37 +215,27 @@ def signed_max(data, dim):
         """
         Returns the signed maximum value along a given axis.
         """
-        bools = (-1.*x).max(axis=axis) > x.max(axis=axis)
-        return (bools*x.min(axis=axis) + np.invert(bools)*x.max(axis=axis))
+        bools = (-1. * x).max(axis=axis) > x.max(axis=axis)
+        return (bools * x.min(axis=axis) + np.invert(bools) * x.max(axis=axis))
     return data.reduce(max_, dim=dim)
 
+
+# Deprecated.
 def gms(lat, temp, sphum, vcomp, dp, p):
     """
     Returns the gross moist stability as defined in SH 2015.
     """
+    v = vert_coord_name(dp)
     return mmc_mse_flux(lat, temp, sphum, vcomp, dp, p) / (c_p.value * signed_max(msf(vcomp, dp), v))
 
-def zeros(field, dim='lat'):
-    """Returns the interpolated zeros of a field.
-    This can be applied to a time or longitude dependent field.
-    """
-    field_ = field.copy(deep=True)
-    signs = np.sign(field_)
-    mask = signs.diff('lat', label='lower') != 0
-    mask = mask.diff('lat', label='upper')
-    mask_full = xray.DataArray(np.zeros(field_.values.shape).astype(bool),
-                               coords = field_.coords)
-    mask_full[dict(lat=slice(1,-1))] = mask
-    field_.values = np.ma.masked_array(field_.values, np.invert(mask_full))
-    lat_diff = xray.DataArray(field_.lat.values, coords=[field_.lat.values],
-                              dims=['lat']).diff('lat', label='lower')
-    b = field_.diff('lat', label='lower') / lat_diff
-    return (lat_diff.lat - (field_[dict(lat=slice(None, -1))] / b)).dropna('lat')
 
+# Deprecated.
 def msf_500_zeros(vcomp, dp, p):
     """
-    Returns the linearly interpolated zeros of the 500 mb meridional mass streamfunction.
-    These can later be interpreted as Hadley Cell boundaries (but there will sometimes be more than three)
+    Returns the linearly interpolated zeros of the 500 mb meridional mass
+    streamfunction. These can later be interpreted as Hadley Cell boundaries
+    (but there will sometimes be more than three).
+    This is more easily accomplished with the new interpolation module.
     """
     # Find the streamfunction at 500 mb.
     msf_ = msf_at_500_hPa(vcomp, dp, p)
@@ -253,17 +265,20 @@ def msf_500_zeros(vcomp, dp, p):
     b = msf_.diff('lat', label='lower') / lat_diff.diff('lat', label='lower')
     return (msf_['lat'][dict(lat=slice(None,-1))] * b - msf_[dict(lat=slice(None,-1))])/ b
 
+
 def Q_toa_im(swdn_sfc, olr):
     """
     Heat flux at the top of atmosphere in the idealized moist model.
     """
     return swdn_sfc - olr
 
+
 def Q_sfc_im(swdn_sfc, lwdn_sfc, lwup_sfc, flux_t, flux_lhe):
     """
     Heat flux at the surface.
     """
     return swdn_sfc + lwdn_sfc - lwup_sfc - flux_t - flux_lhe
+
 
 def aht(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area):
     """
@@ -272,20 +287,33 @@ def aht(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area):
     Parameters
     ----------
     """
-    Q_diff = Q_toa_im(swdn_sfc, olr) - Q_sfc_im(swdn_sfc, lwdn_sfc, lwup_sfc, flux_t, flux_lhe)
-    global_mean = (sfc_area * Q_diff).sum('lat').sum('lon') / sfc_area.sum('lat').sum('lon')
+    Q_diff_ = Q_toa_im(swdn_sfc, olr) - Q_sfc_im(swdn_sfc,
+                                                 lwdn_sfc,
+                                                 lwup_sfc,
+                                                 flux_t,
+                                                 flux_lhe)
+    global_mean = (sfc_area * Q_diff_).sum('lat').sum('lon') / sfc_area.sum('lat').sum('lon')
     zonal_integral = (sfc_area * (Q_diff - global_mean)).sum('lon')
     # Now do a cumulative sum in the latitude dimension.
     aht_ = zonal_integral.copy(deep=True)
     for j in range(zonal_integral['lat'].values.shape[0]):
-        aht_[dict(lat=j)] = zonal_integral.isel(lat=slice(None,j)).sum('lat')
+        aht_[dict(lat=j)] = zonal_integral.isel(lat=slice(None, j)).sum('lat')
     return aht_
 
-def eddy_mse_flux(temp, sphum, vcomp, swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area, dp, p):
+
+def eddy_mse_flux(temp, sphum, vcomp, swdn_sfc, olr,
+                  lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area, dp, p):
+    """Eddy contribution to the northward MSE flux.
+    Defined as a residual from the aht.
     """
-    Eddy contribution to the northward MSE flux. Defined as a residual from the aht.
-    """
-    return aht(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area).mean('time') - mmc_mse_flux(temp, sphum, vcomp, dp, p)
+    return aht(swdn_sfc,
+               olr,
+               lwdn_sfc,
+               lwup_sfc,
+               flux_t,
+               flux_lhe,
+               sfc_area).mean('time') - mmc_mse_flux(temp, sphum, vcomp, dp, p)
+
 
 def precip_extrema(condensation_rain, convection_rain):
     """Find the locations of precipitation extrema in the zonal mean using an
@@ -293,96 +321,18 @@ def precip_extrema(condensation_rain, convection_rain):
     """
     # Take the zonal and time mean of the total.
     total_rain = (condensation_rain + convection_rain).mean('lon').mean('time')
-    return zeros(d_dy_from_lat(total_rain, r_e, vec_field=False), dim='lat')
-#     lats = xray.DataArray(total_rain['lat'].values, coords=[total_rain['lat'].values], dims=['lat'])
+    return zeros_xray(d_dy_from_lat(total_rain, r_e, vec_field=False),
+                      'lat')
 
-#     # Take the central difference first derivative.
-#     dummy = total_rain.diff('lat', n=1, label='upper')
-#     dummy = dummy.diff('lat', n=1, label='lower')
-
-#     # Now dummy has the coordinates and dimensions we want for the central difference.
-#     dummy.values = total_rain[dict(lat=slice(2,None))].values - total_rain[dict(lat=slice(None,-2))].values
-
-#     # Now we need the denominator.
-#     lat = dummy.copy(deep=True)
-#     lat.values = lats[dict(lat=slice(2,None))].values - lats[dict(lat=slice(None,-2))].values
-
-#     rain_central_diff = dummy / lat
-
-#     # Now interpolate to find the zeros of the derivative.
-#     # Now find the zeros.
-#     signs = rain_central_diff.copy(deep=True)
-#     rcd = np.array(rain_central_diff.values)
-#     signs.values = np.sign(rcd)
-
-#     # Take two diffs, one preserving lower, the other preserving upper for the lat coord.
-#     # This leaves everything but the values surrounding the zero masked.
-#     mask = signs.diff('lat', label='lower') != 0
-#     mask = mask.diff('lat', label='upper')
-
-#     # Initialize the mask as all False's.
-#     mask_full = rain_central_diff.copy(deep=True)
-#     mask_full.values = np.zeros(rain_central_diff.values.shape).astype(bool)
-#     mask_full[dict(lat=slice(1,-1))] = mask
-
-#     # Mask msf_ appropriately.
-#     rain_central_diff.values= np.ma.masked_array(rain_central_diff.values, np.invert(mask_full))
-
-#     # For whatever reason you cannot do a diff on a coordinate. Thus we create
-#     # a DataArray with the lat values renamed as a new variable.
-#     lat_diff = xray.DataArray(rain_central_diff['lat'].values, coords=[rain_central_diff['lat'].values],
-#                                       dims=['lat'])
-#     b = rain_central_diff.diff('lat', label='lower') / lat_diff.diff('lat', label='lower')
-# #    print((rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))]) / b)
-#     return (rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))])/ b
 
 def precip_extrema_gcm(precip):
+    """Find the locations of precipitation extrema in the zonal mean using an
+    interpolation method.
     """
-    Find the locations of precipitation extrema in the zonal mean using interpolation method.
-    """
-    # Take the zonal and time mean of the total.
+    # NOTE THIS FUNCTION IS BAD. It takes the mean in time to early.
     total_rain = precip.mean('lon').mean('time')
-    lats = xray.DataArray(total_rain['lat'].values, coords=[total_rain['lat'].values], dims=['lat'])
-
-    # Take the central difference first derivative.
-    dummy = total_rain.diff('lat', n=1, label='upper')
-    dummy = dummy.diff('lat', n=1, label='lower')
-
-    # Now dummy has the coordinates and dimensions we want for the central difference.
-    dummy.values = total_rain[dict(lat=slice(2,None))].values - total_rain[dict(lat=slice(None,-2))].values
-
-    # Now we need the denominator.
-    lat = dummy.copy(deep=True)
-    lat.values = lats[dict(lat=slice(2,None))].values - lats[dict(lat=slice(None,-2))].values
-
-    rain_central_diff = dummy / lat
-
-    # Now interpolate to find the zeros of the derivative.
-    # Now find the zeros.
-    signs = rain_central_diff.copy(deep=True)
-    rcd = np.array(rain_central_diff.values)
-    signs.values = np.sign(rcd)
-
-    # Take two diffs, one preserving lower, the other preserving upper for the lat coord.
-    # This leaves everything but the values surrounding the zero masked.
-    mask = signs.diff('lat', label='lower') != 0
-    mask = mask.diff('lat', label='upper')
-
-    # Initialize the mask as all False's.
-    mask_full = rain_central_diff.copy(deep=True)
-    mask_full.values = np.zeros(rain_central_diff.values.shape).astype(bool)
-    mask_full[dict(lat=slice(1,-1))] = mask
-
-    # Mask msf_ appropriately.
-    rain_central_diff.values= np.ma.masked_array(rain_central_diff.values, np.invert(mask_full))
-
-    # For whatever reason you cannot do a diff on a coordinate. Thus we create
-    # a DataArray with the lat values renamed as a new variable.
-    lat_diff = xray.DataArray(rain_central_diff['lat'].values, coords=[rain_central_diff['lat'].values],
-                                      dims=['lat'])
-    b = rain_central_diff.diff('lat', label='lower') / lat_diff.diff('lat', label='lower')
-#    print((rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))]) / b)
-    return (rain_central_diff['lat'][dict(lat=slice(None,-1))] * b - rain_central_diff[dict(lat=slice(None,-1))])/ b
+    return zeros_xray(d_dy_from_lat(total_rain, r_e, vec_field=False),
+                      'lat', 360)
 
 
 def total_precip(condensation_rain, convection_rain):
@@ -390,6 +340,7 @@ def total_precip(condensation_rain, convection_rain):
     Returns the total precipitation rate at a gridbox.
     """
     return condensation_rain + convection_rain
+
 
 def d_dtheta(field, div=False):
     """
@@ -413,6 +364,7 @@ def d_dtheta(field, div=False):
 
     return (1./(r_e.value * np.cos(np.deg2rad(field.lat.isel(lat=slice(1,-1)))))) * (dfield / dtheta)
 
+
 def d_dphi(field):
     """
     Computes the longitude derivative using the central difference method.
@@ -427,6 +379,7 @@ def d_dphi(field):
 
     dfield = upper_bound - lower_bound
     return (1.0 / r_e.value) * dfield / dphi
+
 
 def d_dp(field, pf):
     """ Computes the pressure derivative of a quantity using a central difference.
@@ -454,6 +407,7 @@ def d_dp(field, pf):
                                     (pf[dict(pfull=-1)].values - pf[dict(pfull=-2)].values)
 
     return dfield
+
 
 def div_v(ucomp, vcomp, omega, p):
     """
@@ -514,3 +468,34 @@ def Q_diff(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc, lwup_sfc,
     """Net radiation at TOA"""
     return (swdn_toa - olr - swup_toa - (swdn_sfc + lwdn_sfc - swup_sfc -
                                          lwup_sfc - shflx - (L_v * evap)))
+
+
+def aht_gcm(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc, lwup_sfc,
+            shflx, evap):
+    """
+    Atmospheric heat transport. Computed from radiative fluxes.
+    Procedure adapted from SH's library.
+    Parameters
+    ----------
+    """
+    Q_diff_ = Q_diff(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc,
+                     lwup_sfc, shflx, evap)
+    sfc_area = swdn_toa.sfc_area
+    global_mean = (sfc_area * Q_diff_).sum('lat').sum('lon') /\
+        sfc_area.sum('lat').sum('lon')
+    zonal_integral = (sfc_area * (Q_diff_ - global_mean)).sum('lon')
+    # Now do a cumulative sum in the latitude dimension.
+    aht_ = zonal_integral.copy(deep=True)
+    for j in range(zonal_integral['lat'].values.shape[0]):
+        aht_[dict(lat=j)] = zonal_integral.isel(lat=slice(None, j)).sum('lat')
+    return aht_
+
+
+def S_net(swdn_toa, swup_toa, swdn_sfc, swup_sfc):
+    """Net shortwave radiation in full GCM"""
+    return swdn_toa + swup_sfc - swup_toa - swdn_sfc
+
+
+def L_net(olr, lwdn_sfc, lwup_sfc):
+    """Net longwave radiation in full GCM"""
+    return lwup_sfc - olr - lwdn_sfc

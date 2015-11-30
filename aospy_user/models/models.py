@@ -34,13 +34,13 @@ am2_reyoi = Model(
     ),
     runs=[runs.am2_HadISST_control, runs.am2_reyoi_extratropics_full,
           runs.am2_reyoi_extratropics_sp, runs.am2_reyoi_extratropics_u,
-          runs.am2_reyoi_control, runs.am2_reyoi_extratropics_sp_SI,
+          runs.am2_reyoi_extratropics_sp_SI,
           runs.am2_reyoi_tropics_sp_SI, runs.am2_reyoi_tropics_full,
           runs.am2_reyoi_tropics_u],
     default_runs=[runs.am2_HadISST_control, runs.am2_reyoi_extratropics_full,
                   runs.am2_reyoi_extratropics_sp,
                   runs.am2_reyoi_extratropics_u,
-                  runs.am2_reyoi_control, runs.am2_reyoi_extratropics_sp_SI,
+                  runs.am2_reyoi_extratropics_sp_SI,
                   runs.am2_reyoi_tropics_sp_SI, runs.am2_reyoi_tropics_full,
                   runs.am2_reyoi_tropics_u]
 )

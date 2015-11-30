@@ -39,6 +39,34 @@ sh = Region(
     lon_bounds=(0, 360),
     do_land_mask=False
 )
+nh_tropics = Region(
+    name='nh_tropics',
+    description='Northern Hemisphere Tropics',
+    lat_bounds=(0, 30),
+    lon_bounds=(0, 360),
+    do_land_mask=False,
+)
+sh_tropics = Region(
+    name='sh_tropics',
+    description='Southern Hemisphere Tropics',
+    lat_bounds=(-30, 0),
+    lon_bounds=(0, 360),
+    do_land_mask=False,
+)
+nh_extratropics = Region(
+    name='nh_extratropics',
+    description='Northern Hemisphere Extratropics',
+    lat_bounds=(30, 90),
+    lon_bounds=(0, 360),
+    do_land_mask=False
+)
+sh_extratropics = Region(
+    name='sh_extratropics',
+    description='Southern Hemisphere Extratropics',
+    lat_bounds=(-90, -30),
+    lon_bounds=(0, 360),
+    do_land_mask=False
+)
 # Eastern Hemisphere.
 eh = Region(
     name='eh',

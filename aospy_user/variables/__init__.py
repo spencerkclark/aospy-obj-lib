@@ -965,6 +965,45 @@ omega_mse = Var(
 
 # Calculations involving one or more model-native variables.
 
+dp_sigma = Var(
+    name='dp_sigma',
+    domain='atmos',
+    description=('dp_sigma'),
+    variables=(temp, dp),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.dp_sigma,
+    units=units.Pa
+)
+
+net_sw = Var(
+    name='net_sw',
+    domain='atmos',
+    description=('Net SW radiation at TOA'),
+    variables=(swdn_toa, swup_toa),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.net_sw,
+    units=units.W_m2
+)
+
+vcomp_mb = Var(
+    name='vcomp_mb',
+    domain='atmos',
+    description=('vcomp mass balance'),
+    variables=(vcomp, dp),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.correct_vcomp,
+    units=units.m_s1,
+)
+
 gz = Var(
     name='gz',
     domain='atmos',
@@ -1147,7 +1186,7 @@ precip_extrema_gcm = Var(
     name='precip_extrema_gcm',
     domain='atmos',
     description=('Locations of extreme zonal mean precipitation values'),
-    variables=(precip),
+    variables=(precip,),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -1272,6 +1311,61 @@ Q_toa_im = Var(
     func=calcs.Q_toa_im,
     units=units.W_m2
 )
+
+Q_diff = Var(
+    name='Q_diff',
+    domain='atmos',
+    description=('Net column heating'),
+    variables=(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc,
+               lwup_sfc, shflx, evap),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.Q_diff,
+    units=units.W_m2
+)
+
+aht_gcm = Var(
+    name='aht_gcm',
+    domain='atmos',
+    description=('Meridional total atmospheric heat transport.'),
+    variables=(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc,
+               lwup_sfc, shflx, evap),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.aht_gcm,
+    units=units.W
+)
+
+S_net = Var(
+    name='S_net',
+    domain='atmos',
+    description=('Net shortwave radiation.'),
+    variables=(swdn_toa, swup_toa, swdn_sfc, swup_sfc),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.S_net,
+    units=units.W_m2
+)
+
+L_net = Var(
+    name='L_net',
+    domain='atmos',
+    description=('Net longwave radiation.'),
+    variables=(olr, lwdn_sfc, lwup_sfc),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.L_net,
+    units=units.W_m2
+)
+
 
 master_vars_list = [
     alb_sfc, cld_amt, divg, esf, evap, hght, high_cld_amt, ice_wat, liq_wat,
