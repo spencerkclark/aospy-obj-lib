@@ -1,31 +1,65 @@
-"""My library of functions for use in aospy.
-
-Except for helper functions, all assume input variables with the first axis
-denoting time and the subsequent axes either (pressure, lat, lon) or, if not
-vertically defined, (lat, lon).
-"""
-
-
+"""My library of functions for use in aospy."""
+from aospy.utils import dp_from_ps, to_pascal
+from aospy import PFULL_STR
 import universal
 import idealized_moist
 import deprecated
 
+
 def dp(ps, bk, pk, arr):
-    """Pressure thickness of hybrid coordinate levels from surface pressure."""
+    """Pressure thickness of hybrid coordinate levels from surface pressure.
+
+    Parameters
+    ----------
+    ps : DataArray
+        Surface pressure
+    bk : DataArray
+        bk coordinate
+    pk : DataArray
+        pk coordinate
+    arr : DataArray
+        A DataArray with a pfull coordinate
+
+    Returns
+    -------
+    dp : DataArray
+        Pressure thicknesses in sigma coordinates
+    """
     return dp_from_ps(bk, pk, ps, arr[PFULL_STR])
 
 
 def dp_sigma(temp, dp):
-    return dp
+    """Returns the pressure thicknesses on sigma levels.
 
-def net_sw(swdn_toa, swup_toa):
-    """Net shortwave radiation at TOA"""
-    return swdn_toa - swup_toa
+    This is a function used such that we can save the pressure
+    output.
+
+    Parameters
+    ----------
+    temp : DataArray
+        Temperature
+    dp : DataArray
+        Computed pressure thicknesses
+
+    Returns
+    -------
+    dp : DataArray
+        Pressure thicknesses for sigma levels
+    """
+    return dp
 
 
 def pfull(p):
-    """ Returns the pressure at the level midpoints."""
+    """Returns the pressure at the level midpoints.
+
+    Parameters
+    ----------
+    p : DataArray
+        Pressure
+
+    Returns
+    -------
+    p : DataArray
+        Pressure in Pa
+    """
     return to_pascal(p)
-
-
-
