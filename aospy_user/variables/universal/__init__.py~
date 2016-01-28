@@ -1,0 +1,8 @@
+"""Universal variables (appear in multiple models) or apply to
+standard GCM's.
+"""
+import dynamics
+import energy
+import pressure
+import thermo
+import water

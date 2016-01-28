@@ -13,6 +13,7 @@ from aospy.constants import (c_p, grav, kappa, L_f, L_v, r_e, Omega, p_trip,
 from aospy.utils import (level_thickness, to_pascal, to_radians,
                          integrate, int_dp_g, dp_from_ps, vert_coord_name)
 
+import idealized_moist
 
 def dp(ps, bk, pk, arr):
     """Pressure thickness of hybrid coordinate levels from surface pressure."""
@@ -68,6 +69,13 @@ def gz(temp, sphum, dp, p):
     return gz
 
 
+def vert_avg_temp(temp, dp):
+    ones = np.ones(temp.values.shape)
+    copy = temp.copy(deep=True)
+    copy.values = ones
+    return int_dp_g(temp, dp) / int_dp_g(copy, dp)
+
+
 def dse(temp, sphum, dp, p):
     """ Returns the dry static energy at each gridbox.
 
@@ -98,6 +106,73 @@ def mse(temp, sphum, dp, p):
         moist static energy
     """
     return (dse(temp, sphum, dp, p) + L_v.value * sphum)
+
+
+def tdt_moist_diabatic(tdt_lw, tdt_sw, tdt_vdif):
+    """Net moist diabatic heating rate."""
+    return tdt_lw + tdt_sw + tdt_vdif
+
+
+def mse_tendency(tdt_lw, tdt_sw, tdt_vdif, qdt_vdif):
+    """Net MSE forcing."""
+    return ((c_p.value * tdt_moist_diabatic(tdt_lw, tdt_sw, tdt_vdif)) +
+            (L_v.value * qdt_vdif))
+
+
+def hb(temp, sphum, dp, p):
+    """Average MSE between 20 and 40 hPa from surface.
+    From Shekhar and Boos (2016).
+
+    Parameters
+    ----------
+    temp : array
+        temperature
+    sphum : array
+        specific humidity
+    p : array
+        pressure at sigma levels
+    dp : array
+        thickness of pressure levels
+
+    Returns
+    -------
+    mse : array
+        moist static energy
+    """
+    p = to_pascal(p)
+    dp = to_pascal(dp)
+    dp_sfc = p.isel(pfull=-1) - p
+    mask = (dp_sfc >= 2000.0) & (dp_sfc < 4000.0)
+    mse_ = mse(temp, sphum, dp, p)
+    return (mse_ * dp).where(mask).sum('pfull') / dp.where(mask).sum('pfull')
+
+
+def h_lower_trop(temp, sphum, dp, p):
+    """Average MSE between 20 and 500 hPa from surface.
+    From Shekhar and Boos (2016).
+
+    Parameters
+    ----------
+    temp : array
+        temperature
+    sphum : array
+        specific humidity
+    p : array
+        pressure at sigma levels
+    dp : array
+        thickness of pressure levels
+
+    Returns
+    -------
+    mse : array
+        moist static energy
+    """
+    p = to_pascal(p)
+    dp = to_pascal(dp)
+    dp_sfc = p.isel(pfull=-1) - p
+    mask = (dp_sfc >= 2000.0) & (dp_sfc < 50000.0)
+    mse_ = mse(temp, sphum, dp, p)
+    return (mse_ * dp).where(mask).sum('pfull') / dp.where(mask).sum('pfull')
 
 
 def msf(vcomp, dp):
@@ -181,14 +256,15 @@ def correct_vcomp(vcomp, dp):
     return (vplus + factor * vminus)
 
 
-def total_mse_flux_im(temp, sphum, height, vcomp, dp):
+def total_mse_flux_im(temp, sphum, vcomp, dp, p):
     """
     Computes the full mse transport in the zonal mean sense for a specific
     timestep in the idealized moist model.
     """
     # Take the zonal mean of the mse.
-    mse_ = (c_p.value * temp) + (L_v.value * sphum) + height
-    return int_dp_g(mse_ * correct_vcomp(vcomp, dp), dp)
+    mse_ = (c_p.value * temp) + (L_v.value * sphum) + gz(temp, sphum, dp, p)
+    mse_ = mse_.mean('lon')
+    return 2.*np.pi*r_e.value*np.cos(np.deg2rad(mse_.lat))*int_dp_g(mse_ * correct_vcomp(vcomp, dp), dp.mean('lon'))
 
 
 # Deprecated.
@@ -203,7 +279,7 @@ def mmc_mse_flux(temp, sphum, vcomp, dp, p):
         dp = dp.mean('lon')
     except:
         pass
-    return 2. * np.pi * r_e.value * np.cos(np.deg2rad(temp.lat)) * int_dp_g_xray(mse_*v, dp)
+    return 2. * np.pi * r_e.value * np.cos(np.deg2rad(temp.lat)) * int_dp_g(mse_*v, dp)
 
 
 # Deprecated.
@@ -293,7 +369,7 @@ def aht(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe, sfc_area):
                                                  flux_t,
                                                  flux_lhe)
     global_mean = (sfc_area * Q_diff_).sum('lat').sum('lon') / sfc_area.sum('lat').sum('lon')
-    zonal_integral = (sfc_area * (Q_diff - global_mean)).sum('lon')
+    zonal_integral = (sfc_area * (Q_diff_ - global_mean)).sum('lon')
     # Now do a cumulative sum in the latitude dimension.
     aht_ = zonal_integral.copy(deep=True)
     for j in range(zonal_integral['lat'].values.shape[0]):
@@ -480,6 +556,29 @@ def aht_gcm(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc, lwup_sfc,
     """
     Q_diff_ = Q_diff(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc,
                      lwup_sfc, shflx, evap)
+    sfc_area = swdn_toa.sfc_area
+    global_mean = (sfc_area * Q_diff_).sum('lat').sum('lon') /\
+        sfc_area.sum('lat').sum('lon')
+    zonal_integral = (sfc_area * (Q_diff_ - global_mean)).sum('lon')
+    # Now do a cumulative sum in the latitude dimension.
+    aht_ = zonal_integral.copy(deep=True)
+    for j in range(zonal_integral['lat'].values.shape[0]):
+        aht_[dict(lat=j)] = zonal_integral.isel(lat=slice(None, j)).sum('lat')
+    return aht_
+
+
+def aht_gcm_tend(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc, lwup_sfc,
+            shflx, evap, tdt_lw, tdt_sw, tdt_vdif, qdt_vdif, dp):
+    """
+    Atmospheric heat transport. Computed from radiative fluxes.
+    Procedure adapted from SH's library.
+    Parameters
+    ----------
+    """
+    Q_diff_ = Q_diff(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc,
+                     lwup_sfc, shflx, evap)
+    mse_tendency_ = int_dp_g(mse_tendency(tdt_lw, tdt_sw, tdt_vdif, qdt_vdif), dp)
+    Q_diff = Q_diff - mse_tendency
     sfc_area = swdn_toa.sfc_area
     global_mean = (sfc_area * Q_diff_).sum('lat').sum('lon') /\
         sfc_area.sum('lat').sum('lon')

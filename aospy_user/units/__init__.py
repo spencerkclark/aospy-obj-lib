@@ -110,6 +110,9 @@ J_kg1_Pa1 = Units(
     plot_units='J kg$^{-1}$ hPa$^{-1}',
     plot_units_conv=1e2
 )
+kg_kg1_s1 = Units(
+    units=r'kg kg1 s1',
+)
 Pa = Units(
     units=r'Pa',
     plot_units=r'hPa',

@@ -5,11 +5,11 @@ from aospy.utils import (d_deta_from_pfull, d_deta_from_phalf, int_dp_g,
 import numpy as np
 import xray
 
-#from .. import LAT_STR, LON_STR, PFULL_STR, PLEVEL_STR
-LAT_STR = 'lat'
-LON_STR = 'lon'
-PFULL_STR = 'pfull'
-PLEVEL_STR = 'level'
+from .. import LAT_STR, LON_STR, PFULL_STR, PLEVEL_STR
+#LAT_STR = 'lat'
+#LON_STR = 'lon'
+#PFULL_STR = 'pfull'
+#PLEVEL_STR = 'level'
 
 def fwd_diff1(arr, dim):
     """1st order accurate forward differencing approximation of derivative.
