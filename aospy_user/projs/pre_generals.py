@@ -1,5 +1,5 @@
 from aospy.proj import Proj
-from aospy_user import regions, variables
+from aospy_user import regions
 import aospy_user.models.models as models
 
 itcz = Proj(
@@ -12,7 +12,8 @@ itcz = Proj(
         models.dargan,
         models.idealized_moist_rad
         ),
-    regions=(regions.globe,)
+    regions=(regions.globe,
+             regions.nh)
 )
 
 dargan_test = Proj(

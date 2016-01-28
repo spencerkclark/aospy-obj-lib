@@ -1,4 +1,6 @@
 from aospy.region import Region
+
+
 # Globe
 globe = Region(
     name='globe',

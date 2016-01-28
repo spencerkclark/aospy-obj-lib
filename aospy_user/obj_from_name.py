@@ -1,6 +1,7 @@
 """obj_from_name: Get aospy objects given their name string"""
 import aospy
-from aospy_user import regions, variables
+from aospy_user import variables
+from . import regions
 import aospy_user.projs.pre_generals as projs
 
 def to_iterable(obj):
