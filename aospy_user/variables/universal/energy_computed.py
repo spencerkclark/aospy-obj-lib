@@ -19,7 +19,7 @@ Q_diff = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    func=calcs.Q_diff,
+    func=calcs.universal.energy.Q_diff,
     units=units.W_m2
 )
 Q_diff_sw = Var(
@@ -31,7 +31,7 @@ Q_diff_sw = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    func=calcs.S_net,
+    func=calcs.universal.energy.Q_diff_sw,
     units=units.W_m2
 )
 Q_diff_lw = Var(
@@ -43,6 +43,6 @@ Q_diff_lw = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    func=calcs.L_net,
+    func=calcs.universal.energy.Q_diff_lw,
     units=units.W_m2
 )

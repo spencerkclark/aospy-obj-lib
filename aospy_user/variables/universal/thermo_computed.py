@@ -15,7 +15,7 @@ dse = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    func=calcs.dse,
+    func=calcs.universal.thermo.dse,
     units=units.J_kg1
 )
 mse = Var(
@@ -27,11 +27,11 @@ mse = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    func=calcs.mse,
+    func=calcs.universal.thermo.mse,
     units=units.J_kg1
 )
-hb = Var(
-    name='hb',
+mse_b = Var(
+    name='mse_b',
     domain='atmos',
     description=('Average moist static energy 20 to 40 hPa from sfc.'),
     variables=(temp, sphum, dp, p),
@@ -40,10 +40,10 @@ hb = Var(
     def_lat=True,
     def_lon=True,
     units=units.J_kg1,
-    func=calcs.hb
+    func=calcs.universal.thermo.mse_b
 )
-h_lower_trop = Var(
-    name='h_lower_trop',
+mse_lower_trop = Var(
+    name='mse_lower_trop',
     domain='atmos',
     description=('Average moist static energy 20 to 500 hPa from sfc.'),
     variables=(temp, sphum, dp, p),
@@ -52,5 +52,5 @@ h_lower_trop = Var(
     def_lat=True,
     def_lon=True,
     units=units.J_kg1,
-    func=calcs.h_lower_trop
+    func=calcs.universal.thermo.mse_lower_trop
 )

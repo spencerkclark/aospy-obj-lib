@@ -99,7 +99,7 @@ dmv_dx_im = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    func=calcs.mse_zonal_flux_divg_im,
+    func=calcs.deprecated.mse_zonal_flux_divg_im,
     units=units.W
 )
 dmv_dx_v_im = Var(
@@ -111,7 +111,7 @@ dmv_dx_v_im = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    func=calcs.mse_zonal_flux_divg_v_im,
+    func=calcs.deprecated.mse_zonal_flux_divg_v_im,
     units=units.W
 )
 dmv_dy_v_im = Var(
@@ -123,7 +123,7 @@ dmv_dy_v_im = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    func=calcs.mse_merid_flux_divg_v_im,
+    func=calcs.deprecated.mse_merid_flux_divg_v_im,
     units=units.W
 )
 dmv_dy_im = Var(
@@ -135,6 +135,6 @@ dmv_dy_im = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    func=calcs.mse_merid_flux_divg_im,
+    func=calcs.deprecated.mse_merid_flux_divg_im,
     units=units.W
 )

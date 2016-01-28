@@ -21,7 +21,7 @@ msf = Var(
     def_vert=True,
     def_lat=True,
     def_lon=False,
-    func=calcs.msf,
+    func=calcs.universal.dynamics.msf,
     units=units.kg_s1
 )
 gz = Var(
@@ -33,7 +33,7 @@ gz = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    func=calcs.gz,
+    func=calcs.universal.dynamics.gz,
     units=units.J_kg1
 )
 aht = Var(
@@ -46,20 +46,8 @@ aht = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    func=calcs.aht_gcm,
+    func=calcs.universal.dynamics.aht,
     units=units.W
-)
-gms = Var(
-    name='gms',
-    domain='atmos',
-    description=('Gross Moist Stability as defined in SH 2015.'),
-    variables=(temp, sphum, vcomp, dp, p),
-    def_time=True,
-    def_vert=False,
-    def_lat=True,
-    def_lon=False,
-    func=calcs.gms,
-    units=units.K
 )
 vcomp_mb = Var(
     name='vcomp_mb',
@@ -70,10 +58,22 @@ vcomp_mb = Var(
     def_vert=True,
     def_lat=True,
     def_lon=False,
-    func=calcs.correct_vcomp,
+    func=calcs.universal.dynamics.vcomp_mb,
     units=units.m_s1,
 )
 # Continue supporting below?
+gms = Var(
+    name='gms',
+    domain='atmos',
+    description=('Gross Moist Stability as defined in SH 2015.'),
+    variables=(temp, sphum, vcomp, dp, p),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.deprecated.gms,
+    units=units.K
+)
 msf_at_500_hPa = Var(
     name='msf_500',
     domain='atmos',
@@ -84,7 +84,7 @@ msf_at_500_hPa = Var(
     def_vert=False,
     def_lat=True,
     def_lon=False,
-    func=calcs.msf_at_500_hPa,
+    func=calcs.deprecated.msf_at_500_hPa,
     units=units.kg_s1
 )
 mmc_mse_flux = Var(
@@ -97,7 +97,7 @@ mmc_mse_flux = Var(
     def_vert=False,
     def_lat=True,
     def_lon=False,
-    func=calcs.mmc_mse_flux,
+    func=calcs.deprecated.mmc_mse_flux,
     units=units.W
 )
 msf_500_zeros = Var(
@@ -109,7 +109,7 @@ msf_500_zeros = Var(
     def_vert=False,
     def_lat=True,
     def_lon=False,
-    func=calcs.msf_500_zeros,
+    func=calcs.deprecated.msf_500_zeros,
     units=units.latlon
 )
 dmv_dx = Var(
@@ -121,7 +121,7 @@ dmv_dx = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    func=calcs.mse_zonal_flux_divg,
+    func=calcs.deprecated.mse_zonal_flux_divg,
     units=units.W
 )
 dmv_dy = Var(
@@ -133,6 +133,6 @@ dmv_dy = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    func=calcs.mse_merid_flux_divg,
+    func=calcs.deprecated.mse_merid_flux_divg,
     units=units.W
 )

@@ -3,7 +3,7 @@
 import numpy as np
 import xarray as xr
 
-from .. import LAT_STR, LON_STR, PFULL_STR, PLEVEL_STR
+from aospy import LAT_STR, LON_STR, PFULL_STR, PLEVEL_STR
 
 
 def cumsum(arr, dim):
@@ -24,6 +24,32 @@ def cumsum(arr, dim):
         DataArray of result
     """
     return xr.DataArray(np.cumsum(arr, axis=arr.get_axis_num(dim)), arr.coords)
+
+
+def reverse_cumsum(arr, dim):
+    """A wrapper for to compute the reverse np.cumsum method
+    for application on DataArrays.  This is good for use on
+    computing the vertical integral from the bottom of the atmosphere
+    up (if index 0 in the vertical is the top of the atmosphere).
+
+    Adapted from https://github.com/pydata/xarray/issues/652
+
+    Parameters
+    ----------
+    arr : DataArray
+        DataArray to preform the cumulative sum on
+    dim : str
+        Dimension name of axis to preform summation along
+
+    Returns
+    -------
+    cumsum : DataArray
+        DataArray of result
+    """
+    rev_arr = arr.isel(**{dim: slice(None, None, -1)})
+    integral = xr.DataArray(np.cumsum(rev_arr, axis=rev_arr.get_axis_num(dim)),
+                            rev_arr.coords)
+    return integral.isel(**{dim: slice(None, None, -1)})
 
 
 def global_integral(arr):

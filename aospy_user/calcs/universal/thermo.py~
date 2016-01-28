@@ -1,0 +1,52 @@
+from aospy.constants import c_p, L_v
+from aospy_user.calcs.universal.dynamics import gz
+
+
+def dse(temp, sphum, dp, p):
+    """ Returns the dry static energy at each gridbox.
+
+    .. math::
+        s = c_p T + gz
+
+    Parameters
+    ----------
+    temp : DataArray
+        Temperature
+    sphum : DataArray
+        Specific humidity
+    p : DataArray
+        Pressure at sigma levels
+    dp : DataArray
+        Thickness of pressure levels
+
+    Returns
+    -------
+    dse : DataArray
+        Dry static energy
+    """
+    return (c_p.value * temp + gz(temp, sphum, dp, p))
+
+
+def mse(temp, sphum, dp, p):
+    """ Returns the moist static energy at each gridbox.
+
+    .. math::
+        m = c_p T + L_v q + gz
+
+    Parameters
+    ----------
+    temp : DataArray
+        Temperature
+    sphum : DataArray
+        Specific humidity
+    p : DataArray
+        Pressure at sigma levels
+    dp : DataArray
+        Thickness of pressure levels
+
+    Returns
+    -------
+    mse : DataArray
+        Moist static energy
+    """
+    return (dse(temp, sphum, dp, p) + L_v.value * sphum)

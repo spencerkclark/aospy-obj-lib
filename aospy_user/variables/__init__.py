@@ -25,7 +25,7 @@ from universal.thermo_native import (
     mc_half, sst
 )
 from universal.thermo_computed import (
-    dse, mse, hb, h_lower_trop
+    dse, mse, mse_b, mse_lower_trop
 )
 from universal.water_native import (
     precip, prec_conv, prec_ls, evap, snow_conv, snow_ls,
