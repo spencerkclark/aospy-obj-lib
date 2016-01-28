@@ -1,20 +1,14 @@
 #! /usr/bin/env python
 """Main script for automating computations using aospy."""
+from __future__ import print_function
 import itertools
-
-import colorama
+import warnings
 
 import aospy
+import colorama
 
-import aospy_user.regions
-import aospy_user.units
-import aospy_user.calcs
-import aospy_user.variables
-from aospy_user.runs.cases import *
-#from aospy_user.runs.idealized import *
-from aospy_user.models.models import *
-from aospy_user.projs.am2_2009_yim import *
-import aospy_user.obj_from_name as aospy_user
+from . import projs, variables, regions
+
 
 class MainParams(object):
     """Container for parameters specified in main routine."""
@@ -24,20 +18,18 @@ class MainParams(object):
 class MainParamsParser(object):
     """Interface between specified parameters and resulting CalcSuite."""
     def str_to_aospy_obj(self, proj, model, var, region):
-        proj_out = aospy_user.to_proj(proj)
-        model_out = aospy_user.to_model(model, proj_out)
-        var_out = aospy_user.to_var(var)
-        region_out = aospy_user.to_region(region, proj=proj_out)
+        proj_out = aospy.to_proj(proj, self.projs)
+        model_out = aospy.to_model(model, proj_out, self.projs)
+        var_out = aospy.to_var(var, variables)
+        region_out = aospy.to_region(region, regions, proj=proj_out)
         return proj_out, model_out, var_out, region_out
 
     def aospy_obj_to_iterable(self, proj, model, var, region):
-        return [aospy_user.to_iterable(obj)
-                for obj in (proj, model, var, region)]
+        return [aospy.to_iterable(obj) for obj in (proj, model, var, region)]
 
     def str_to_aospy_iterable(self, proj, model, var, region):
-        projo, modelo, varo, regiono = self.str_to_aospy_obj(proj, model,
-                                                             var, region)
-        return self.aospy_obj_to_iterable(projo, modelo, varo, regiono)
+        p, m, v, r = self.str_to_aospy_obj(proj, model, var, region)
+        return self.aospy_obj_to_iterable(p, m, v, r)
 
     def create_child_run_obj(self, models, runs, proj):
         """Create child Run object(s) for each Model object."""
@@ -45,18 +37,18 @@ class MainParamsParser(object):
         for model in models:
             for run in runs:
                 try:
-                    run_objs.append(aospy_user.to_run(run, model, proj))
+                    run_objs.append(aospy.to_run(run, model, proj, self.projs))
                 except AttributeError as ae:
                     print(ae)
-        print(run_objs)            
-        if len(run_objs) == 1 and not isinstance(run_objs[0], (list, tuple)):
+        # If flat list, return the list.  If nested, then flatten it.
+        if all([isinstance(r, aospy.Run) for r in run_objs]):
             return run_objs
-        else:
-            return list(itertools.chain.from_iterable(run_objs))
+        return list(itertools.chain.from_iterable(run_objs))
 
-    def __init__(self, main_params):
+    def __init__(self, main_params, projs):
         """Turn all inputs into aospy-ready objects."""
         self.__dict__ = vars(main_params)
+        self.projs = projs
         self.proj, self.model, self.var, self.region = (
             self.str_to_aospy_iterable(main_params.proj, main_params.model,
                                        main_params.var, main_params.region)
@@ -77,7 +69,7 @@ class CalcSuite(object):
             ('Runs', self.run),
             ('Ensemble members', self.ens_mem),
             ('Variables', self.var),
-            ('Year ranges', self.yr_range),
+            ('Year ranges', self.date_range),
             ('Geographical regions', [r.values() for r in self.region]),
             ('Time interval of input data', self.intvl_in),
             ('Time interval for averaging', self.intvl_out),
@@ -86,21 +78,26 @@ class CalcSuite(object):
             ('Output data time type', self.dtype_out_time),
             ('Output data vertical type', self.dtype_out_vert),
             ('Vertical levels', self.level),
-            ('Year chunks', self.yr_chunk_len),
+            ('Year chunks', self.chunk_len),
             ('Compute this data', self.compute),
             ('Print this data', self.print_table)
         )
-        print ''
+        print('')
         colorama.init()
         color_left = colorama.Fore.BLUE
         color_right = colorama.Fore.RESET
         for left, right in pairs:
-            print color_left, left, ':', color_right, right
-        print colorama.Style.RESET_ALL
+            print(color_left, left, ':', color_right, right)
+        print(colorama.Style.RESET_ALL)
 
     def prompt_user_verify(self):
-        if not raw_input("Proceed using these parameters? ").lower() == 'y':
-            raise IOError('\nExecution cancelled by user.')
+        try:
+            input = raw_input
+        except NameError:
+            import builtins
+            input = builtins.input
+        if not input("Perform these computations? ").lower() in ('y', 'yes'):
+            raise IOError('\n', 'Execution cancelled by user.')
 
     def create_params_all_calcs(self):
         attr_names = ('proj',
@@ -108,7 +105,7 @@ class CalcSuite(object):
                       'run',
                       'ens_mem',
                       'var',
-                      'yr_range',
+                      'date_range',
                       'level',
                       'region',
                       'intvl_in',
@@ -118,7 +115,7 @@ class CalcSuite(object):
                       'dtype_in_vert',
                       'dtype_out_vert',
                       'verbose',
-                      'yr_chunk_len')
+                      'chunk_len')
         attrs = tuple([getattr(self, name) for name in attr_names])
 
         # Each permutation becomes a dictionary, with the keys being the attr
@@ -131,16 +128,29 @@ class CalcSuite(object):
             param_combos.append(dict(zip(attr_names, permutation)))
         return param_combos
 
-    def create_calcs(self, param_combos):
+    def create_calcs(self, param_combos, exec_calcs=False, print_table=False):
         """Iterate through given parameter combos, creating needed Calcs."""
         calcs = []
         for params in param_combos:
             try:
-                calc_int = aospy.CalcInterface(**params)
-            except AttributeError as ae:
-                print('aospy warning:', ae)
+                ci = aospy.CalcInterface(**params)
+            # except AttributeError as ae:
+                # print('aospy warning:', ae)
+            except:
+                raise
             else:
-                calc = aospy.Calc(calc_int)
+                calc = aospy.Calc(ci)
+                if exec_calcs:
+                    try:
+                        calc.compute()
+                    except:
+                        raise
+                        # print('Calc {} failed.  Skipping.'.format(calc))
+                    else:
+                        if print_table:
+                            print("{}".format(calc.load('reg.av', False,
+                                                        ci.region['sahel'],
+                                                        plot_units=False)))
                 calcs.append(calc)
         return calcs
 
@@ -155,57 +165,18 @@ class CalcSuite(object):
                                  region=region, plot_units=True)])
 
 
-def main(main_params):
+def main(main_params, exec_calcs=True, print_table=False, prompt_verify=True):
     """Main script for interfacing with aospy."""
     # Instantiate objects and load default/all models, runs, and regions.
-    cs = CalcSuite(MainParamsParser(main_params))
+    cs = CalcSuite(MainParamsParser(main_params, projs))
     cs.print_params()
-    cs.prompt_user_verify()
+    if prompt_verify:
+        try:
+            cs.prompt_user_verify()
+        except IOError as e:
+            warnings.warn(e)
+            return
     param_combos = cs.create_params_all_calcs()
-    calcs = cs.create_calcs(param_combos)
-    print('\n\tVariable time averages and statistics:')
-    if main_params.compute:
-        cs.exec_calcs(calcs)
-    if main_params.print_table[0]:
-        cs.print_results(calcs)
-    print("Calculations finished.")
+    calcs = cs.create_calcs(param_combos, exec_calcs=exec_calcs,
+                            print_table=print_table)
     return calcs
-
-if __name__ == '__main__':
-    mp = MainParams()
-#    mp.proj = 'dargan_test'
-    mp.proj = 'am2_2009_yim'
-#    mp.model = ['dargan']
-    mp.model = ['am2']
-#    mp.run = [('control_T85', 'extratropics_0.15_T85', 'extratropics_0.037_T85',
-#              'tropics_0.1_T85', 'tropics_0.025_T85')]
-#    mp.run = [('am2_control', 'am2_tropics', 'am2_extratropics', 'am2_tropics+extratropics')]
-    mp.run = [('am2_control', 'am2_tropics')]
-#    mp.run = [('am2_reyoi_control','am2_reyoi_extratropics_full', 'am2_reyoi_extratropics_sp_SI','am2_reyoi_tropics_sp_SI', 'am2_reyoi_extratropics_u',
-#               'am2_HadISST_control', 'am2_reyoi_tropics_u', 'am2_reyoi_tropics_full')]
-    mp.ens_mem = [None]
-    mp.var = ['precip']
-#    mp.var = ['swdn_sfc', 'olr', 'lwdn_sfc', 'lwup_sfc']#, 'gz', 'mse', 'dse']
-    # mp.yr_range = [(1983, 1983)]
-    mp.yr_range = ['default']
-    mp.region = 'sahel3'
-    mp.intvl_in = ['monthly'] # pp monthly tag
-    mp.intvl_out = ['ann']
-#    mp.intvl_out = ['jja']
-#    mp.intvl_out = [1,2,3,4,5,6,7,8,9,10,11,12] # time reduction method
-    mp.dtype_in_time = ['ts']
-    mp.dtype_in_vert = ['pressure']
-#    mp.dtype_in_vert = ['sigma']
-#    mp.dtype_out_time = [('',)]
-    mp.dtype_out_time = ['av']
-#    mp.dtype_out_time = ['znl.av','reg.av_xray', 'reg.ts_xray', 'reg.std_xray']
-#    mp.dtype_out_time = ['znl.av'], #'av', 'std', 'reg.av_xray', 'reg.ts_xray', 'reg.std_xray')]
-    # mp.dtype_out_vert = [False]
-    mp.dtype_out_vert = [False]
-    mp.level = [False]
-    mp.yr_chunk_len = [False]
-    mp.compute = [True]
-    mp.verbose = [True]
-    mp.print_table = [False]
-
-    calcs = main(mp)
