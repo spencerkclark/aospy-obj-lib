@@ -1,0 +1,1 @@
+Personal library of objects deriving from the `aospy` Python package.
