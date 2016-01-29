@@ -80,7 +80,8 @@ idealized_moist_rad = Model(
     name='idealized_moist_rad',
     grid_file_paths=(
         ('/home/skc/archive/testing_2015_12_22/idealized_moist_rad/'
-         'gfdl.ncrc2-default-repro/1x0m360d_32pe/history'),
+         'gfdl.ncrc2-default-repro/1x0m360d_32pe/history/'
+         '00010101.atmos_1x20day.nc'),
     ),
     runs=[idealized.imr_control],
     default_runs=[idealized.imr_control],

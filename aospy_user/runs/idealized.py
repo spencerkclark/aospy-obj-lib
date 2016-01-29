@@ -12,7 +12,7 @@ varia = ['olr', 'temp', 'sphum', 'ps', 'vcomp', 'swdn_sfc', 'olr', 'lwdn_sfc',
          'lwup_sfc', 'flux_t', 'flux_lhe',
          'convection_rain', 'condensation_rain',
          'ucomp', 'omega', 'umse', 'vmse', 'omega_mse', 'mse', 'umse_vint',
-         'vmse_vint', 'omega_mse_vint', 'swdn_toa']
+         'vmse_vint', 'omega_mse_vint', 'swdn_toa', 't_surf']
 
 # If we run more than four years we'll have to think about leap years,
 # but for now this is OK.
