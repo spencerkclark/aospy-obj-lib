@@ -4,7 +4,7 @@ from universal.dynamics_native import (
     omega, vort, divg, pv, esf
 )
 from universal.dynamics_computed import (
-    msf, gz, aht, gms, vcomp_mb,
+    msf, gz, aht, gms, vcomp_mb, alet,
     msf_at_500_hPa, mmc_mse_flux, msf_500_zeros, dmv_dx, dmv_dy
 )
 from universal.energy_native import (

@@ -78,7 +78,7 @@ def alet(precip, evap):
         Vertically integrated latent energy transport
     """
     p_minus_e_ = p_minus_e(precip, evap)
-    return skcint.meridional_integral(L_v.value * p_minus_e_)
+    return skcint.meridional_integral(-L_v.value * p_minus_e_)
 
 
 def aht(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc, lwup_sfc,
