@@ -1,5 +1,6 @@
 from aospy.var import Var
 from aospy_user import calcs, units
+from aospy_user.variables.idealized_moist.energy import flux_lhe
 
 
 condensation_rain = Var(
@@ -32,5 +33,29 @@ precip_im = Var(
     def_lat=True,
     def_lon=True,
     func=calcs.idealized_moist.water.precip,
+    units=units.kg_m2_s1
+)
+evap_im = Var(
+    name='evap_im',
+    domain='atmos',
+    description=('Total evaporation rate in idealized moist model'),
+    variables=(flux_lhe,),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.idealized_moist.water.evap,
+    units=units.kg_m2_s1
+)
+p_minus_e_im = Var(
+    name='p_minus_e_im',
+    domain='atmos',
+    description=('P-E in idealized moist model'),
+    variables=(condensation_rain, convection_rain, flux_lhe,),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.idealized_moist.water.p_minus_e,
     units=units.kg_m2_s1
 )

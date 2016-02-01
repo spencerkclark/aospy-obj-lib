@@ -32,6 +32,9 @@ from universal.water_native import (
     soil_liq, soil_moisture, high_cld_amt, low_cld_amt,
     mid_cld_amt, tot_cld_amt, cld_amt, wvp
 )
+from universal.water_computed import (
+    p_minus_e
+)
 from idealized_moist.dynamics import (
     umse_vint, vmse_vint, omega_mse_vint, umse, vmse,
     omega_mse, aht_im, dmv_dx_im, dmv_dy_im, dmv_dx_v_im,
@@ -45,5 +48,5 @@ from idealized_moist.thermo import (
     dse_im, mse_im
 )
 from idealized_moist.water import (
-    condensation_rain, convection_rain, precip_im
+    condensation_rain, convection_rain, precip_im, p_minus_e_im
 )
