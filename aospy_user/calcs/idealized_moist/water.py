@@ -60,4 +60,4 @@ def p_minus_e(condensation_rain, convection_rain, flux_lhe):
     p_minus_e : DataArray
         Precipitation rate minus evaporation rate
     """
-    return precip(condensation_rain, convection_rain, flux_lhe)
+    return precip(condensation_rain, convection_rain) - evap(flux_lhe)
