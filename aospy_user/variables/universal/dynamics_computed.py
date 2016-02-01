@@ -7,7 +7,7 @@ from aospy_user.variables.universal.energy_native import (swdn_toa,
                                                           lwup_sfc, lwdn_sfc,
                                                           swup_sfc,
                                                           swdn_sfc, shflx)
-from aospy_user.variables.universal.water_native import evap
+from aospy_user.variables.universal.water_native import evap, precip
 from aospy_user.variables.universal.dynamics_native import ucomp, vcomp
 
 
@@ -60,6 +60,18 @@ vcomp_mb = Var(
     def_lon=False,
     func=calcs.universal.dynamics.vcomp_mb,
     units=units.m_s1,
+)
+alet = Var(
+    name='alet',
+    domain='atmos',
+    description=('Atmospheric latent energy transport'),
+    variables=(precip, evap),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.universal.dynamics.alet,
+    units=units.W
 )
 # Continue supporting below?
 gms = Var(

@@ -40,7 +40,7 @@ mp.var = ['p_minus_e']
 #              'swup_toa','swup_toa_clr','swdn_sfc_clr','lwup_sfc_clr','lwdn_sfc_clr',
 #              ]#, 'mse_vert_advec_upwind']
     #mp.date_range = [('1983-01-01', '2012-12-31')
-mp.date_range = [('0021-01-01', '0080-12-31')]
+mp.date_range = [('0041-01-01', '0080-12-31')]
     #    mp.date_range = [('1983-01-01', '1998-12-31')]
 #mp.date_range = [('0002-02-05', '0002-05-16')]
 #mp.date_range = [('0001-12-27', '0002-12-22')]

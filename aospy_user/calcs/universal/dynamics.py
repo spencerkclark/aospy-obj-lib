@@ -1,11 +1,12 @@
 import numpy as np
 import xarray as xr
 
-from aospy.constants import R_a, grav, r_e
+from aospy.constants import R_a, grav, r_e, L_v
 from aospy import LON_STR, LAT_STR
 from aospy.utils import vert_coord_name, to_radians, to_pascal, int_dp_g
 from aospy_user.calcs import integration as skcint
 from aospy_user.calcs.universal.energy import Q_diff
+from aospy_user.calcs.universal.water import p_minus_e
 
 
 def gz(temp, sphum, dp, p):
@@ -58,6 +59,26 @@ def msf(vcomp, dp):
     integral = skcint.reverse_cumsum(integrand, vert_coord_name(dp))
     return ((-2.0 * r_e.value * np.pi / grav.value) *
             np.cos(to_radians(vcomp[LAT_STR])) * integral)
+
+
+def alet(precip, evap):
+    """Returns the zonal mean vertically integrated transport of latent
+    energy.  Computed via a meridional integral.
+
+    Parameters
+    ----------
+    precip : DataArray
+        Total precipitation rate
+    evap : DataArray
+        Evaporation rate
+
+    Returns
+    -------
+    alet : DataArray
+        Vertically integrated latent energy transport
+    """
+    p_minus_e_ = p_minus_e(precip, evap)
+    return skcint.meridional_integral(L_v.value * p_minus_e_)
 
 
 def aht(swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc, swup_sfc, lwup_sfc,
