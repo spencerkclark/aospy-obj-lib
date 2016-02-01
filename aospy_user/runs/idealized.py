@@ -223,6 +223,13 @@ extratropics_gaussian_15_T42 = Run(
     idealized=False
 )
 
+model_start = datetime(1, 1, 1)
+length = timedelta(days=500)
+end = model_start + length
+analysis_length = timedelta(days=100)
+a_start = str(end - analysis_length)
+a_end = str(end)
+
 imr_control = Run(
     name='imr_control',
     description=(
@@ -235,6 +242,21 @@ imr_control = Run(
     default_date_range=('0001-01-01', '0001-12-0027'),
     data_in_dir_struc='one_dir',
     data_in_files={'20-day': {v: '00010101.atmos_1x20day.nc' for v in varia},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}},
+    idealized=False
+)
+
+imr_control_yi = Run(
+    name='imr_control_yi',
+    description=(
+        'Control simulation of idealized moist run with realistic'
+        'radiative transfer; Yi ran this one.'
+    ),
+    data_in_direc=('/archive/yim/ulm_201505/idealized_moist_rad/'
+                   'gfdl.ncrc2-default-prod/1x0m500d_32pe/history'),
+    default_date_range=('0001-01-01', '0001-12-0027'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'daily': {v: '00010312.atmos_daily.nc' for v in varia},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}},
     idealized=False
 )

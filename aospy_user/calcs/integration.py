@@ -23,7 +23,7 @@ def cumsum(arr, dim):
     cumsum : DataArray
         DataArray of result
     """
-    return xr.DataArray(np.cumsum(arr, axis=arr.get_axis_num(dim)), arr.coords)
+    return np.cumsum(arr, axis=arr.get_axis_num(dim))
 
 
 def reverse_cumsum(arr, dim):
@@ -47,8 +47,7 @@ def reverse_cumsum(arr, dim):
         DataArray of result
     """
     rev_arr = arr.isel(**{dim: slice(None, None, -1)})
-    integral = xr.DataArray(np.cumsum(rev_arr, axis=rev_arr.get_axis_num(dim)),
-                            rev_arr.coords)
+    integral = cumsum(rev_arr, dim)
     return integral.isel(**{dim: slice(None, None, -1)})
 
 

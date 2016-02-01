@@ -31,6 +31,15 @@ def replace_dim(da, dim, values):
             new_coords[dim] = values
     return new_coords
 
+def drop_dim(da, dim):
+    """Drops the specified dimension from the coord. dict"""
+    sorted_coords_ = sorted_coords(da)
+    coords = da.coords
+    new_coords = OrderedDict()
+    for coord in sorted_coords_:
+        if dim != coord:
+            new_coords[coord] = coords[coord]
+    return new_coords
 
 def interp1d_pt_xray(da, dim, value):
     """Interpolates the values of a DataArray at a point
@@ -60,7 +69,7 @@ def interp1d_pt_xray(da, dim, value):
     return da_interp
 
 
-def interp1d_xray(da, dim, npoints=18000):
+def interp1d_xray(da, dim, npoints=18000, kind='linear'):
     """Interpolates the DataArray to finer resolution
 
     Parameters
@@ -71,6 +80,9 @@ def interp1d_xray(da, dim, npoints=18000):
          dimension name to interpolate along
     npoints : int
          number of points to expand dimension to
+    kind : str
+         type of interpolation to perform (see scipy documentation)
+         defaults to linear
 
     Returns
     -------
@@ -78,7 +90,7 @@ def interp1d_xray(da, dim, npoints=18000):
          interpolated DataArray
     """
     function = interp1d(da[dim].values, da.values,
-                        axis=da.get_axis_num(dim))
+                        axis=da.get_axis_num(dim), kind=kind)
     coord_interp = np.linspace(da[dim][0], da[dim][-1],
                                npoints, endpoint=True)
     values_interp = function(coord_interp)
@@ -108,7 +120,10 @@ def zeros_xray(da, dim, npoints=18000):
     zeros : DataArray
          zeros of the DataArray along the dimension specified
     """
-    da_interp = interp1d_xray(da, dim, npoints)
+    if npoints:
+        da_interp = interp1d_xray(da, dim, npoints)
+    else:
+        da_interp = da
     signs = np.sign(da_interp)
     mask = signs.diff(dim, label='lower') != 0
     zeros = mask * mask[dim]

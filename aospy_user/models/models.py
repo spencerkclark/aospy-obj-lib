@@ -50,7 +50,8 @@ dargan = Model(
     grid_file_paths=(
         ('/archive/skc/idealized_moist_T85/control_T85/'
          'gfdl.ncrc2-default-prod/'
-         '1x0m720d_32pe/history/00000.1x20days.nc'),
+         '1x0m720d_32pe/history/00000.1x20days.nc',
+         '/home/skc/inputdata/aquaplanet.land_mask.nc'),
     ),
     runs=[idealized.control_T85, idealized.extratropics_15_T85,
           idealized.extratropics_037_T85,
@@ -64,7 +65,8 @@ dargan_T42 = Model(
     name='dargan_T42',
     grid_file_paths=(
         ('/archive/skc/idealized_moist_alb_T42/control_alb_T42/'
-         'gfdl.ncrc2-default-prod/1x0m720d_32pe/history/00000.1x20days.nc'),
+         'gfdl.ncrc2-default-prod/1x0m720d_32pe/history/00000.1x20days.nc',
+         '/home/skc/inputdata/aquaplanet.land_mask.nc'),
     ),
     runs=[idealized.control_alb_T42, idealized.control_gaussian_T42,
           idealized.tropics_gaussian_5_T42,
@@ -81,8 +83,9 @@ idealized_moist_rad = Model(
     grid_file_paths=(
         ('/home/skc/archive/testing_2015_12_22/idealized_moist_rad/'
          'gfdl.ncrc2-default-repro/1x0m360d_32pe/history/'
-         '00010101.atmos_1x20day.nc'),
+         '00010101.atmos_1x20day.nc',
+         '/home/skc/inputdata/aquaplanet.land_mask.nc'),
     ),
-    runs=[idealized.imr_control],
-    default_runs=[idealized.imr_control],
+    runs=[idealized.imr_control, idealized.imr_control_yi],
+    default_runs=[idealized.imr_control, idealized.imr_control_yi],
 )

@@ -1,4 +1,5 @@
 import numpy as np
+import xarray as xr
 
 from aospy.constants import R_a, grav, r_e
 from aospy import LON_STR, LAT_STR
@@ -53,9 +54,9 @@ def msf(vcomp, dp):
     except AttributeError:
         pass
     dp = to_pascal(dp)
-    integrand = vcomp.mean(LON_STR) * dp
+    integrand = dp * vcomp.mean(LON_STR)
     integral = skcint.reverse_cumsum(integrand, vert_coord_name(dp))
-    return ((2.0 * r_e.value * np.pi / grav.value) *
+    return ((-2.0 * r_e.value * np.pi / grav.value) *
             np.cos(to_radians(vcomp[LAT_STR])) * integral)
 
 

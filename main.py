@@ -7,9 +7,11 @@ mp.proj = 'itcz'
 #    mp.proj = 'dargan_test'
 #    mp.model = ['am2']
 mp.model = ['dargan_T42']
+#mp.model = ['idealized_moist_rad']
 #    mp.model = ['am2_reyoi']
 #    mp.model = ['dargan']
 #    mp.run = [('am2_control','am2_tropics', 'am2_extratropics','am2_tropics+extratropics')]
+#mp.run = [('imr_control_yi')]
 mp.run = [('control_gaussian_T42',
            'tropics_gaussian_5.0_T42',
            'extratropics_gaussian_5.0_T42',
@@ -31,7 +33,7 @@ mp.ens_mem = [False]
 #    mp.var = ['tdt_sw', 'tdt_lw', 'tdt_vdif', 'qdt_vdif']#, 'vcomp_mb', 'mse']
 #    mp.var = ['aht', 'msf', 'olr', 'swdn_toa', 'swdn_sfc', 'lwdn_sfc', 'mse',
 #              'precip_im']
-mp.var = ['aht_im']
+mp.var = ['msf']
 #    mp.var = ['swdn_sfc', 'olr', 'lwdn_sfc', 'lwup_sfc', 'flux_t', 'flux_lhe']
 #    mp.var = ['dp_sigma']
 #    mp.var = ['olr','t_surf','swdn_toa','lwdn_sfc','swdn_sfc','lwup_sfc','evap','precip',
@@ -40,6 +42,7 @@ mp.var = ['aht_im']
     #mp.date_range = [('1983-01-01', '2012-12-31')]
     #    mp.date_range = [('0021-01-01', '0080-12-31')]
     #    mp.date_range = [('1983-01-01', '1998-12-31')]
+#mp.date_range = [('0002-02-05', '0002-05-16')]
 mp.date_range = [('0001-12-27', '0002-12-22')]
 mp.region = ['nh', 'sh', 'globe']
 #    mp.region = ['sahel', 'nh', 'sh', 'nh_tropics', 'sh_tropics',
