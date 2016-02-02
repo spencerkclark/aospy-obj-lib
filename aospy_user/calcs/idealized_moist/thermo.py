@@ -4,7 +4,7 @@ quantities in the idealized moist gray radiation model.
 from aospy.constants import L_v, c_p
 
 
-def dse(temp, sphum, height_full):
+def dse(temp, height_full, sphum):
     """Returns the dry static energy in a model where height_full
     is a model output diagnostic.
 
@@ -14,6 +14,8 @@ def dse(temp, sphum, height_full):
         Temperature at full pressure levels
     height_full : DataArray
         Geopotential height at full pressure levels
+    sphum : DataArray
+        Specific humidity
 
     Returns
     -------
@@ -41,4 +43,4 @@ def mse(temp, height_full, sphum):
     mse : DataArray
         Moist static energy on full pressure levels
     """
-    return dse(temp, height_full) + (L_v.value * sphum)
+    return dse(temp, height_full, sphum) + (L_v.value * sphum)

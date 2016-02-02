@@ -224,11 +224,21 @@ extratropics_gaussian_15_T42 = Run(
 )
 
 model_start = datetime(1, 1, 1)
-length = timedelta(days=500)
+length = timedelta(days=1080)
 end = model_start + length
-analysis_length = timedelta(days=100)
+analysis_length = timedelta(days=500)
 a_start = str(end - analysis_length)
 a_end = str(end)
+
+v_atmos = ['temp', 'sphum', 'ps', 'vcomp',
+           'flux_t', 'flux_lhe', 'convection_rain',
+           'condensation_rain', 'ucomp', 'omega', 't_surf', 'height', 'vor',
+           'div', 'swdn_sfc', 'lwdn_sfc', 'netrad_toa', 'vert_int_tdt_rad',
+           'vert_int_tdtlw_rad', 'vert_int_tdtsw_rad', 'dt_tg_rad',
+           'dt_tg_diffusion', 'dt_qg_diffusion', 'dt_tg_condensation',
+           'dt_tg_convection', 'qo3']
+
+rad_atmos = ['tdt_lw', 'tdt_sw', 'allradp']
 
 imr_control = Run(
     name='imr_control',
@@ -239,9 +249,12 @@ imr_control = Run(
     data_in_direc=('/home/skc/archive/testing_2015_12_22/'
                    'idealized_moist_rad/gfdl.ncrc2-default-repro/'
                    '1x0m360d_32pe/history'),
-    default_date_range=('0001-01-01', '0001-12-0027'),
+    default_date_range=(a_start, a_end),
     data_in_dir_struc='one_dir',
-    data_in_files={'20-day': {v: '00010101.atmos_1x20day.nc' for v in varia},
+    data_in_files={'20-day': {v: ['00010101.atmos_1x20day.nc',
+                                  '00011227.atmos_1x20day.nc',
+                                  '00021222.atmos_1x20day.nc']
+                              for v in v_atmos},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}},
     idealized=False
 )
