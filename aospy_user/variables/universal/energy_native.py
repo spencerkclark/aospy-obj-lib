@@ -29,7 +29,7 @@ olr_clr = Var(
 )
 lwdn_sfc = Var(
     name='lwdn_sfc',
-    alt_names=('rlds', 'lw_dn_sfc'),
+    alt_names=('rlds', 'lw_down_sfc'),
     math_str="$R^{LW\downarrow_{sfc}$",
     description='All-sky downwelling longwave radiation at the surface.',
     domain='atmos',
@@ -78,7 +78,7 @@ lwup_sfc_clr = Var(
 )
 swdn_sfc = Var(
     name='swdn_sfc',
-    alt_names=('rsds', 'sw_dn_sfc'),
+    alt_names=('rsds', 'sw_down_sfc'),
     units=units.W_m2,
     domain='atmos',
     description='All-sky downwelling shortwave radiation at the surface.',

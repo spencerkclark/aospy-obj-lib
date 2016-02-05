@@ -1,7 +1,7 @@
 """Module containing methods used for computing thermodynamic
 quantities in the idealized moist gray radiation model.
 """
-from aospy.constants import L_v, c_p
+from aospy.constants import L_v, c_p, grav
 
 
 def dse(temp, height_full, sphum):
@@ -22,7 +22,7 @@ def dse(temp, height_full, sphum):
     dse : DataArray
         Dry static energy on full pressure levels
     """
-    return (c_p.value * temp) + height_full
+    return (c_p.value * temp) + height_full * grav.value
 
 
 def mse(temp, height_full, sphum):

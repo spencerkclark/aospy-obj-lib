@@ -86,6 +86,8 @@ idealized_moist_rad = Model(
          '00010101.atmos_1x20day.nc',
          '/home/skc/inputdata/aquaplanet.land_mask.nc'),
     ),
-    runs=[idealized.imr_control, idealized.imr_control_yi],
-    default_runs=[idealized.imr_control, idealized.imr_control_yi],
+    runs=[idealized.imr_control, idealized.imr_fixed_h2o,
+          idealized.imr_control_yi, idealized.imr_rad_passive_h2o],
+    default_runs=[idealized.imr_control, idealized.imr_fixed_h2o,
+                  idealized.imr_control_yi, idealized.imr_rad_passive_h2o],
 )

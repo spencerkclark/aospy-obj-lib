@@ -56,7 +56,7 @@ from idealized_moist.energy import (
 )
 
 from idealized_moist.thermo import (
-    dse_im, mse_im
+    tdt_rad, dse_im, mse_im
 )
 
 from idealized_moist.water import (
@@ -65,5 +65,9 @@ from idealized_moist.water import (
 
 from idealized_moist_rad.energy import (
     netrad_toa_imr, vert_int_tdt_rad_imr, vert_int_tdtlw_rad_imr,
-    vert_int_tdtsw_rad_imr
+    vert_int_tdtsw_rad_imr, Q_diff_imr, Q_sfc_imr
+)
+
+from idealized_moist_rad.dynamics import (
+    aht_imr
 )

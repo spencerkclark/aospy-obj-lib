@@ -12,7 +12,8 @@ varia = ['olr', 'temp', 'sphum', 'ps', 'vcomp', 'swdn_sfc', 'olr', 'lwdn_sfc',
          'lwup_sfc', 'flux_t', 'flux_lhe',
          'convection_rain', 'condensation_rain',
          'ucomp', 'omega', 'umse', 'vmse', 'omega_mse', 'mse', 'umse_vint',
-         'vmse_vint', 'omega_mse_vint', 'swdn_toa', 't_surf']
+         'vmse_vint', 'omega_mse_vint', 'swdn_toa', 't_surf', 'tdt_rad',
+         'height']
 
 # If we run more than four years we'll have to think about leap years,
 # but for now this is OK.
@@ -233,7 +234,8 @@ a_end = str(end)
 v_atmos = ['temp', 'sphum', 'ps', 'vcomp',
            'flux_t', 'flux_lhe', 'convection_rain',
            'condensation_rain', 'ucomp', 'omega', 't_surf', 'height', 'vor',
-           'div', 'swdn_sfc', 'lwdn_sfc', 'netrad_toa', 'vert_int_tdt_rad',
+           'div', 'sw_down_sfc', 'lw_down_sfc', 'netrad_toa',
+           'vert_int_tdt_rad',
            'vert_int_tdtlw_rad', 'vert_int_tdtsw_rad', 'dt_tg_rad',
            'dt_tg_diffusion', 'dt_qg_diffusion', 'dt_tg_condensation',
            'dt_tg_convection', 'qo3']
@@ -253,10 +255,63 @@ imr_control = Run(
     data_in_dir_struc='one_dir',
     data_in_files={'20-day': {v: ['00010101.atmos_1x20day.nc',
                                   '00011227.atmos_1x20day.nc',
-                                  '00021222.atmos_1x20day.nc']
+                                  '00021222.atmos_1x20day.nc',
+                                  '00031217.atmos_1x20day.nc']
                               for v in v_atmos},
-                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}},
-    idealized=False
+                   '20-day-rad': {v: ['00010101.atmos_rad_1x20day.nc',
+                                      '00011227.atmos_rad_1x20day.nc',
+                                      '00021222.atmos_rad_1x20day.nc',
+                                      '00031217.atmos_rad_1x20day.nc']
+                                  for v in rad_atmos},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
+)
+
+imr_fixed_h2o = Run(
+    name='imr_fixed_h2o',
+    description=(
+        'Simulation with idealized moist model with realistic radiative'
+        'transfer, but with fixed radiative effect due to water vapor.'
+    ),
+    data_in_direc=('/home/skc/archive/testing_2015_12_22/'
+                   'idealized_moist_rad_fixed_h2o/gfdl.ncrc2-default-repro/'
+                   '1x0m360d_32pe/history'),
+    default_date_range=(a_start, a_end),
+    data_in_dir_struc='one_dir',
+    data_in_files={'20-day': {v: ['00010101.atmos_1x20day.nc',
+                                  '00011227.atmos_1x20day.nc',
+                                  '00021222.atmos_1x20day.nc',
+                                  '00031217.atmos_1x20day.nc']
+                              for v in v_atmos},
+                   '20-day-rad': {v: ['00010101.atmos_rad_1x20day.nc',
+                                      '00011227.atmos_rad_1x20day.nc',
+                                      '00021222.atmos_rad_1x20day.nc',
+                                      '00031217.atmos_rad_1x20day.nc']
+                                  for v in rad_atmos},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
+)
+
+imr_rad_passive_h2o = Run(
+    name='imr_rad_passive_h2o',
+    description=(
+        'Simulation with idealized moist model with realistic radiative'
+        'transfer, but with zero radiative effect due to water vapor.'
+    ),
+    data_in_direc=('/home/skc/archive/testing_2015_12_22/'
+                   'idealized_moist_rad_passive_h2o/gfdl.ncrc2-default-repro/'
+                   '1x0m360d_32pe/history'),
+    default_date_range=(a_start, a_end),
+    data_in_dir_struc='one_dir',
+    data_in_files={'20-day': {v: ['00010101.atmos_1x20day.nc',
+                                  '00011227.atmos_1x20day.nc',
+                                  '00021222.atmos_1x20day.nc',
+                                  '00031217.atmos_1x20day.nc']
+                              for v in v_atmos},
+                   '20-day-rad': {v: ['00010101.atmos_rad_1x20day.nc',
+                                      '00011227.atmos_rad_1x20day.nc',
+                                      '00021222.atmos_rad_1x20day.nc',
+                                      '00031217.atmos_rad_1x20day.nc']
+                                  for v in rad_atmos},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
 )
 
 imr_control_yi = Run(

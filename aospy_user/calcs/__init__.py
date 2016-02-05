@@ -3,6 +3,7 @@ from aospy.utils import dp_from_ps, to_pascal
 from aospy import PFULL_STR
 import universal
 import idealized_moist
+import idealized_moist_rad
 import deprecated
 
 
