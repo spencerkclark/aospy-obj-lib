@@ -33,11 +33,27 @@ nh = Region(
     lon_bounds=(0, 360),
     do_land_mask=False
 )
+# North Pole
+np = Region(
+    name='np',
+    description='North Pole',
+    lat_bounds=(60, 90),
+    lon_bounds=(0, 360),
+    do_land_mask=False
+)
 # Southern Hemisphere.
 sh = Region(
     name='sh',
     description='Southern Hemisphere',
     lat_bounds=(-90, 0),
+    lon_bounds=(0, 360),
+    do_land_mask=False
+)
+# South Pole
+sp = Region(
+    name='sp',
+    description='South Pole',
+    lat_bounds=(-90, -60),
     lon_bounds=(0, 360),
     do_land_mask=False
 )

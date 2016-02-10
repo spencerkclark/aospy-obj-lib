@@ -11,7 +11,8 @@ mp.model = ['idealized_moist_rad']
 #    mp.model = ['am2_reyoi']
 #    mp.model = ['dargan']
 #mp.run = [('am2_control','am2_tropics', 'am2_extratropics','am2_tropics+extratropics')]
-mp.run = [('imr_control', 'imr_fixed_h2o', 'imr_rad_passive_h2o')]
+mp.run = [('imr_control', 'imr_fixed_h2o_symm', 'imr_rad_passive_h2o',
+           'imr_2xCO2', 'imr_fixed_h2o_2xCO2')]
 #mp.run = [('control_gaussian_T42')]
 #mp.run = [('control_gaussian_T42',
 #          'tropics_gaussian_5.0_T42',
@@ -32,19 +33,25 @@ mp.ens_mem = [False]
 #    mp.var = ['dp_sigma', 'ucomp', 'vcomp', 'mse']
 #    mp.var = ['net_sw']
 #mp.var = ['tdt_sw', 'tdt_lw', 'tdt_rad'] # 'tdt_vdif', 'qdt_vdif']#, 'vcomp_mb', 'mse']
-mp.var = ['mse_im']
+#mp.var = ['mse_im', 'aht_im', 'condensation_rain', 'convection_rain', 'precip_im',
+#          'p_minus_e_im', 'dp_sigma', 'dse_im', 'flux_lhe', 'flux_t', 'msf', 'omega',
+#          'sphum', 'tdt_rad', 'temp', 't_surf', 'ucomp', 'vcomp', 'vcomp_mb']
+#mp.var = ['msf', 'temp']
 #    mp.var = ['aht', 'msf', 'olr', 'swdn_toa', 'swdn_sfc', 'lwdn_sfc', 'mse',
 #              'precip_im']
 #mp.var = ['temp', 'sphum', 'flux_t', 'flux_lhe', 'ucomp', 'vcomp', 't_surf',
-#          'precip_im', 'mse_im', 'netrad_toa_imr',
-#          'vert_int_tdt_rad_imr',
+##          'precip_im', 'mse_im', 'netrad_toa_imr',
+##          'vert_int_tdt_rad_imr',
 #          'vert_int_tdtsw_rad_imr', 'vert_int_tdtlw_rad_imr',
 #          'lwdn_sfc', 'lwup_sfc']
-# mp.var = ['aht_imr', 'p_minus_e_im', 't_surf', 'dp_sigma', 'mse_im',
+#mp.var = ['aht_imr', 'p_minus_e_im', 't_surf', 'dp_sigma', 'mse_im',
 #           'precip_im', 'ucomp', 'vcomp', 'vert_int_tdtlw_rad_imr',
 #           'vert_int_tdtsw_rad_imr', 'vert_int_tdt_rad_imr', 'flux_lhe',
 #           'msf', 'sphum', 'flux_t', 'netrad_toa_imr', 'temp',
-#           'lwdn_sfc', 'swdn_sfc']
+#           'lwdn_sfc', 'swdn_sfc', 'omega']
+mp.var = ['netrad_toa_imr', 'lwdn_sfc', 'swdn_sfc', 'flux_t', 'flux_lhe',
+          'vert_int_tdtsw_rad_imr', 'vert_int_tdtlw_rad_imr',
+          'vert_int_tdt_rad_imr']
 #mp.var = ['omega', 'sphum', 'temp', 'ps', 'vcomp', 'flux_t', 'flux_lhe',
 #          'convection_rain', 'condensation_rain', 'precip_im', 'p_minus_e_im',
 #          'ucomp', 't_surf', 'mse_im', 'swdn_sfc',
@@ -61,7 +68,7 @@ mp.date_range=[('0002-12-22', '0004-12-11')] # Leap year in datetime... Last 720
     #    mp.date_range = [('1983-01-01', '1998-12-31')]
 #mp.date_range = [('0002-02-05', '0002-05-16')]
 #mp.date_range = [('0001-12-27', '0002-12-22')]
-mp.region = ['nh', 'sh', 'globe']
+mp.region = ['nh', 'sh', 'globe', 'np', 'sp']
 #    mp.region = ['sahel', 'nh', 'sh', 'nh_tropics', 'sh_tropics',
 #                 'nh_extratropics', 'sh_extratropics']
 #mp.intvl_in = ['monthly']

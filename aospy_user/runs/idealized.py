@@ -120,7 +120,7 @@ control_gaussian_T42 = Run(
         'Control case at T42 spectral resolution'
     ),
     data_in_direc='/archive/skc/idealized_moist_alb_T42/control_gaussian_T42/'
-                  'gfdl.ncrc2-default-prod/1x0m720d_32pe/history',
+                  'gfdl.ncrc2-default-prod/1x0m720d_32pe1/history',
     default_date_range=(a_start, a_end),
     data_in_dir_struc='one_dir',
     data_in_files={'20-day': {v: '00000.1x20days.nc' for v in varia},
@@ -286,6 +286,90 @@ imr_fixed_h2o = Run(
                                       '00011227.atmos_rad_1x20day.nc',
                                       '00021222.atmos_rad_1x20day.nc',
                                       '00031217.atmos_rad_1x20day.nc']
+                                  for v in rad_atmos},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
+)
+
+imr_fixed_h2o_symm = Run(
+    name='imr_fixed_h2o_symm',
+    description=(
+        'Simulation with idealized moist model with realistic radiative'
+        'transfer, but with fixed radiative effect due to water vapor.'
+        'Fixed H2O imposed to be symmetric about equator.'
+    ),
+    data_in_direc=('/home/skc/archive/testing_2015_12_22/'
+                   'idealized_moist_rad_fixed_h2o/gfdl.ncrc2-default-repro/'),
+    default_date_range=(a_start, a_end),
+    data_in_dir_struc='one_dir',
+    data_in_files={'20-day': {v: [('1x0m360d_32pe6/history/'
+                                   '00010101.atmos_1x20day.nc'),
+                                  ('1x0m720d_32pe/history/'
+                                   '00011227.atmos_1x20day.nc'),
+                                  ('1x0m360d_32pe8/history/'
+                                   '00031217.atmos_1x20day.nc')]
+                              for v in v_atmos},
+                   '20-day-rad': {v: [('1x0m360d_32pe6/history/'
+                                       '00010101.atmos_rad_1x20day.nc'),
+                                      ('1x0m720d_32pe/history/'
+                                       '00011227.atmos_rad_1x20day.nc'),
+                                      ('1x0m360d_32pe8/history/'
+                                       '00031217.atmos_rad_1x20day.nc')]
+                                  for v in rad_atmos},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
+)
+
+imr_2xCO2 = Run(
+    name='imr_2xCO2',
+    description=(
+        'Simulation with idealized moist model with realistic radiative'
+        'transfer, with 2xCO2 from control case.'
+    ),
+    data_in_direc=('/home/skc/archive/testing_2015_12_22/'
+                   'idealized_moist_rad_2xCO2/gfdl.ncrc2-default-repro/'),
+    default_date_range=(a_start, a_end),
+    data_in_dir_struc='one_dir',
+    data_in_files={'20-day': {v: [('1x0m360d_32pe/history/'
+                                   '00010101.atmos_1x20day.nc'),
+                                  ('1x0m720d_32pe/history/'
+                                   '00011227.atmos_1x20day.nc'),
+                                  ('1x0m360d_32pe/history/'
+                                   '00031217.atmos_1x20day.nc')]
+                              for v in v_atmos},
+                   '20-day-rad': {v: [('1x0m360d_32pe/history/'
+                                       '00010101.atmos_rad_1x20day.nc'),
+                                      ('1x0m720d_32pe/history/'
+                                       '00011227.atmos_rad_1x20day.nc'),
+                                      ('1x0m360d_32pe/history/'
+                                       '00031217.atmos_rad_1x20day.nc')]
+                                  for v in rad_atmos},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
+)
+
+imr_fixed_h2o_2xCO2 = Run(
+    name='imr_fixed_h2o_2xCO2',
+    description=(
+        'Simulation with idealized moist model with realistic radiative'
+        'transfer, with 2xCO2 from control case and fixed H2O'
+        ' radiative effect.'
+    ),
+    data_in_direc=('/home/skc/archive/testing_2015_12_22/'
+                   'idealized_moist_rad_fixed_h2o_2xCO2/'
+                   'gfdl.ncrc2-default-repro/'),
+    default_date_range=(a_start, a_end),
+    data_in_dir_struc='one_dir',
+    data_in_files={'20-day': {v: [('1x0m360d_32pe/history/'
+                                   '00010101.atmos_1x20day.nc'),
+                                  ('1x0m720d_32pe/history/'
+                                   '00011227.atmos_1x20day.nc'),
+                                  ('1x0m360d_32pe/history/'
+                                   '00031217.atmos_1x20day.nc')]
+                              for v in v_atmos},
+                   '20-day-rad': {v: [('1x0m360d_32pe/history/'
+                                       '00010101.atmos_rad_1x20day.nc'),
+                                      ('1x0m720d_32pe/history/'
+                                       '00011227.atmos_rad_1x20day.nc'),
+                                      ('1x0m360d_32pe/history/'
+                                       '00031217.atmos_rad_1x20day.nc')]
                                   for v in rad_atmos},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
 )
