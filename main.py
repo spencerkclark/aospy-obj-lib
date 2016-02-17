@@ -11,8 +11,14 @@ mp.model = ['idealized_moist_rad']
 #    mp.model = ['am2_reyoi']
 #    mp.model = ['dargan']
 #mp.run = [('am2_control','am2_tropics', 'am2_extratropics','am2_tropics+extratropics')]
-mp.run = [('imr_control', 'imr_fixed_h2o_symm', 'imr_rad_passive_h2o',
-           'imr_2xCO2', 'imr_fixed_h2o_2xCO2')]
+#mp.run = [('imr_control', 'imr_fixed_h2o_symm', 'imr_rad_passive_h2o',
+#           'imr_2xCO2', 'imr_fixed_h2o_2xCO2')]
+#mp.run = [('imr_fixed_h2o_symm', 'imr_rad_passive_h2o',
+#           'imr_2xCO2', 'imr_fixed_h2o_2xCO2')]
+mp.run = [('control', '2xCO2', 'conv_off', 'fixed_h2o',
+           'fixed_h2o_2xCO2', 'asym_e5', 'asym_t5', 'asym_e15',
+           'asym_t15', 'asym_t20')]
+#mp.run = ['control']
 #mp.run = [('control_gaussian_T42')]
 #mp.run = [('control_gaussian_T42',
 #          'tropics_gaussian_5.0_T42',
@@ -44,14 +50,26 @@ mp.ens_mem = [False]
 ##          'vert_int_tdt_rad_imr',
 #          'vert_int_tdtsw_rad_imr', 'vert_int_tdtlw_rad_imr',
 #          'lwdn_sfc', 'lwup_sfc']
-#mp.var = ['aht_imr', 'p_minus_e_im', 't_surf', 'dp_sigma', 'mse_im',
-#           'precip_im', 'ucomp', 'vcomp', 'vert_int_tdtlw_rad_imr',
-#           'vert_int_tdtsw_rad_imr', 'vert_int_tdt_rad_imr', 'flux_lhe',
-#           'msf', 'sphum', 'flux_t', 'netrad_toa_imr', 'temp',
-#           'lwdn_sfc', 'swdn_sfc', 'omega']
-mp.var = ['netrad_toa_imr', 'lwdn_sfc', 'swdn_sfc', 'flux_t', 'flux_lhe',
-          'vert_int_tdtsw_rad_imr', 'vert_int_tdtlw_rad_imr',
-          'vert_int_tdt_rad_imr']
+mp.var = ['aht_imr', 'p_minus_e_im', 't_surf', 'dp_sigma', 'mse_im',
+          'precip_im', 'ucomp', 'vcomp', 'vert_int_tdtlw_rad_imr',
+          'vert_int_tdtsw_rad_imr', 'vert_int_tdt_rad_imr', 'flux_lhe',
+          'msf', 'sphum', 'flux_t', 'netrad_toa_imr', 'temp',
+          'lwdn_sfc', 'swdn_sfc', 'omega']
+
+#mp.var = ['netrad_toa_imr', 'lwdn_sfc', 'swdn_sfc', 'flux_t', 'flux_lhe',
+#          'vert_int_tdtsw_rad_imr', 'vert_int_tdtlw_rad_imr',
+#          'vert_int_tdt_rad_imr', 't_surf']
+
+#mp.var = ['msf', 'aht_imr', 'mse_im', 'vcomp_mb', 'dp_sigma', 'swdn_sfc',
+#          'lwdn_sfc', 't_surf', 'vert_int_tdtsw_rad_imr',
+#          'vert_int_tdtlw_rad_imr']
+
+#mp.var = ['sphum']
+
+#mp.var = ['tdt_rad', 'tdt_sw', 'tdt_lw']
+
+#mp.var = ['p_minus_e_im', 'ucomp', 'vcomp', 'sphum', 'omega', 'temp']
+
 #mp.var = ['omega', 'sphum', 'temp', 'ps', 'vcomp', 'flux_t', 'flux_lhe',
 #          'convection_rain', 'condensation_rain', 'precip_im', 'p_minus_e_im',
 #          'ucomp', 't_surf', 'mse_im', 'swdn_sfc',
@@ -63,7 +81,9 @@ mp.var = ['netrad_toa_imr', 'lwdn_sfc', 'swdn_sfc', 'flux_t', 'flux_lhe',
 #              'swup_toa','swup_toa_clr','swdn_sfc_clr','lwup_sfc_clr','lwdn_sfc_clr',
 #              ]#, 'mse_vert_advec_upwind']
     #mp.date_range = [('1983-01-01', '2012-12-31')
-mp.date_range=[('0002-12-22', '0004-12-11')] # Leap year in datetime... Last 720 days.
+mp.date_range = [('0003-01-01', '0006-12-31')]
+#mp.date_range=[('0002-12-22', '0004-12-11')] # Leap year in datetime... Last 720 days.
+#mp.date_range=[('0002-12-22', '0006-12-1')] # Leap year in datetime... Last 1440 days.
 #mp.date_range = [('0021-01-01', '0080-12-31')]
     #    mp.date_range = [('1983-01-01', '1998-12-31')]
 #mp.date_range = [('0002-02-05', '0002-05-16')]
@@ -72,7 +92,7 @@ mp.region = ['nh', 'sh', 'globe', 'np', 'sp']
 #    mp.region = ['sahel', 'nh', 'sh', 'nh_tropics', 'sh_tropics',
 #                 'nh_extratropics', 'sh_extratropics']
 #mp.intvl_in = ['monthly']
-mp.intvl_in = ['20-day']
+mp.intvl_in = ['monthly']
 #    mp.intvl_in = ['20-day']
 #mp.intvl_out = ['ann', 'jas', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] # 'jas', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 mp.intvl_out = ['ann']
@@ -81,7 +101,7 @@ mp.dtype_in_vert = [False]
 #mp.dtype_in_vert = ['pressure']
 mp.dtype_in_vert = ['sigma']
 # mp.dtype_out_time = [('reg.av',)]
-mp.dtype_out_time = [('av', 'reg.av')]# 'ts', 'reg.av', 'reg.ts')]# 'reg.av', 'reg.ts')]
+mp.dtype_out_time = [('av',)]# 'ts', 'reg.av', 'reg.ts')]# 'reg.av', 'reg.ts')]
 #    mp.dtype_out_time = [('av', 'reg.av', 'reg.ts')]
 #    mp.dtype_out_time = [('av','reg.std','reg.av','reg.ts')]
 #    mp.dtype_out_vert = ['vert_int']

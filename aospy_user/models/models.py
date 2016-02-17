@@ -1,6 +1,7 @@
 from aospy.model import Model
 import aospy_user.runs.cases as runs
 import aospy_user.runs.idealized as idealized
+import aospy_user.runs.idealized_moist_rad as imr
 
 am2 = Model(
     name='am2',
@@ -89,9 +90,14 @@ idealized_moist_rad = Model(
     runs=[idealized.imr_control, idealized.imr_fixed_h2o,
           idealized.imr_control_yi, idealized.imr_rad_passive_h2o,
           idealized.imr_fixed_h2o_symm, idealized.imr_2xCO2,
-          idealized.imr_fixed_h2o_2xCO2],
+          idealized.imr_fixed_h2o_2xCO2, imr.control, imr.conv_off,
+          imr.double_CO2, imr.fixed_h2o, imr.fixed_h2o_2xCO2, imr.asym_e5,
+          imr.asym_t5, imr.asym_e15, imr.asym_t15, imr.asym_t20],
     default_runs=[idealized.imr_control, idealized.imr_fixed_h2o,
                   idealized.imr_control_yi, idealized.imr_rad_passive_h2o,
                   idealized.imr_fixed_h2o_symm, idealized.imr_2xCO2,
-                  idealized.imr_fixed_h2o_2xCO2],
+                  idealized.imr_fixed_h2o_2xCO2, imr.control, imr.conv_off,
+                  imr.double_CO2, imr.fixed_h2o, imr.fixed_h2o_2xCO2,
+                  imr.asym_e5, imr.asym_t5, imr.asym_e15, imr.asym_t15,
+                  imr.asym_t20],
 )

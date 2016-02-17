@@ -306,14 +306,18 @@ imr_fixed_h2o_symm = Run(
                                   ('1x0m720d_32pe/history/'
                                    '00011227.atmos_1x20day.nc'),
                                   ('1x0m360d_32pe8/history/'
-                                   '00031217.atmos_1x20day.nc')]
+                                   '00031217.atmos_1x20day.nc'),
+                                  ('1x0m720_32pe1/history/'
+                                   '00041212.atmos_1x20day.nc')]
                               for v in v_atmos},
                    '20-day-rad': {v: [('1x0m360d_32pe6/history/'
                                        '00010101.atmos_rad_1x20day.nc'),
                                       ('1x0m720d_32pe/history/'
                                        '00011227.atmos_rad_1x20day.nc'),
                                       ('1x0m360d_32pe8/history/'
-                                       '00031217.atmos_rad_1x20day.nc')]
+                                       '00031217.atmos_rad_1x20day.nc'),
+                                      ('1x0m720d_32pe1/history/'
+                                       '00041212.atmos_rad_1x20day.nc')]
                                   for v in rad_atmos},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
 )
@@ -333,14 +337,18 @@ imr_2xCO2 = Run(
                                   ('1x0m720d_32pe/history/'
                                    '00011227.atmos_1x20day.nc'),
                                   ('1x0m360d_32pe/history/'
-                                   '00031217.atmos_1x20day.nc')]
+                                   '00031217.atmos_1x20day.nc'),
+                                  ('1x0m720d_32pe/history/'
+                                   '00041212.atmos_1x20day.nc')]
                               for v in v_atmos},
                    '20-day-rad': {v: [('1x0m360d_32pe/history/'
                                        '00010101.atmos_rad_1x20day.nc'),
                                       ('1x0m720d_32pe/history/'
                                        '00011227.atmos_rad_1x20day.nc'),
                                       ('1x0m360d_32pe/history/'
-                                       '00031217.atmos_rad_1x20day.nc')]
+                                       '00031217.atmos_rad_1x20day.nc'),
+                                      ('1x0m720d_32pe/history/'
+                                       '00041212.atmos_rad_1x20day.nc')]
                                   for v in rad_atmos},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
 )
@@ -362,14 +370,18 @@ imr_fixed_h2o_2xCO2 = Run(
                                   ('1x0m720d_32pe/history/'
                                    '00011227.atmos_1x20day.nc'),
                                   ('1x0m360d_32pe/history/'
-                                   '00031217.atmos_1x20day.nc')]
+                                   '00031217.atmos_1x20day.nc'),
+                                  ('1x0m720d_32pe/history/'
+                                   '00041212.atmos_1x20day.nc')]
                               for v in v_atmos},
                    '20-day-rad': {v: [('1x0m360d_32pe/history/'
                                        '00010101.atmos_rad_1x20day.nc'),
                                       ('1x0m720d_32pe/history/'
                                        '00011227.atmos_rad_1x20day.nc'),
                                       ('1x0m360d_32pe/history/'
-                                       '00031217.atmos_rad_1x20day.nc')]
+                                       '00031217.atmos_rad_1x20day.nc'),
+                                      ('1x0m720d_32pe/history/'
+                                       '00041212.atmos_rad_1x20day.nc')]
                                   for v in rad_atmos},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
 )
@@ -381,19 +393,31 @@ imr_rad_passive_h2o = Run(
         'transfer, but with zero radiative effect due to water vapor.'
     ),
     data_in_direc=('/home/skc/archive/testing_2015_12_22/'
-                   'idealized_moist_rad_passive_h2o/gfdl.ncrc2-default-repro/'
-                   '1x0m360d_32pe/history'),
+                   'idealized_moist_rad_passive_h2o/'
+                   'gfdl.ncrc2-default-repro/'),
     default_date_range=(a_start, a_end),
     data_in_dir_struc='one_dir',
-    data_in_files={'20-day': {v: ['00010101.atmos_1x20day.nc',
-                                  '00011227.atmos_1x20day.nc',
-                                  '00021222.atmos_1x20day.nc',
-                                  '00031217.atmos_1x20day.nc']
+    data_in_files={'20-day': {v: [('1x0m360d_32pe/history/'
+                                   '00010101.atmos_1x20day.nc'),
+                                  ('1x0m360d_32pe/history/'
+                                   '00011227.atmos_1x20day.nc'),
+                                  ('1x0m360d_32pe/history/'
+                                   '00021222.atmos_1x20day.nc'),
+                                  ('1x0m360d_32pe/history/'
+                                   '00031217.atmos_1x20day.nc'),
+                                  ('1xm720d_32pe/history/'
+                                   '00041212.atmos_1x20day.nc')]
                               for v in v_atmos},
-                   '20-day-rad': {v: ['00010101.atmos_rad_1x20day.nc',
-                                      '00011227.atmos_rad_1x20day.nc',
-                                      '00021222.atmos_rad_1x20day.nc',
-                                      '00031217.atmos_rad_1x20day.nc']
+                   '20-day-rad': {v: [('1x0m360d_32pe/history/'
+                                       '00010101.atmos_rad_1x20day.nc'),
+                                      ('1x0m360d_32pe/history/'
+                                       '00011227.atmos_rad_1x20day.nc'),
+                                      ('1x0m360d_32pe/history/'
+                                       '00021222.atmos_rad_1x20day.nc'),
+                                      ('1x0m360d_32pe/history/'
+                                       '00031217.atmos_rad_1x20day.nc'),
+                                      ('1xm720d_32pe/history/'
+                                       '00041212.atmos_rad_1x20day.nc')]
                                   for v in rad_atmos},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}}
 )
