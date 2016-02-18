@@ -15,7 +15,7 @@ mp.model = ['idealized_moist_rad']
 #           'imr_2xCO2', 'imr_fixed_h2o_2xCO2')]
 #mp.run = [('imr_fixed_h2o_symm', 'imr_rad_passive_h2o',
 #           'imr_2xCO2', 'imr_fixed_h2o_2xCO2')]
-mp.run = [('control', '2xCO2', 'conv_off', 'fixed_h2o',
+mp.run = [('control', '2xCO2', 'fixed_h2o',
            'fixed_h2o_2xCO2', 'asym_e5', 'asym_t5', 'asym_e15',
            'asym_t15', 'asym_t20')]
 #mp.run = ['control']
@@ -50,11 +50,12 @@ mp.ens_mem = [False]
 ##          'vert_int_tdt_rad_imr',
 #          'vert_int_tdtsw_rad_imr', 'vert_int_tdtlw_rad_imr',
 #          'lwdn_sfc', 'lwup_sfc']
-mp.var = ['aht_imr', 'p_minus_e_im', 't_surf', 'dp_sigma', 'mse_im',
-          'precip_im', 'ucomp', 'vcomp', 'vert_int_tdtlw_rad_imr',
-          'vert_int_tdtsw_rad_imr', 'vert_int_tdt_rad_imr', 'flux_lhe',
-          'msf', 'sphum', 'flux_t', 'netrad_toa_imr', 'temp',
-          'lwdn_sfc', 'swdn_sfc', 'omega']
+#mp.var = ['aht_imr', 'p_minus_e_im', 't_surf', 'dp_sigma', 'mse_im',
+#          'precip_im', 'ucomp', 'vcomp', 'vert_int_tdtlw_rad_imr',
+#          'vert_int_tdtsw_rad_imr', 'vert_int_tdt_rad_imr', 'flux_lhe',
+#          'msf', 'sphum', 'flux_t', 'netrad_toa_imr', 'temp',
+#          'lwdn_sfc', 'swdn_sfc', 'omega']
+mp.var = ['swnet_toa_imr', 'olr_imr']
 
 #mp.var = ['netrad_toa_imr', 'lwdn_sfc', 'swdn_sfc', 'flux_t', 'flux_lhe',
 #          'vert_int_tdtsw_rad_imr', 'vert_int_tdtlw_rad_imr',

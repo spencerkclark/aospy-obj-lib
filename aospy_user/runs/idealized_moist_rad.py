@@ -9,7 +9,7 @@ v_atmos = ['temp', 'sphum', 'ps', 'vcomp',
            'dt_tg_diffusion', 'dt_qg_diffusion', 'dt_tg_condensation',
            'dt_tg_convection', 'qo3']
 
-rad_atmos = ['tdt_lw', 'tdt_sw', 'allradp']
+rad_atmos = ['tdt_lw', 'tdt_sw', 'allradp', 'swdn_toa']
 
 # New albedo -- last 1860 days of each run; haven't addressed 3 hourly output
 # yet.

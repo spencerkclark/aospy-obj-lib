@@ -1,6 +1,6 @@
 from aospy.var import Var
 from aospy_user import calcs, units
-from aospy_user.variables import flux_lhe, flux_t
+from aospy_user.variables import flux_lhe, flux_t, swdn_sfc
 
 netrad_toa_imr = Var(
     name='netrad_toa',
@@ -72,5 +72,31 @@ Q_diff_imr = Var(
     def_lat=True,
     def_lon=True,
     func=calcs.idealized_moist_rad.energy.Q_diff,
+    units=units.W_m2
+)
+
+swnet_toa_imr = Var(
+    name='swnet_toa',
+    domain='atmos',
+    description=('Net shortwave heating'),
+    variables=(swdn_sfc, vert_int_tdtsw_rad_imr),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.idealized_moist_rad.energy.swnet_toa,
+    units=units.W_m2
+)
+
+olr_imr = Var(
+    name='olr',
+    domain='atmos',
+    description=('Outgoing longwave radiation'),
+    variables=(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.idealized_moist_rad.energy.olr,
     units=units.W_m2
 )

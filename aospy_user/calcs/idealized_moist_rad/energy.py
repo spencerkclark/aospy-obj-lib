@@ -72,3 +72,46 @@ def aht(vert_int_tdt_rad_imr, flux_lhe, flux_t):
     """
     Q_diff_ = Q_diff(vert_int_tdt_rad_imr, flux_lhe, flux_t)
     return skcint.meridional_integral(Q_diff_)
+
+
+def swnet_toa(swdn_sfc, vert_int_tdtsw_rad_imr):
+    """Returns the net shortwave radiation at the top of atmosphere
+    in the idealized moist full radiation model.
+
+    Parameters
+    ----------
+    swdn_sfc : DataArray
+        Net shortwave radiation at the surface (not break from GCM
+        nomenclature).
+    vert_int_tdtsw_rad_imr : DataArray
+        Net column heating due to shortwave radiation
+
+    Returns
+    -------
+    swnet_toa : DataArray
+        Net shortwave radiation at the top of atmosphere
+    """
+    return swdn_sfc + vert_int_tdtsw_rad_imr
+
+
+def olr(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr):
+    """Returns the outgoing longwave radiation
+    in the idealized moist full radiation model.
+
+    Parameters
+    ----------
+    swdn_sfc : DataArray
+        Net shortwave radiation at the surface (not break from GCM
+        nomenclature).
+    vert_int_tdtsw_rad_imr : DataArray
+        Net column heating due to shortwave radiation
+    netrad_toa_imr : DataArray
+        Net radiation at top of atmosphere (natively output
+        by model)
+
+    Returns
+    -------
+    olr : DataArray
+        Outgoing longwave radiation
+    """
+    return swnet_toa(swdn_sfc, vert_int_tdtsw_rad_imr) - netrad_toa_imr
