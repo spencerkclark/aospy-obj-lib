@@ -4,6 +4,7 @@ from __future__ import print_function
 import itertools
 import warnings
 
+import multiprocess  # Installed via pip install multiprocess
 import aospy
 import colorama
 
@@ -165,7 +166,8 @@ class CalcSuite(object):
                                  region=region, plot_units=True)])
 
 
-def main(main_params, exec_calcs=True, print_table=False, prompt_verify=True):
+def main(main_params, exec_calcs=True, print_table=False, prompt_verify=True,
+         parallelize=False):
     """Main script for interfacing with aospy."""
     # Instantiate objects and load default/all models, runs, and regions.
     cs = CalcSuite(MainParamsParser(main_params, projs))
@@ -177,6 +179,12 @@ def main(main_params, exec_calcs=True, print_table=False, prompt_verify=True):
             warnings.warn(e)
             return
     param_combos = cs.create_params_all_calcs()
-    calcs = cs.create_calcs(param_combos, exec_calcs=exec_calcs,
-                            print_table=print_table)
+    if parallelize and exec_calcs:
+        calcs = cs.create_calcs(param_combos, exec_calcs=False,
+                                print_table=print_table)
+        p = multiprocess.Pool()
+        return p.map(lambda calc: calc.compute(), calcs)
+    else:
+        calcs = cs.create_calcs(param_combos, exec_calcs=exec_calcs,
+                                print_table=print_table)
     return calcs
