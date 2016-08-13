@@ -21,6 +21,7 @@ def precip(condensation_rain, convection_rain):
     precip : DataArray
         Sum of condensation and convection precipitation rates
     """
+    print condensation_rain
     return condensation_rain + convection_rain
 
 
@@ -61,3 +62,22 @@ def p_minus_e(condensation_rain, convection_rain, flux_lhe):
         Precipitation rate minus evaporation rate
     """
     return precip(condensation_rain, convection_rain) - evap(flux_lhe)
+
+
+def cond_minus_e(condensation_rain, flux_lhe):
+    """Returns the condensation rain minus evaporation in the gray atmosphere
+    idealized moist model.
+
+    Parameters
+    ----------
+    condensation_rain : DataArray
+        Condensation precipitation rate
+    flux_lhe : DataArray
+        Latent heat flux of energy into the atmosphere
+
+    Returns
+    -------
+    cond_minus_e : DataArray
+        Condensation rain rate minus evaporation rate
+    """
+    return condensation_rain - evap(flux_lhe)

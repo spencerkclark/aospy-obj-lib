@@ -2,6 +2,7 @@
 quantities in the idealized moist full radiation model.
 """
 from aospy_user.calcs import integration as skcint
+from aospy_user.calcs.idealized_moist.water import p_minus_e
 
 
 def Q_sfc(netrad_toa_imr, vert_int_tdt_rad_imr, flux_lhe, flux_t):
@@ -72,6 +73,60 @@ def aht(vert_int_tdt_rad_imr, flux_lhe, flux_t):
     """
     Q_diff_ = Q_diff(vert_int_tdt_rad_imr, flux_lhe, flux_t)
     return skcint.meridional_integral(Q_diff_)
+
+
+def alet(condensation_rain, convection_rain, flux_lhe):
+    """Returns the implied meridional atmospheric latent energy transport
+    computed from boundary energy fluxes.  This is a zonal mean quantity by
+    definition.  The procedure is adapted from Spencer Hill's object library.
+
+    .. math::
+         \\left< \\overline{m v}  \\right> =
+         \\int_0^{2 \\pi} \\int_{-\\pi / 2}^{\\pi / 2} \\overline{Q_{diff}}
+         d \\phi d\\ \lambda
+
+    Parameters
+    ----------
+    condensation_rain : DataArray
+        Condensation rain
+    convection_rain : DataArray
+        Convection rain
+    flux_lhe : DataArray
+        Latent heat flux into atmosphere
+
+    Returns
+    -------
+    alet : DataArray
+         Atmospheric latent energy transport
+    """
+    p_minus_e_ = p_minus_e(condensation_rain, convection_rain, flux_lhe)
+    return skcint.meridional_integral(p_minus_e_)
+
+
+def aht_simple(netrad_toa_imr):
+    """Returns the implied meridional atmospheric moist static energy transport
+    computed from boundary energy fluxes.  This is a zonal mean quantity by
+    definition.  The procedure is adapted from Spencer Hill's object library.
+
+    This is a test to see if not relying on the surface flux makes a big
+    difference as to where the energy flux equator ends up.
+
+    .. math::
+         \\left< \\overline{m v}  \\right> =
+         \\int_0^{2 \\pi} \\int_{-\\pi / 2}^{\\pi / 2} \\overline{Q_{diff}}
+         d \\phi d\\ \lambda
+
+    Parameters
+    ----------
+    netrad_toa_imr : DataArray
+        Net radiation at the top of the atmosphere
+
+    Returns
+    -------
+    aht : DataArray
+         Atmospheric heat transport
+    """
+    return skcint.meridional_integral(netrad_toa_imr)
 
 
 def swnet_toa(swdn_sfc, vert_int_tdtsw_rad_imr):

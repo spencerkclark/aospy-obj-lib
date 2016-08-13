@@ -9,6 +9,13 @@ globe = Region(
     lon_bounds=(0, 360),
     do_land_mask=False
 )
+itcz = Region(
+    name='itcz',
+    description='itcz',
+    lat_bounds=(-2, 2),
+    lon_bounds=(0, 360),
+    do_land_mask=False
+)
 # Land.
 land = Region(
     name='land',

@@ -224,6 +224,51 @@ extratropics_gaussian_15_T42 = Run(
     idealized=False
 )
 
+legendre_1 = Run(
+    name='legendre_1',
+    description=(
+        'Case with gamma set to 0.1'
+    ),
+    data_in_direc='/archive/skc/idealized_moist_legendre/'
+                  'legendre_0.1/'
+                  'gfdl.ncrc2-default-prod/1x0m720d_32pe/history',
+    default_date_range=(a_start, a_end),
+    data_in_dir_struc='one_dir',
+    data_in_files={'20-day': {v: '00000.1x20days.nc' for v in varia},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}},
+    idealized=False
+)
+
+legendre_2 = Run(
+    name='legendre_2',
+    description=(
+        'Case with gamma set to 0.2'
+    ),
+    data_in_direc='/archive/skc/idealized_moist_legendre/'
+                  'legendre_0.2/'
+                  'gfdl.ncrc2-default-prod/1x0m720d_32pe/history',
+    default_date_range=(a_start, a_end),
+    data_in_dir_struc='one_dir',
+    data_in_files={'20-day': {v: '00000.1x20days.nc' for v in varia},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}},
+    idealized=False
+)
+
+legendre_3 = Run(
+    name='legendre_3',
+    description=(
+        'Case with gamma set to 0.3'
+    ),
+    data_in_direc='/archive/skc/idealized_moist_legendre/'
+                  'legendre_0.3/'
+                  'gfdl.ncrc2-default-prod/1x0m720d_32pe/history',
+    default_date_range=(a_start, a_end),
+    data_in_dir_struc='one_dir',
+    data_in_files={'20-day': {v: '00000.1x20days.nc' for v in varia},
+                   '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}},
+    idealized=False
+)
+
 model_start = datetime(1, 1, 1)
 length = timedelta(days=1080)
 end = model_start + length

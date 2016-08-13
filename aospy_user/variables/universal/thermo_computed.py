@@ -54,3 +54,15 @@ mse_lower_trop = Var(
     units=units.J_kg1,
     func=calcs.universal.thermo.mse_lower_trop
 )
+vert_av_temp = Var(
+    name='vert_av_temp',
+    domain='atmos',
+    description=('Vertical, mass-weighted integral of temperature.'),
+    variables=(temp, dp),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    units=units.K,
+    func=calcs.universal.thermo.vert_av_temp
+)

@@ -111,3 +111,21 @@ def meridional_integral(arr):
     mean = global_average(arr)
     zonal_int = (arr.sfc_area * (arr - mean)).sum(LON_STR)
     return cumsum(zonal_int, LAT_STR)
+
+
+def stationary_eddy(arr):
+    """Computes the stationary eddy component of a variable.
+
+    This is the deviation from the zonal mean.
+
+    Parameters
+    ----------
+    arr : DataArray
+        Array to compute the stationary eddy component of
+
+    Returns
+    -------
+    arr : DataArray
+        Stationary eddy component
+    """
+    return arr - arr.mean('lon')

@@ -1,6 +1,10 @@
 from aospy.var import Var
+from aospy.constants import r_e
 from aospy_user import calcs, units
-from aospy_user.variables import flux_lhe, flux_t, swdn_sfc
+from aospy_user.variables import (flux_lhe, flux_t, swdn_sfc,
+                                  temp, height_full, sphum,
+                                  ucomp, vcomp, condensation_rain,
+                                  convection_rain, ps, dp, pk, bk)
 
 netrad_toa_imr = Var(
     name='netrad_toa',
@@ -99,4 +103,113 @@ olr_imr = Var(
     def_lon=True,
     func=calcs.idealized_moist_rad.energy.olr,
     units=units.W_m2
+)
+
+# SAH MSE budget variables
+energy_column_divg_adj_eddy = Var(
+    name='energy_column_divg_adj_eddy',
+    domain='atmos',
+    description='',
+    variables=(temp, height_full, sphum, ucomp, vcomp, vert_int_tdt_rad_imr,
+               flux_t, flux_lhe,
+               condensation_rain, convection_rain, ps, dp, r_e.value),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.sah_mse_budget.energy.energy_column_divg_adj_eddy,
+    units=units.W_m2,
+    colormap='RdBu'
+)
+
+energy_horiz_advec_eta_upwind_adj_time_mean = Var(
+    name='energy_horiz_advec_eta_upwind_adj_time_mean',
+    domain='atmos',
+    variables=(temp, height_full, sphum, ucomp, vcomp, vert_int_tdt_rad_imr,
+               flux_t, flux_lhe,
+               condensation_rain, convection_rain, ps, dp, r_e.value, bk, pk),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.sah_mse_budget.energy.energy_horiz_advec_eta_upwind_adj_time_mean,
+    units=units.J_kg1_s1,
+    colormap='RdBu'
+)
+
+energy_column_vert_advec_as_resid_eta_time_mean = Var(
+    name='energy_column_vert_advec_as_resid_eta_time_mean',
+    domain='atmos',
+    description='',
+    variables=(temp, height_full, sphum, ucomp, vcomp, vert_int_tdt_rad_imr,
+               flux_t, flux_lhe,
+               condensation_rain, convection_rain, ps, dp, r_e.value, bk, pk),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.sah_mse_budget.energy.energy_column_vert_advec_as_resid_eta_time_mean,
+    units=units.W_m2,
+    colormap='RdBu'
+)
+
+energy_column_tendency_each_timestep = Var(
+    name='energy_column_tendency_each_timestep',
+    domain='atmos',
+    description='Monthly time-tendency of column integrated energy.',
+    variables=(temp, height_full, sphum, ucomp, vcomp, dp),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.sah_mse_budget.energy.energy_column_tendency_each_timestep,
+    units=units.W_m2,
+    colormap='RdBu_r'
+)
+
+# TESTING
+energy_column_divg_adj_time_mean = Var(
+    name='energy_column_divg_adj_time_mean',
+    domain='atmos',
+    description='',
+    variables=(temp, height_full, sphum, ucomp, vcomp, vert_int_tdt_rad_imr,
+               flux_t, flux_lhe,
+               condensation_rain, convection_rain, ps, dp, r_e.value),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.sah_mse_budget.energy.energy_column_divg_adj_time_mean,
+    units=units.W_m2,
+    colormap='RdBu'
+)
+
+energy_column_divg_adj = Var(
+    name='energy_column_divg_adj',
+    domain='atmos',
+    description='',
+    variables=(temp, height_full, sphum, ucomp, vcomp, vert_int_tdt_rad_imr,
+               flux_t, flux_lhe,
+               condensation_rain, convection_rain, ps, dp, r_e.value),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.sah_mse_budget.energy.energy_column_divg_adj,
+    units=units.W_m2,
+    colormap='RdBu'
+)
+
+energy_column_divg = Var(
+    name='energy_column_divg',
+    domain='atmos',
+    description='',
+    variables=(temp, height_full, sphum, ucomp, vcomp, dp, r_e.value),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.sah_mse_budget.energy.energy_column_divg,
+    units=units.W_m2,
+    colormap='RdBu'
 )

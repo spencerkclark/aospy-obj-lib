@@ -6,7 +6,7 @@ from universal.dynamics_native import (
 
 from universal.dynamics_computed import (
     msf, gz, aht, gms, vcomp_mb, alet,
-    msf_at_500_hPa, mmc_mse_flux, msf_500_zeros, dmv_dx, dmv_dy
+    msf_at_500_hPa, mmc_mse_flux, msf_500_zeros, dmv_dx, dmv_dy, vcomp_stat
 )
 
 from universal.energy_native import (
@@ -31,7 +31,7 @@ from universal.thermo_native import (
 )
 
 from universal.thermo_computed import (
-    dse, mse, mse_b, mse_lower_trop
+    dse, mse, mse_b, mse_lower_trop, vert_av_temp
 )
 
 from universal.water_native import (
@@ -51,24 +51,29 @@ from idealized_moist.dynamics import (
 )
 
 from idealized_moist.energy import (
-    flux_t, flux_lhe, Q_sfc_im, Q_toa_im,
+    flux_t, flux_lhe, flux_ocean, Q_sfc_im, Q_toa_im,
     Q_diff_im, Q_diff_sw_im, Q_diff_lw_im
 )
 
 from idealized_moist.thermo import (
-    tdt_rad, dse_im, mse_im
+    tdt_rad, dse_im, mse_im, mse_stat_im
 )
 
 from idealized_moist.water import (
-    condensation_rain, convection_rain, precip_im, p_minus_e_im
+    condensation_rain, convection_rain, precip_im, p_minus_e_im,
+    cond_minus_e_im
 )
 
 from idealized_moist_rad.energy import (
     netrad_toa_imr, vert_int_tdt_rad_imr, vert_int_tdtlw_rad_imr,
     vert_int_tdtsw_rad_imr, Q_diff_imr, Q_sfc_imr, swnet_toa_imr,
-    olr_imr
+    olr_imr,
+    energy_column_divg_adj_eddy, energy_horiz_advec_eta_upwind_adj_time_mean,
+    energy_column_vert_advec_as_resid_eta_time_mean,
+    energy_column_tendency_each_timestep, energy_column_divg_adj_time_mean,
+    energy_column_divg_adj, energy_column_divg
 )
 
 from idealized_moist_rad.dynamics import (
-    aht_imr
+    aht_imr, alet_imr, alet_cond_imr, simple_aht_imr
 )

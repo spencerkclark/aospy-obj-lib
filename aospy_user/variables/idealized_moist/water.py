@@ -59,3 +59,16 @@ p_minus_e_im = Var(
     func=calcs.idealized_moist.water.p_minus_e,
     units=units.kg_m2_s1
 )
+
+cond_minus_e_im = Var(
+    name='cond_minus_e_im',
+    domain='atmos',
+    description=('Condensation Rain-E in idealized moist model'),
+    variables=(condensation_rain, flux_lhe,),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.idealized_moist.water.cond_minus_e,
+    units=units.kg_m2_s1
+)

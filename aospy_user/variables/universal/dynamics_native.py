@@ -87,6 +87,7 @@ omega = Var(
 )
 vort = Var(
     name='vort',
+    alt_names=('vor',),
     units=units.s1_vort,
     domain='atmos',
     description='Vorticity',
@@ -98,6 +99,7 @@ vort = Var(
 )
 divg = Var(
     name='divg',
+    alt_names=('div',),
     math_str=r"\nabla\cdot\vec{v}",
     units=units.s1,
     domain='atmos',

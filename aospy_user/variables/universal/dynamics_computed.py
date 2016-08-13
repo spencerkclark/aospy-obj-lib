@@ -10,7 +10,6 @@ from aospy_user.variables.universal.energy_native import (swdn_toa,
 from aospy_user.variables.universal.water_native import evap, precip
 from aospy_user.variables.universal.dynamics_native import ucomp, vcomp
 
-
 # Computed variables
 msf = Var(
     name='msf',
@@ -147,4 +146,17 @@ dmv_dy = Var(
     def_lon=True,
     func=calcs.deprecated.mse_merid_flux_divg,
     units=units.W
+)
+
+vcomp_stat = Var(
+    name='vcomp_stat',
+    domain='atmos',
+    description=('vcomp stationary eddy component'),
+    variables=(vcomp,),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=False,
+    func=calcs.integration.stationary_eddy,
+    units=units.m_s1,
 )

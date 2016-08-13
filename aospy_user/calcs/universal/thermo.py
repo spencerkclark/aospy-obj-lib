@@ -118,3 +118,22 @@ def mse_lower_trop(temp, sphum, dp, p):
     mse_ = mse(temp, sphum, dp, p)
     return ((mse_ * dp).where(mask).sum(PFULL_STR) /
             dp.where(mask).sum(PFULL_STR))
+
+
+def vert_av_temp(temp, dp):
+    """Vertical, mass-weighted average of temperature
+
+    Parameters
+    ----------
+    temp : DataArray
+        Temperature
+    dp : DataArray
+        Thickness of pressure levels
+
+    Returns
+    -------
+    vert_av_temp : DataArray
+        Vertical, mass-weighted average of temperature
+    """
+    dp = to_pascal(dp)
+    return ((temp * dp)).sum(PFULL_STR) / (dp.sum(PFULL_STR))

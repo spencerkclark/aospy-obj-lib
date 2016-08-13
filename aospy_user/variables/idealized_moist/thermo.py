@@ -39,3 +39,16 @@ mse_im = Var(
     func=calcs.idealized_moist.thermo.mse,
     units=units.J_kg1
 )
+
+mse_stat_im = Var(
+    name='mse_stat_im',
+    domain='atmos',
+    description=('Moist Static Energy'),
+    variables=(temp, height_full, sphum),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.idealized_moist.thermo.mse_stat,
+    units=units.J_kg1
+)

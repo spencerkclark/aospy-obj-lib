@@ -25,6 +25,17 @@ flux_lhe = Var(
     def_lon=False,
     in_nc_grid=False
 )
+flux_ocean = Var(
+    name='flux_oceanq',
+    units=units.W_m2,
+    domain='atmos',
+    description='Ocean heat flux in idealized moist model',
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=False,
+    in_nc_grid=False
+)
 Q_sfc_im = Var(
     name='Q_sfc_im',
     domain='atmos',
