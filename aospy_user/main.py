@@ -143,7 +143,7 @@ class CalcSuite(object):
                 calc = aospy.Calc(ci)
                 if exec_calcs:
                     try:
-                        calc.compute()
+                        calc.compute(save_tar_files=False)
                     except:
                         raise
                         # print('Calc {} failed.  Skipping.'.format(calc))
@@ -156,7 +156,7 @@ class CalcSuite(object):
         return calcs
 
     def exec_calcs(self, calcs):
-        return [calc.compute() for calc in calcs]
+        return [calc.compute(save_tar_files=False) for calc in calcs]
 
     def print_results(self, calcs):
         for calc in calcs:
@@ -167,7 +167,7 @@ class CalcSuite(object):
 
 
 def main(main_params, exec_calcs=True, print_table=False, prompt_verify=True,
-         parallelize=False):
+         parallelize=True):
     """Main script for interfacing with aospy."""
     # Instantiate objects and load default/all models, runs, and regions.
     cs = CalcSuite(MainParamsParser(main_params, projs))
@@ -183,7 +183,7 @@ def main(main_params, exec_calcs=True, print_table=False, prompt_verify=True,
         calcs = cs.create_calcs(param_combos, exec_calcs=False,
                                 print_table=print_table)
         p = multiprocess.Pool()
-        return p.map(lambda calc: calc.compute(), calcs)
+        return p.map(lambda calc: calc.compute(save_tar_files=False), calcs)
     else:
         calcs = cs.create_calcs(param_combos, exec_calcs=exec_calcs,
                                 print_table=print_table)
