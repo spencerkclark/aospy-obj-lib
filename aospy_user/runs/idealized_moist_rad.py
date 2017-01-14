@@ -7,13 +7,14 @@ v_atmos = ['temp', 'sphum', 'ps', 'vcomp',
            'vert_int_tdt_rad',
            'vert_int_tdtlw_rad', 'vert_int_tdtsw_rad', 'dt_tg_rad',
            'dt_tg_diffusion', 'dt_qg_diffusion', 'dt_tg_condensation',
-           'dt_tg_convection', 'qo3', 'flux_oceanq', 'rh', 'vor', 'div']
+           'dt_tg_convection', 'qo3', 'flux_oceanq', 'rh', 'vor', 'div',
+           'tdt_rad']
 
 three_hourly = ['condensation_rain', 'convection_rain', 'flux_lhe',
                 'flux_t', 'height', 'sphum', 'temp', 'ucomp', 'vcomp',
                 'vert_int_tdt_rad', 'ps']
 
-rad_atmos = ['tdt_lw', 'tdt_sw', 'allradp', 'swdn_toa']
+rad_atmos = ['tdt_lw', 'tdt_sw', 'tdt_rad', 'swdn_toa']
 
 # New albedo -- last 1860 days of each run; haven't addressed 3 hourly output
 # yet.
@@ -1480,4 +1481,316 @@ asym_e15_fixed_h2o_extratropics = Run(
                                      '00060101.atmos_rad_month.nc']
                                  for v in rad_atmos},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in []}}
+)
+
+zero_o3 = Run(
+    name='zero_o3',
+    description=(
+        'Control simulation of idealized moist run with realistic'
+        'radiative transfer with zero ozone.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'zero_o3/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+anti_t15 = Run(
+    name='anti_t15',
+    description=(
+        'Antisymmetric gaussian solar forcing. Asymmetry equivalent to'
+        ' asym_*15 cases.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'anti_t15/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+anti_e15 = Run(
+    name='anti_e15',
+    description=(
+        'Antisymmetric gaussian solar forcing. Asymmetry equivalent to'
+        ' asym_*15 cases.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'anti_e15/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+anti_t15_fixed_h2o = Run(
+    name='anti_t15_fixed_h2o',
+    description=(
+        'Antisymmetric gaussian solar forcing. Asymmetry equivalent to'
+        ' asym_*15 cases.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'anti_t15_fixed_h2o/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+anti_e15_fixed_h2o = Run(
+    name='anti_e15_fixed_h2o',
+    description=(
+        'Antisymmetric gaussian solar forcing. Asymmetry equivalent to'
+        ' asym_*15 cases.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'anti_e15_fixed_h2o/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+anti_t15_fixed_h2o_tropics = Run(
+    name='anti_t15_fixed_h2o_tropics',
+    description=(
+        'Antisymmetric gaussian solar forcing. Asymmetry equivalent to'
+        ' asym_*15 cases.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'anti_t15_fixed_h2o_tropics/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+anti_e15_fixed_h2o_tropics = Run(
+    name='anti_e15_fixed_h2o_tropics',
+    description=(
+        'Antisymmetric gaussian solar forcing. Asymmetry equivalent to'
+        ' asym_*15 cases.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'anti_e15_fixed_h2o_tropics/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+anti_t15_fixed_h2o_extratropics = Run(
+    name='anti_t15_fixed_h2o_extratropics',
+    description=(
+        'Antisymmetric gaussian solar forcing. Asymmetry equivalent to'
+        ' asym_*15 cases.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'anti_t15_fixed_h2o_extratropics/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+anti_e15_fixed_h2o_extratropics = Run(
+    name='anti_e15_fixed_h2o_extratropics',
+    description=(
+        'Antisymmetric gaussian solar forcing. Asymmetry equivalent to'
+        ' asym_*15 cases.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'anti_e15_fixed_h2o_extratropics/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos},
+                   'rad_month': {v: ['00010101.atmos_rad_month.nc',
+                                     '00020101.atmos_rad_month.nc',
+                                     '00030101.atmos_rad_month.nc',
+                                     '00040101.atmos_rad_month.nc',
+                                     '00050101.atmos_rad_month.nc',
+                                     '00060101.atmos_rad_month.nc']
+                                 for v in rad_atmos},
+                   '3-hourly': {v: ['000{}0101.atmos_8xday.{}.nc'.format(y, v)
+                                    for y in range(6, 7)]
+                                for v in three_hourly}}  # SKC: for now just do one year.
+)
+
+control_gray = Run(
+    name='control_gray',
+    description=(
+        'Case with symmetric solar insolation and a gray atmosphere.'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'control_gray/gfdl.ncrc3-default-repro/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos}
+                   }
+)
+
+control_gray_solar = Run(
+    name='control_gray_solar',
+    description=(
+        'Case with symmetric solar insolation and a gray atmosphere.'
+        ' Includes a parameterization of absorption of shortwave radiation.'
+        ' The absorption parameter is set to 0.2 and the solar exponent is 4.0'
+    ),
+    data_in_direc=('/archive/Spencer.Clark/imr_skc_develop/'
+                   'control_gray_solar/gfdl.ncrc3-default-repro/2/'
+                   'history'),
+    default_date_range=('0003-01-01', '0006-12-31'),
+    data_in_dir_struc='one_dir',
+    data_in_files={'monthly': {v: ['00010101.atmos_month.nc',
+                                   '00020101.atmos_month.nc',
+                                   '00030101.atmos_month.nc',
+                                   '00040101.atmos_month.nc',
+                                   '00050101.atmos_month.nc',
+                                   '00060101.atmos_month.nc']
+                               for v in v_atmos}
+                   }
 )

@@ -99,7 +99,7 @@ def alet(condensation_rain, convection_rain, flux_lhe):
     alet : DataArray
          Atmospheric latent energy transport
     """
-    p_minus_e_ = p_minus_e(condensation_rain, convection_rain, flux_lhe)
+    p_minus_e_ = -p_minus_e(condensation_rain, convection_rain, flux_lhe)
     return skcint.meridional_integral(p_minus_e_)
 
 

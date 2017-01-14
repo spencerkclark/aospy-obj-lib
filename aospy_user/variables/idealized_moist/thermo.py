@@ -14,6 +14,18 @@ tdt_rad = Var(
     units=units.K_s1
 )
 
+tdt_solar = Var(
+    name='tdt_solar',
+    alt_names=('tdt_sw',),
+    domain='atmos',
+    description=('Heating rate due to solar radiation'),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    units=units.K_s1
+)
+
 dse_im = Var(
     name='dse_im',
     domain='atmos',

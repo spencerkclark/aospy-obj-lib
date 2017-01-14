@@ -4,7 +4,6 @@ import aospy_user.models.models as models
 
 itcz = Proj(
     'itcz',
-    direc_out='/archive/skc/itcz/',
     models=(
         models.am2,
         models.am2_reyoi,
@@ -13,7 +12,9 @@ itcz = Proj(
         models.idealized_moist_rad
         ),
     regions=(regions.globe,
-             regions.nh)
+             regions.nh),
+    direc_out='/work/Spencer.Clark',
+    tar_direc_out='/archive/Spencer.Clark'
 )
 
 dargan_test = Proj(

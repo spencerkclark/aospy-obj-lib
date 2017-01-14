@@ -475,7 +475,7 @@ imr_control_yi = Run(
     ),
     data_in_direc=('/archive/yim/ulm_201505/idealized_moist_rad/'
                    'gfdl.ncrc2-default-prod/1x0m500d_32pe/history'),
-    default_date_range=('0001-01-01', '0001-12-0027'),
+    default_date_range=('0001-01-01', '0001-12-27'),
     data_in_dir_struc='one_dir',
     data_in_files={'daily': {v: '00010312.atmos_daily.nc' for v in varia},
                    '3-hourly': {v: '{}.8xday.nc'.format(v) for v in varia}},

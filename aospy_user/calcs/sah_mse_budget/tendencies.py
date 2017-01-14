@@ -1,5 +1,5 @@
 """Calculations involved in mass and energy budgets."""
-from aospy.utils import coord_to_new_dataarray
+# from aospy.utils import coord_to_new_dataarray
 from infinite_diff import CenDeriv
 import numpy as np
 
@@ -8,7 +8,8 @@ from aospy import TIME_STR
 
 def first_to_last_vals_dur(arr, freq='1M'):
     """Time elapsed between 1st and last values in each given time period."""
-    time = coord_to_new_dataarray(arr, TIME_STR)
+#    time = coord_to_new_dataarray(arr, TIME_STR)
+    time = arr[TIME_STR]
     first = time.resample(freq, TIME_STR, how='first')
     last = time.resample(freq, TIME_STR, how='last')
     delta_time = last - first

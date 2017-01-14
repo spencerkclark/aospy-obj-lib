@@ -21,7 +21,6 @@ def precip(condensation_rain, convection_rain):
     precip : DataArray
         Sum of condensation and convection precipitation rates
     """
-    print condensation_rain
     return condensation_rain + convection_rain
 
 

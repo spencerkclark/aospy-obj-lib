@@ -56,7 +56,7 @@ from idealized_moist.energy import (
 )
 
 from idealized_moist.thermo import (
-    tdt_rad, dse_im, mse_im, mse_stat_im
+    tdt_rad, tdt_solar, dse_im, mse_im, mse_stat_im
 )
 
 from idealized_moist.water import (
@@ -68,10 +68,10 @@ from idealized_moist_rad.energy import (
     netrad_toa_imr, vert_int_tdt_rad_imr, vert_int_tdtlw_rad_imr,
     vert_int_tdtsw_rad_imr, Q_diff_imr, Q_sfc_imr, swnet_toa_imr,
     olr_imr,
-    energy_column_divg_adj_eddy, energy_horiz_advec_eta_upwind_adj_time_mean,
-    energy_column_vert_advec_as_resid_eta_time_mean,
-    energy_column_tendency_each_timestep, energy_column_divg_adj_time_mean,
-    energy_column_divg_adj, energy_column_divg
+    # energy_column_divg_adj_eddy, energy_horiz_advec_eta_upwind_adj_time_mean,
+    # energy_column_vert_advec_as_resid_eta_time_mean,
+    # energy_column_tendency_each_timestep, energy_column_divg_adj_time_mean,
+    # energy_column_divg_adj, energy_column_divg
 )
 
 from idealized_moist_rad.dynamics import (
