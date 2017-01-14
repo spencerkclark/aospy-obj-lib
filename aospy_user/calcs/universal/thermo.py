@@ -1,6 +1,6 @@
 from aospy.constants import c_p, L_v
 from aospy_user.calcs.universal.dynamics import gz
-from aospy.utils import to_pascal
+from aospy.utils.vertcoord import to_pascal
 from aospy import PFULL_STR
 
 

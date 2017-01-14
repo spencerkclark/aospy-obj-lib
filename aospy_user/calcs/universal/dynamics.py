@@ -3,7 +3,7 @@ import xarray as xr
 
 from aospy.constants import R_a, grav, r_e, L_v
 from aospy import LON_STR, LAT_STR
-from aospy.utils import vert_coord_name, to_radians, to_pascal, int_dp_g
+from aospy.utils.vertcoord import vert_coord_name, to_radians, to_pascal, int_dp_g
 from aospy_user.calcs import integration as skcint
 from aospy_user.calcs.universal.energy import Q_diff
 from aospy_user.calcs.universal.water import p_minus_e

@@ -5,7 +5,7 @@ import numpy as np
 import xarray as xr
 
 from aospy.constants import c_p, r_e
-from aospy.utils import to_pascal, int_dp_g, vert_coord_name
+from aospy.utils.vertcoord import to_pascal, int_dp_g, vert_coord_name
 
 from aospy_user.calcs.universal.dynamics import (msf,
                                                  vcomp_mb,

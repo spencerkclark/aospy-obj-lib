@@ -1,1 +1,1 @@
-from pre_generals import itcz
+from pre_generals import test
