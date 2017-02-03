@@ -66,3 +66,29 @@ vert_av_temp = Var(
     units=units.K,
     func=calcs.universal.thermo.vert_av_temp
 )
+
+potential_temp = Var(
+    name='potential_temp',
+    domain='atmos',
+    description=('Potential temperature'),
+    variables=(temp, p),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    units=units.K,
+    func=calcs.universal.thermo.potential_temp
+)
+
+equiv_potential_temp = Var(
+    name='equiv_potential_temp',
+    domain='atmos',
+    description=('Equivalent potential temperature'),
+    variables=(temp, p, sphum),
+    def_time=True,
+    def_vert=True,
+    def_lat=True,
+    def_lon=True,
+    units=units.K,
+    func=calcs.universal.thermo.equiv_potential_temp
+)

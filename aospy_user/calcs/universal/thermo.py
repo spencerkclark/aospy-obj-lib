@@ -1,7 +1,7 @@
-from aospy.constants import c_p, L_v
+from aospy.constants import c_p, L_v, kappa
 from aospy_user.calcs.universal.dynamics import gz
 from aospy.utils.vertcoord import to_pascal
-from aospy import PFULL_STR
+from aospy.internal_names import PFULL_STR
 
 
 def dse(temp, sphum, dp, p):
@@ -137,3 +137,47 @@ def vert_av_temp(temp, dp):
     """
     dp = to_pascal(dp)
     return ((temp * dp)).sum(PFULL_STR) / (dp.sum(PFULL_STR))
+
+
+def potential_temp(temp, p, p0=100000.):
+    """Potential temperature
+
+
+    Parameters
+    ----------
+    temp : DataArray
+        Temperature [K]
+    p : DataArray
+        Pressure [Pa]
+    p0 : float
+        Reference pressure [Pa]
+
+
+    Returns
+    -------
+    DataArray
+    """
+    return temp * (p0 / p) ** kappa.value
+
+
+def equiv_potential_temp(temp, p, sphum, p0=100000.):
+    """Equivalent potential temperature
+
+
+    Parameters
+    ----------
+    temp : DataArray
+        Temperature [K]
+    p : DataArray
+        Pressure [Pa]
+    sphum : DataArray
+        Specific humidity [kg/kg]
+    p0 : float
+        Reference pressure [Pa]
+
+
+    Returns
+    -------
+    DataArray
+    """
+    return potential_temp(temp + L_v.value * sphum / c_p.value, p, p0=p0)

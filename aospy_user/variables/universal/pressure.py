@@ -11,8 +11,7 @@ p = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 ps = Var(
     name='ps',
@@ -22,8 +21,7 @@ ps = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 bk = Var(
     name='bk',
@@ -33,8 +31,7 @@ bk = Var(
     def_time=False,
     def_vert=True,
     def_lat=False,
-    def_lon=False,
-    in_nc_grid=True
+    def_lon=False
 )
 pk = Var(
     name='pk',
@@ -44,8 +41,7 @@ pk = Var(
     def_time=False,
     def_vert=True,
     def_lat=False,
-    def_lon=False,
-    in_nc_grid=True
+    def_lon=False
 )
 dp = Var(
     name='dp',
@@ -60,7 +56,6 @@ dp = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     func=calcs.dp,
     units=units.Pa,
 )

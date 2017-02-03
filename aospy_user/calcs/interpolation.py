@@ -2,7 +2,7 @@
 dimension agnostic.
 """
 
-import xray
+import xarray as xray
 import numpy as np
 from scipy.interpolate import interp1d
 from collections import OrderedDict

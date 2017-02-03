@@ -12,8 +12,7 @@ olr = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 olr_clr = Var(
     name='olr_clr',
@@ -24,8 +23,7 @@ olr_clr = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 lwdn_sfc = Var(
     name='lwdn_sfc',
@@ -37,8 +35,7 @@ lwdn_sfc = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 lwdn_sfc_clr = Var(
     name='lwdn_sfc_clr',
@@ -49,8 +46,7 @@ lwdn_sfc_clr = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 lwup_sfc = Var(
     name='lwup_sfc',
@@ -61,8 +57,7 @@ lwup_sfc = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 lwup_sfc_clr = Var(
     name='lwup_sfc_clr',
@@ -73,8 +68,7 @@ lwup_sfc_clr = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 swdn_sfc = Var(
     name='swdn_sfc',
@@ -85,8 +79,7 @@ swdn_sfc = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 swdn_sfc_clr = Var(
     name='swdn_sfc_clr',
@@ -97,8 +90,7 @@ swdn_sfc_clr = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 swup_sfc = Var(
     name='swup_sfc',
@@ -109,8 +101,7 @@ swup_sfc = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 swup_sfc_clr = Var(
     name='swup_sfc_clr',
@@ -121,8 +112,7 @@ swup_sfc_clr = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 swdn_toa = Var(
     name='swdn_toa',
@@ -133,8 +123,7 @@ swdn_toa = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 swdn_toa_clr = Var(
     name='swdn_toa_clr',
@@ -145,8 +134,7 @@ swdn_toa_clr = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 swup_toa = Var(
     name='swup_toa',
@@ -157,8 +145,7 @@ swup_toa = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 swup_toa_clr = Var(
     name='swup_toa_clr',
@@ -169,8 +156,7 @@ swup_toa_clr = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 alb_sfc = Var(
     name='alb_sfc',
@@ -180,8 +166,7 @@ alb_sfc = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 shflx = Var(
     name='shflx',
@@ -192,6 +177,5 @@ shflx = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )

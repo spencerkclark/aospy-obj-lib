@@ -3,7 +3,7 @@
 import numpy as np
 import xarray as xr
 
-from aospy import LAT_STR, LON_STR, PFULL_STR, PLEVEL_STR
+from aospy.internal_names import LAT_STR, LON_STR, PFULL_STR, PLEVEL_STR
 
 
 def cumsum(arr, dim):
@@ -23,7 +23,8 @@ def cumsum(arr, dim):
     cumsum : DataArray
         DataArray of result
     """
-    return np.cumsum(arr, axis=arr.get_axis_num(dim))
+    return arr.cumsum(dim=dim, keep_attrs=True)
+    # return np.cumsum(arr, axis=arr.get_axis_num(dim))
 
 
 def reverse_cumsum(arr, dim):

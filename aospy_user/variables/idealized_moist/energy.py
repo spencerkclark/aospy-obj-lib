@@ -11,8 +11,7 @@ flux_t = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 flux_lhe = Var(
     name='flux_lhe',
@@ -22,8 +21,7 @@ flux_lhe = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=False,
-    in_nc_grid=False
+    def_lon=False
 )
 flux_ocean = Var(
     name='flux_oceanq',
@@ -33,8 +31,7 @@ flux_ocean = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=False,
-    in_nc_grid=False
+    def_lon=False
 )
 Q_sfc_im = Var(
     name='Q_sfc_im',

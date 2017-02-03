@@ -1,6 +1,6 @@
 """My library of functions for use in aospy."""
 from aospy.utils.vertcoord import dp_from_ps, to_pascal
-from aospy import PFULL_STR
+from aospy.internal_names import PFULL_STR
 import universal
 import idealized_moist
 import idealized_moist_rad

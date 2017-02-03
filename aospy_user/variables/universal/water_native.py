@@ -12,7 +12,6 @@ precip = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     colormap='BrBG'
 )
 prec_conv = Var(
@@ -25,7 +24,6 @@ prec_conv = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     colormap='BrBG'
 )
 prec_ls = Var(
@@ -37,7 +35,6 @@ prec_ls = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     colormap='BrBG'
 )
 evap = Var(
@@ -50,8 +47,7 @@ evap = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 snow_conv = Var(
     name='snow_conv',
@@ -61,8 +57,7 @@ snow_conv = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 snow_ls = Var(
     name='snow_ls',
@@ -72,8 +67,7 @@ snow_ls = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 soil_liq = Var(
     name='soil_liq',
@@ -83,8 +77,7 @@ soil_liq = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 soil_moisture = Var(
     name='soil_moisture',
@@ -95,8 +88,7 @@ soil_moisture = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 high_cld_amt = Var(
     name='high_cld_amt',
@@ -106,8 +98,7 @@ high_cld_amt = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 low_cld_amt = Var(
     name='low_cld_amt',
@@ -117,8 +108,7 @@ low_cld_amt = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 mid_cld_amt = Var(
     name='mid_cld_amt',
@@ -128,8 +118,7 @@ mid_cld_amt = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 tot_cld_amt = Var(
     name='tot_cld_amt',
@@ -140,8 +129,7 @@ tot_cld_amt = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 cld_amt = Var(
     name='cld_amt',
@@ -152,8 +140,7 @@ cld_amt = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 wvp = Var(
     name='wvp',
@@ -165,6 +152,5 @@ wvp = Var(
     def_vert=False,
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     colormap='Greys'
 )

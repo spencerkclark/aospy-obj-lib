@@ -79,8 +79,8 @@ class CalcSuite(object):
             ('Output data time type', self.dtype_out_time),
             ('Output data vertical type', self.dtype_out_vert),
             ('Vertical levels', self.level),
-            ('Year chunks', self.chunk_len),
             ('Compute this data', self.compute),
+            ('Time offset', self.time_offset),
             ('Print this data', self.print_table)
         )
         print('')
@@ -116,7 +116,7 @@ class CalcSuite(object):
                       'dtype_in_vert',
                       'dtype_out_vert',
                       'verbose',
-                      'chunk_len')
+                      'time_offset')
         attrs = tuple([getattr(self, name) for name in attr_names])
 
         # Each permutation becomes a dictionary, with the keys being the attr

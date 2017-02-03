@@ -14,8 +14,7 @@ umse_vint = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 vmse_vint = Var(
     name='vmse_vint',
@@ -25,8 +24,7 @@ vmse_vint = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 omega_mse_vint = Var(
     name='omega_mse_vint',
@@ -36,8 +34,7 @@ omega_mse_vint = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 umse = Var(
     name='umse',
@@ -47,8 +44,7 @@ umse = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 vmse = Var(
     name='vmse',
@@ -58,8 +54,7 @@ vmse = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 omega_mse = Var(
     name='omega_mse',
@@ -69,8 +64,7 @@ omega_mse = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 
 

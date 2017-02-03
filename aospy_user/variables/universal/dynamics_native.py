@@ -12,8 +12,7 @@ height_half = Var(
     def_time=True,
     def_vert='phalf',
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 height_full = Var(
     name='height_full',
@@ -24,8 +23,7 @@ height_full = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 ucomp = Var(
     name='ucomp',
@@ -36,8 +34,7 @@ ucomp = Var(
     def_time=True,
     def_vert='pfull',
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 u_ref = Var(
     name='u_ref',
@@ -47,8 +44,7 @@ u_ref = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 vcomp = Var(
     name='vcomp',
@@ -59,8 +55,7 @@ vcomp = Var(
     def_time=True,
     def_vert='pfull',
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 v_ref = Var(
     name='v_ref',
@@ -70,8 +65,7 @@ v_ref = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 omega = Var(
     name='omega',
@@ -82,8 +76,7 @@ omega = Var(
     def_time=True,
     def_vert='pfull',
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 vort = Var(
     name='vort',
@@ -94,8 +87,7 @@ vort = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 divg = Var(
     name='divg',
@@ -108,7 +100,6 @@ divg = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     colormap='RdBu'
 )
 pv = Var(
@@ -119,8 +110,7 @@ pv = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 esf = Var(
     name='esf',
@@ -130,6 +120,5 @@ esf = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )

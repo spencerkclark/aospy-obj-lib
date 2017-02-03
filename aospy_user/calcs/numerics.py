@@ -3,7 +3,7 @@ from infinite_diff import FiniteDiff
 from aospy.utils.vertcoord import (d_deta_from_pfull, d_deta_from_phalf, int_dp_g,
                                    pfull_from_ps, to_pfull_from_phalf, to_radians)
 import numpy as np
-import xray
+import xarray as xray
 
 from .. import LAT_STR, LON_STR, PFULL_STR, PLEVEL_STR
 #LAT_STR = 'lat'

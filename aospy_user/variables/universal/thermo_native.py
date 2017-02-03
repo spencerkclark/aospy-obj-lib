@@ -12,7 +12,6 @@ sphum = Var(
     def_vert='pfull',
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     colormap='Greys'
 )
 rh = Var(
@@ -24,8 +23,7 @@ rh = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 rh_ref = Var(
     name='rh_ref',
@@ -35,8 +33,7 @@ rh_ref = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 temp = Var(
     name='temp',
@@ -48,7 +45,6 @@ temp = Var(
     def_vert='pfull',
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     colormap='RdBu_r'
 )
 t_surf = Var(
@@ -60,11 +56,11 @@ t_surf = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 tdt_conv = Var(
     name='tdt_conv',
+    alt_names=('dt_tg_convection',),
     units=units.K_s1,
     domain='atmos',
     description='Convective heating rate.',
@@ -72,7 +68,6 @@ tdt_conv = Var(
     def_vert=True,
     def_lat=True,
     def_lon=True,
-    in_nc_grid=False,
     valid_range=(-20, 20)
 )
 qdt_vdif = Var(
@@ -83,19 +78,18 @@ qdt_vdif = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 tdt_ls = Var(
     name='tdt_ls',
+    alt_names=('dt_tg_condensation',),
     units=units.K_s1,
     domain='atmos',
     description='Large-scale heating rate.',
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 tdt_lw = Var(
     name='tdt_lw',
@@ -105,8 +99,7 @@ tdt_lw = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 tdt_lw_clr = Var(
     name='tdt_lw_clr',
@@ -116,8 +109,7 @@ tdt_lw_clr = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 tdt_sw = Var(
     name='tdt_sw',
@@ -127,8 +119,7 @@ tdt_sw = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 tdt_sw_clr = Var(
     name='tdt_sw_clr',
@@ -138,8 +129,7 @@ tdt_sw_clr = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 tdt_vdif = Var(
     name='tdt_vdif',
@@ -149,8 +139,7 @@ tdt_vdif = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 ice_wat = Var(
     name='ice_wat',
@@ -160,8 +149,7 @@ ice_wat = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 liq_wat = Var(
     name='liq_wat',
@@ -171,8 +159,7 @@ liq_wat = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 mc = Var(
     name='mc',
@@ -182,8 +169,7 @@ mc = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 mc_full = Var(
     name='mc_full',
@@ -193,8 +179,7 @@ mc_full = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 mc_half = Var(
     name='mc_half',
@@ -204,8 +189,7 @@ mc_half = Var(
     def_time=True,
     def_vert=True,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )
 sst = Var(
     name='sst',
@@ -216,6 +200,5 @@ sst = Var(
     def_time=True,
     def_vert=False,
     def_lat=True,
-    def_lon=True,
-    in_nc_grid=False
+    def_lon=True
 )

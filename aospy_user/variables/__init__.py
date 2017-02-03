@@ -31,7 +31,8 @@ from universal.thermo_native import (
 )
 
 from universal.thermo_computed import (
-    dse, mse, mse_b, mse_lower_trop, vert_av_temp
+    dse, mse, mse_b, mse_lower_trop, vert_av_temp, potential_temp,
+    equiv_potential_temp
 )
 
 from universal.water_native import (
