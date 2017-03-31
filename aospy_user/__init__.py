@@ -10,7 +10,5 @@ from . import variables
 from . import runs
 from . import models
 from . import projs
-from . import main
-from .main import MainParams, MainParamsParser, CalcSuite, main
 
 itcz = projs.itcz

@@ -1,12 +1,15 @@
 from aospy.var import Var
 from aospy.constants import r_e
 from aospy_user import calcs, units
-from aospy_user.variables import (flux_lhe, flux_t, swdn_sfc, lwdn_sfc,
-                                  temp, height_full, sphum,
-                                  ucomp, vcomp, condensation_rain,
-                                  convection_rain, ps, dp, pk, bk)
+from ..idealized_moist.energy import flux_lhe, flux_t
+from ..universal.energy_native import swdn_sfc, lwdn_sfc
+from ..universal.thermo_native import sphum, temp
+from ..universal.dynamics_native import height_full, ucomp, vcomp
+from ..idealized_moist.water import condensation_rain, convection_rain
+from ..universal.pressure import ps, dp, pk, bk
 
-netrad_toa_imr = Var(
+
+netrad_toa = Var(
     name='netrad_toa',
     domain='atmos',
     description=('Net radiation at top of atmosphere'),
@@ -17,7 +20,7 @@ netrad_toa_imr = Var(
     units=units.W_m2
 )
 
-vert_int_tdt_rad_imr = Var(
+vert_int_tdt_rad = Var(
     name='vert_int_tdt_rad',
     domain='atmos',
     description=('Vertically integrated heating rate'
@@ -29,7 +32,7 @@ vert_int_tdt_rad_imr = Var(
     units=units.W_m2
 )
 
-vert_int_tdtsw_rad_imr = Var(
+vert_int_tdtsw_rad = Var(
     name='vert_int_tdtsw_rad',
     domain='atmos',
     description=('Vertically integrated heating rate '
@@ -41,7 +44,7 @@ vert_int_tdtsw_rad_imr = Var(
     units=units.W_m2
 )
 
-vert_int_tdtlw_rad_imr = Var(
+vert_int_tdtlw_rad = Var(
     name='vert_int_tdtlw_rad',
     domain='atmos',
     description=('Vertically integrated heating rate '
@@ -53,11 +56,11 @@ vert_int_tdtlw_rad_imr = Var(
     units=units.W_m2
 )
 
-Q_sfc_imr = Var(
-    name='Q_sfc_imr',
+Q_sfc = Var(
+    name='Q_sfc',
     domain='atmos',
     description=('Heat flux at the surface in idealized model.'),
-    variables=(netrad_toa_imr, vert_int_tdt_rad_imr, flux_lhe, flux_t),
+    variables=(netrad_toa, vert_int_tdt_rad, flux_lhe, flux_t),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -66,11 +69,11 @@ Q_sfc_imr = Var(
     units=units.W_m2
 )
 
-Q_diff_imr = Var(
-    name='Q_diff_imr',
+Q_diff = Var(
+    name='Q_diff',
     domain='atmos',
     description=('Net column heating'),
-    variables=(vert_int_tdt_rad_imr, flux_lhe, flux_t),
+    variables=(vert_int_tdt_rad, flux_lhe, flux_t),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -79,11 +82,11 @@ Q_diff_imr = Var(
     units=units.W_m2
 )
 
-swnet_toa_imr = Var(
+swnet_toa = Var(
     name='swnet_toa',
     domain='atmos',
     description=('Net shortwave heating'),
-    variables=(swdn_sfc, vert_int_tdtsw_rad_imr),
+    variables=(swdn_sfc, vert_int_tdtsw_rad),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -92,11 +95,11 @@ swnet_toa_imr = Var(
     units=units.W_m2
 )
 
-olr_imr = Var(
+olr = Var(
     name='olr',
     domain='atmos',
     description=('Outgoing longwave radiation'),
-    variables=(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr),
+    variables=(swdn_sfc, vert_int_tdtsw_rad, netrad_toa),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -105,12 +108,12 @@ olr_imr = Var(
     units=units.W_m2
 )
 
-lwup_sfc_imr = Var(
+lwup_sfc = Var(
     name='lwup_sfc',
     domain='atmos',
     description=('Upward flux of longwave radiation at the surface.'),
-    variables=(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr, lwdn_sfc,
-               vert_int_tdtlw_rad_imr),
+    variables=(swdn_sfc, vert_int_tdtsw_rad, netrad_toa, lwdn_sfc,
+               vert_int_tdtlw_rad),
     def_time=True,
     def_vert=False,
     def_lat=True,

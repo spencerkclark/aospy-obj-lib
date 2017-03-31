@@ -1,8 +1,7 @@
 from aospy import Var
 from aospy_user import calcs, units
-from aospy_user.variables.universal.energy_native import (swdn_sfc, olr,
-                                                          lwdn_sfc, lwup_sfc)
-from aospy_user.variables.idealized_moist.energy import flux_t, flux_lhe
+from ..universal.energy_native import (swdn_sfc, olr, lwdn_sfc, lwup_sfc)
+from .energy import flux_t, flux_lhe
 
 
 # Model native (or self-coded) diagnostics
@@ -69,8 +68,8 @@ omega_mse = Var(
 
 
 # Computed variables
-aht_im = Var(
-    name='aht_im',
+aht = Var(
+    name='aht',
     domain='atmos',
     description=('atmospheric heat transport'),
     variables=(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe),

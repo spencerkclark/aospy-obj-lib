@@ -14,6 +14,7 @@ sphum = Var(
     def_lon=True,
     colormap='Greys'
 )
+
 rh = Var(
     name='rh',
     alt_names=('hur',),
@@ -25,6 +26,7 @@ rh = Var(
     def_lat=True,
     def_lon=True
 )
+
 rh_ref = Var(
     name='rh_ref',
     units=units.unitless,
@@ -35,6 +37,7 @@ rh_ref = Var(
     def_lat=True,
     def_lon=True
 )
+
 temp = Var(
     name='temp',
     alt_names=('ta',),
@@ -47,6 +50,7 @@ temp = Var(
     def_lon=True,
     colormap='RdBu_r'
 )
+
 t_surf = Var(
     name='t_surf',
     alt_names=('tas', 'tmp'),
@@ -58,6 +62,7 @@ t_surf = Var(
     def_lat=True,
     def_lon=True
 )
+
 tdt_conv = Var(
     name='tdt_conv',
     alt_names=('dt_tg_convection',),
@@ -70,6 +75,7 @@ tdt_conv = Var(
     def_lon=True,
     valid_range=(-20, 20)
 )
+
 qdt_vdif = Var(
     name='qdt_vdif',
     units=units.kg_kg1_s1,
@@ -80,6 +86,7 @@ qdt_vdif = Var(
     def_lat=True,
     def_lon=True
 )
+
 tdt_ls = Var(
     name='tdt_ls',
     alt_names=('dt_tg_condensation',),
@@ -91,6 +98,7 @@ tdt_ls = Var(
     def_lat=True,
     def_lon=True
 )
+
 tdt_lw = Var(
     name='tdt_lw',
     units=units.K_s1,
@@ -101,6 +109,7 @@ tdt_lw = Var(
     def_lat=True,
     def_lon=True
 )
+
 tdt_lw_clr = Var(
     name='tdt_lw_clr',
     units=units.K_s1,
@@ -111,6 +120,7 @@ tdt_lw_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 tdt_sw = Var(
     name='tdt_sw',
     units=units.K_s1,
@@ -121,6 +131,7 @@ tdt_sw = Var(
     def_lat=True,
     def_lon=True
 )
+
 tdt_sw_clr = Var(
     name='tdt_sw_clr',
     units=units.K_s1,
@@ -131,6 +142,7 @@ tdt_sw_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 tdt_vdif = Var(
     name='tdt_vdif',
     units=units.K_s1,
@@ -141,6 +153,7 @@ tdt_vdif = Var(
     def_lat=True,
     def_lon=True
 )
+
 ice_wat = Var(
     name='ice_wat',
     units=units.specific_mass,
@@ -151,6 +164,7 @@ ice_wat = Var(
     def_lat=True,
     def_lon=True
 )
+
 liq_wat = Var(
     name='liq_wat',
     units=units.specific_mass,
@@ -161,6 +175,7 @@ liq_wat = Var(
     def_lat=True,
     def_lon=True
 )
+
 mc = Var(
     name='mc',
     units=units.kg_m2_s1_mass,
@@ -171,6 +186,7 @@ mc = Var(
     def_lat=True,
     def_lon=True
 )
+
 mc_full = Var(
     name='mc_full',
     units=units.kg_m2_s1_mass,
@@ -181,6 +197,7 @@ mc_full = Var(
     def_lat=True,
     def_lon=True
 )
+
 mc_half = Var(
     name='mc_half',
     units=units.kg_m2_s1_mass,
@@ -191,6 +208,7 @@ mc_half = Var(
     def_lat=True,
     def_lon=True
 )
+
 sst = Var(
     name='sst',
     alt_names=('ts', 'SST'),

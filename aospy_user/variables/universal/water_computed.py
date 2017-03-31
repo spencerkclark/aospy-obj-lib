@@ -1,6 +1,6 @@
 from aospy.var import Var
 from aospy_user import units, calcs
-from aospy_user.variables.universal.water_native import precip, evap
+from .water_native import precip, evap
 
 
 p_minus_e = Var(

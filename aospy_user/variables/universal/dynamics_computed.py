@@ -1,14 +1,11 @@
 from aospy.var import Var
 from aospy_user import calcs, units
-from aospy_user.variables.universal.pressure import dp, p
-from aospy_user.variables.universal.thermo_native import temp, sphum
-from aospy_user.variables.universal.energy_native import (swdn_toa,
-                                                          swup_toa, olr,
-                                                          lwup_sfc, lwdn_sfc,
-                                                          swup_sfc,
-                                                          swdn_sfc, shflx)
-from aospy_user.variables.universal.water_native import evap, precip
-from aospy_user.variables.universal.dynamics_native import ucomp, vcomp
+from .pressure import dp, p
+from .thermo_native import temp, sphum
+from .energy_native import (swdn_toa, swup_toa, olr, lwup_sfc, lwdn_sfc,
+                            swup_sfc, swdn_sfc, shflx)
+from .water_native import evap, precip
+from .dynamics_native import ucomp, vcomp
 
 # Computed variables
 msf = Var(
@@ -23,6 +20,7 @@ msf = Var(
     func=calcs.universal.dynamics.msf,
     units=units.kg_s1
 )
+
 gz = Var(
     name='gz',
     domain='atmos',
@@ -35,6 +33,7 @@ gz = Var(
     func=calcs.universal.dynamics.gz,
     units=units.J_kg1
 )
+
 aht = Var(
     name='aht',
     domain='atmos',
@@ -48,6 +47,7 @@ aht = Var(
     func=calcs.universal.dynamics.aht,
     units=units.W
 )
+
 vcomp_mb = Var(
     name='vcomp_mb',
     domain='atmos',
@@ -72,6 +72,7 @@ alet = Var(
     func=calcs.universal.dynamics.alet,
     units=units.W
 )
+
 # Continue supporting below?
 gms = Var(
     name='gms',
@@ -85,6 +86,7 @@ gms = Var(
     func=calcs.deprecated.gms,
     units=units.K
 )
+
 msf_at_500_hPa = Var(
     name='msf_500',
     domain='atmos',
@@ -98,6 +100,7 @@ msf_at_500_hPa = Var(
     func=calcs.deprecated.msf_at_500_hPa,
     units=units.kg_s1
 )
+
 mmc_mse_flux = Var(
     name='msef_mmc',
     domain='atmos',
@@ -111,6 +114,7 @@ mmc_mse_flux = Var(
     func=calcs.deprecated.mmc_mse_flux,
     units=units.W
 )
+
 msf_500_zeros = Var(
     name='msf_500_zeros',
     domain='atmos',
@@ -123,6 +127,7 @@ msf_500_zeros = Var(
     func=calcs.deprecated.msf_500_zeros,
     units=units.latlon
 )
+
 dmv_dx = Var(
     name='dmv_dx',
     domain='atmos',
@@ -135,6 +140,7 @@ dmv_dx = Var(
     func=calcs.deprecated.mse_zonal_flux_divg,
     units=units.W
 )
+
 dmv_dy = Var(
     name='dmv_dy',
     domain='atmos',

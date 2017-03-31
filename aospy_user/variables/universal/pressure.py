@@ -13,6 +13,7 @@ p = Var(
     def_lat=True,
     def_lon=True
 )
+
 ps = Var(
     name='ps',
     units=units.Pa,
@@ -23,6 +24,7 @@ ps = Var(
     def_lat=True,
     def_lon=True
 )
+
 bk = Var(
     name='bk',
     units=units.Pa,
@@ -33,6 +35,7 @@ bk = Var(
     def_lat=False,
     def_lon=False
 )
+
 pk = Var(
     name='pk',
     units=units.Pa,
@@ -43,6 +46,7 @@ pk = Var(
     def_lat=False,
     def_lon=False
 )
+
 dp = Var(
     name='dp',
     domain='atmos',
@@ -59,6 +63,7 @@ dp = Var(
     func=calcs.dp,
     units=units.Pa,
 )
+
 dp_sigma = Var(
     name='dp_sigma',
     domain='atmos',
@@ -71,6 +76,7 @@ dp_sigma = Var(
     func=calcs.dp_sigma,
     units=units.Pa
 )
+
 pfull = Var(
     name='pfull',
     domain='atmos',

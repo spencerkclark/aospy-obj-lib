@@ -14,6 +14,7 @@ height_half = Var(
     def_lat=True,
     def_lon=True
 )
+
 height_full = Var(
     name='height_full',
     alt_names=('height',),
@@ -25,6 +26,7 @@ height_full = Var(
     def_lat=True,
     def_lon=True
 )
+
 ucomp = Var(
     name='ucomp',
     alt_names=('ua',),
@@ -36,6 +38,7 @@ ucomp = Var(
     def_lat=True,
     def_lon=True
 )
+
 u_ref = Var(
     name='u_ref',
     units=units.m_s1,
@@ -46,6 +49,7 @@ u_ref = Var(
     def_lat=True,
     def_lon=True
 )
+
 vcomp = Var(
     name='vcomp',
     alt_names=('va',),
@@ -57,6 +61,7 @@ vcomp = Var(
     def_lat=True,
     def_lon=True
 )
+
 v_ref = Var(
     name='v_ref',
     units=units.m_s1,
@@ -67,6 +72,7 @@ v_ref = Var(
     def_lat=True,
     def_lon=True
 )
+
 omega = Var(
     name='omega',
     alt_names=('wap',),
@@ -78,6 +84,7 @@ omega = Var(
     def_lat=True,
     def_lon=True
 )
+
 vort = Var(
     name='vort',
     alt_names=('vor',),
@@ -89,6 +96,7 @@ vort = Var(
     def_lat=True,
     def_lon=True
 )
+
 divg = Var(
     name='divg',
     alt_names=('div',),
@@ -102,6 +110,7 @@ divg = Var(
     def_lon=True,
     colormap='RdBu'
 )
+
 pv = Var(
     name='pv',
     units=units.s1,
@@ -112,6 +121,7 @@ pv = Var(
     def_lat=True,
     def_lon=True
 )
+
 esf = Var(
     name='esf',
     units=units.kg_s1,

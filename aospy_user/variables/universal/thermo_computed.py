@@ -1,8 +1,7 @@
 from aospy.var import Var
 from aospy_user import calcs, units
-from aospy_user.variables.universal.pressure import dp, p
-from aospy_user.variables.universal.thermo_native import (temp,
-                                                          sphum)
+from .pressure import dp, p
+from .thermo_native import temp, sphum
 
 
 # Computed variables
@@ -18,6 +17,7 @@ dse = Var(
     func=calcs.universal.thermo.dse,
     units=units.J_kg1
 )
+
 mse = Var(
     name='mse',
     domain='atmos',
@@ -30,6 +30,7 @@ mse = Var(
     func=calcs.universal.thermo.mse,
     units=units.J_kg1
 )
+
 mse_b = Var(
     name='mse_b',
     domain='atmos',
@@ -42,6 +43,7 @@ mse_b = Var(
     units=units.J_kg1,
     func=calcs.universal.thermo.mse_b
 )
+
 mse_lower_trop = Var(
     name='mse_lower_trop',
     domain='atmos',
@@ -54,6 +56,7 @@ mse_lower_trop = Var(
     units=units.J_kg1,
     func=calcs.universal.thermo.mse_lower_trop
 )
+
 vert_av_temp = Var(
     name='vert_av_temp',
     domain='atmos',

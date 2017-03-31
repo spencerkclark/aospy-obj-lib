@@ -14,6 +14,7 @@ olr = Var(
     def_lat=True,
     def_lon=True
 )
+
 olr_clr = Var(
     name='olr_clr',
     alt_names=('rlutcs',),
@@ -25,6 +26,7 @@ olr_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 lwdn_sfc = Var(
     name='lwdn_sfc',
     alt_names=('rlds', 'lw_down_sfc'),
@@ -37,6 +39,7 @@ lwdn_sfc = Var(
     def_lat=True,
     def_lon=True
 )
+
 lwdn_sfc_clr = Var(
     name='lwdn_sfc_clr',
     alt_names=('rldscs',),
@@ -48,6 +51,7 @@ lwdn_sfc_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 lwup_sfc = Var(
     name='lwup_sfc',
     alt_names=('rlus',),
@@ -59,6 +63,7 @@ lwup_sfc = Var(
     def_lat=True,
     def_lon=True
 )
+
 lwup_sfc_clr = Var(
     name='lwup_sfc_clr',
     alt_names=('rluscs',),
@@ -70,6 +75,7 @@ lwup_sfc_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 swdn_sfc = Var(
     name='swdn_sfc',
     alt_names=('rsds', 'sw_down_sfc'),
@@ -81,6 +87,7 @@ swdn_sfc = Var(
     def_lat=True,
     def_lon=True
 )
+
 swdn_sfc_clr = Var(
     name='swdn_sfc_clr',
     alt_names=('rsdscs',),
@@ -92,6 +99,7 @@ swdn_sfc_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 swup_sfc = Var(
     name='swup_sfc',
     alt_names=('rsus',),
@@ -103,6 +111,7 @@ swup_sfc = Var(
     def_lat=True,
     def_lon=True
 )
+
 swup_sfc_clr = Var(
     name='swup_sfc_clr',
     alt_names=('rsuscs',),
@@ -114,6 +123,7 @@ swup_sfc_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 swdn_toa = Var(
     name='swdn_toa',
     alt_names=('rsdt',),
@@ -125,6 +135,7 @@ swdn_toa = Var(
     def_lat=True,
     def_lon=True
 )
+
 swdn_toa_clr = Var(
     name='swdn_toa_clr',
     alt_names=('rsdtcs',),
@@ -136,6 +147,7 @@ swdn_toa_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 swup_toa = Var(
     name='swup_toa',
     alt_names=('rsut',),
@@ -147,6 +159,7 @@ swup_toa = Var(
     def_lat=True,
     def_lon=True
 )
+
 swup_toa_clr = Var(
     name='swup_toa_clr',
     alt_names=('rsutcs',),
@@ -158,6 +171,7 @@ swup_toa_clr = Var(
     def_lat=True,
     def_lon=True
 )
+
 alb_sfc = Var(
     name='alb_sfc',
     units=units.unitless,
@@ -168,6 +182,7 @@ alb_sfc = Var(
     def_lat=True,
     def_lon=True
 )
+
 shflx = Var(
     name='shflx',
     alt_names=('hfss',),

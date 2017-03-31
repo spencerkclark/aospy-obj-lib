@@ -1,6 +1,8 @@
 from aospy.var import Var
 from aospy_user import calcs, units
-from aospy_user.variables import temp, sphum, height_full
+from ..universal.dynamics_native import height_full
+from ..universal.thermo_native import temp, sphum
+
 
 tdt_rad = Var(
     name='tdt_rad',
@@ -26,8 +28,8 @@ tdt_solar = Var(
     units=units.K_s1
 )
 
-dse_im = Var(
-    name='dse_im',
+dse = Var(
+    name='dse',
     domain='atmos',
     description=('Dry Static Energy'),
     variables=(temp, height_full, sphum),
@@ -39,8 +41,8 @@ dse_im = Var(
     units=units.J_kg1
 )
 
-mse_im = Var(
-    name='mse_im',
+mse = Var(
+    name='mse',
     domain='atmos',
     description=('Moist Static Energy'),
     variables=(temp, height_full, sphum),
@@ -52,8 +54,8 @@ mse_im = Var(
     units=units.J_kg1
 )
 
-mse_stat_im = Var(
-    name='mse_stat_im',
+mse_stat = Var(
+    name='mse_stat',
     domain='atmos',
     description=('Moist Static Energy'),
     variables=(temp, height_full, sphum),

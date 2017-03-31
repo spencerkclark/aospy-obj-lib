@@ -1,16 +1,16 @@
 from aospy import Var
 from aospy_user import calcs, units
-from aospy_user.variables import (vert_int_tdt_rad_imr, flux_t, flux_lhe,
-                                  netrad_toa_imr, condensation_rain,
-                                  convection_rain)
+from ..idealized_moist.water import condensation_rain, convection_rain
+from ..idealized_moist.energy import flux_t, flux_lhe
+from .energy import vert_int_tdt_rad, netrad_toa
 
 
 # Computed variables
-aht_imr = Var(
-    name='aht_imr',
+aht = Var(
+    name='aht',
     domain='atmos',
     description=('atmospheric heat transport'),
-    variables=(vert_int_tdt_rad_imr, flux_lhe, flux_t),
+    variables=(vert_int_tdt_rad, flux_lhe, flux_t),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -19,11 +19,11 @@ aht_imr = Var(
     units=units.W
 )
 
-simple_aht_imr = Var(
-    name='simple_aht_imr',
+simple_aht = Var(
+    name='simple_aht',
     domain='atmos',
     description=('atmospheric heat transport'),
-    variables=(netrad_toa_imr,),
+    variables=(netrad_toa,),
     def_time=True,
     def_vert=False,
     def_lat=True,
@@ -32,8 +32,8 @@ simple_aht_imr = Var(
     units=units.W
 )
 
-alet_imr = Var(
-    name='alet_imr',
+alet = Var(
+    name='alet',
     domain='atmos',
     description=('atmospheric latent energy transport'),
     variables=(condensation_rain, convection_rain, flux_lhe),
@@ -45,8 +45,8 @@ alet_imr = Var(
     units=units.W
 )
 
-alet_cond_imr = Var(
-    name='alet_cond_imr',
+alet_cond = Var(
+    name='alet_cond',
     domain='atmos',
     description=('atmospheric latent energy transport'
                  '-- only condensation_rain'),

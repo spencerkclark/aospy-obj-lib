@@ -1,11 +1,8 @@
 from aospy.var import Var
 from aospy_user import calcs, units
-from aospy_user.variables.universal.energy_native import (swdn_toa,
-                                                          olr, swup_toa,
-                                                          swdn_sfc, lwdn_sfc,
-                                                          swup_sfc, lwup_sfc,
-                                                          shflx)
-from aospy_user.variables.universal.water_native import evap
+from .energy_native import (swdn_toa, olr, swup_toa, swdn_sfc, lwdn_sfc,
+                            swup_sfc, lwup_sfc, shflx)
+from .water_native import evap
 
 
 # Computed variables
@@ -22,6 +19,7 @@ Q_diff = Var(
     func=calcs.universal.energy.Q_diff,
     units=units.W_m2
 )
+
 Q_diff_sw = Var(
     name='Q_diff_sw',
     domain='atmos',
@@ -34,6 +32,7 @@ Q_diff_sw = Var(
     func=calcs.universal.energy.Q_diff_sw,
     units=units.W_m2
 )
+
 Q_diff_lw = Var(
     name='Q_diff_lw',
     domain='atmos',
