@@ -136,7 +136,7 @@ def swnet_toa(swdn_sfc, vert_int_tdtsw_rad_imr):
     Parameters
     ----------
     swdn_sfc : DataArray
-        Net shortwave radiation at the surface (not break from GCM
+        Net shortwave radiation at the surface (note break from GCM
         nomenclature).
     vert_int_tdtsw_rad_imr : DataArray
         Net column heating due to shortwave radiation
@@ -156,7 +156,7 @@ def olr(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr):
     Parameters
     ----------
     swdn_sfc : DataArray
-        Net shortwave radiation at the surface (not break from GCM
+        Net shortwave radiation at the surface (note break from GCM
         nomenclature).
     vert_int_tdtsw_rad_imr : DataArray
         Net column heating due to shortwave radiation
@@ -170,3 +170,32 @@ def olr(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr):
         Outgoing longwave radiation
     """
     return swnet_toa(swdn_sfc, vert_int_tdtsw_rad_imr) - netrad_toa_imr
+
+
+def lwup_sfc(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr, lwdn_sfc,
+             vert_int_tdtlw_rad_imr):
+    """Returns the upward flux of longwave radiation at the surface
+    in the idealized moist full radiation model.
+
+    Parameters
+    ----------
+    swdn_sfc : DataArray
+        Net shortwave radiation at the surface (note break from GCM
+        nomenclature).
+    vert_int_tdtsw_rad_imr : DataArray
+        Net column heating due to shortwave radiation
+    netrad_toa_imr : DataArray
+        Net radiation at top of atmosphere (natively output
+        by model)
+    lwdn_sfc : DataArray
+        Downward flux of longwave radiation at the surface
+    vert_int_tdtlw_rad_imr : DataArray
+        Net column heating due to longwave radiation
+
+    Returns
+    -------
+    lwup_sfc : DataArray
+        Upward flux of radiation at the surface
+    """
+    olr_ = olr(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr)
+    return olr_ + vert_int_tdtlw_rad_imr + lwdn_sfc

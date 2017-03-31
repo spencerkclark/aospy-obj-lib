@@ -1,10 +1,10 @@
 """My library of functions for use in aospy."""
 from aospy.utils.vertcoord import dp_from_ps, to_pascal
 from aospy.internal_names import PFULL_STR
-import universal
-import idealized_moist
-import idealized_moist_rad
-import deprecated
+from . import universal
+from . import idealized_moist
+from . import idealized_moist_rad
+from . import deprecated
 #import sah_mse_budget
 
 def dp(ps, bk, pk, arr):

@@ -1,1 +1,1 @@
-from projects import itcz
+from .projects import itcz

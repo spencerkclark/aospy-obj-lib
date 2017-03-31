@@ -2,13 +2,13 @@
 standard GCM's.
 """
 # Import native variables, then pressure, then the computed variables.
-import dynamics_native
-import energy_native
-import thermo_native
-import water_native
-import pressure
-import dynamics_computed
-import energy_computed
-import thermo_computed
-import water_computed
+from . import dynamics_native
+from . import energy_native
+from . import thermo_native
+from . import water_native
+from . import pressure
+from . import dynamics_computed
+from . import energy_computed
+from . import thermo_computed
+from . import water_computed
 

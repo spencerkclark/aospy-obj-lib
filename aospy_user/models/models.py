@@ -111,6 +111,6 @@ idealized_moist_rad = Model(
           imr.anti_e15_fixed_h2o, imr.anti_t15_fixed_h2o_tropics,
           imr.anti_e15_fixed_h2o_tropics, imr.anti_t15_fixed_h2o_extratropics,
           imr.anti_e15_fixed_h2o_extratropics, imr.control_gray,
-          imr.control_gray_solar],
+          imr.control_gray_solar, imr.control_raw],
     default_runs=[]
 )

@@ -1,1 +1,1 @@
-import energy
+from . import energy

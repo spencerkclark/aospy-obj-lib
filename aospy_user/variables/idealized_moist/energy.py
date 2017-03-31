@@ -93,3 +93,39 @@ Q_diff_lw_im = Var(
     func=calcs.idealized_moist.energy.Q_diff_lw,
     units=units.W_m2
 )
+
+insolation = Var(
+    name='insolation',
+    units=units.W_m2,
+    domain='atmos',
+    description='Raw solar insolation used in model',
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True
+)
+
+net_lw_surf = Var(
+    name='net_lw_surf',
+    units=units.W_m2,
+    domain='atmos',
+    description='Net LW radiation at the surface',
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True
+)
+
+lwup_sfc_im = Var(
+    name='lwup_sfc',
+    domain='atmos',
+    description=('Upward flux of longwave radiation at the surface.'),
+    variables=(net_lw_surf, lwdn_sfc),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.idealized_moist.energy.lwup_sfc,
+    units=units.W_m2
+)
+

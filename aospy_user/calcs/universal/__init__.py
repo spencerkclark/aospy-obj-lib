@@ -1,4 +1,4 @@
-import thermo
-import water
-import dynamics
-import energy
+from . import thermo
+from . import water
+from . import dynamics
+from . import energy

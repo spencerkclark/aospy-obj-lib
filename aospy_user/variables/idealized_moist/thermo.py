@@ -4,7 +4,7 @@ from aospy_user.variables import temp, sphum, height_full
 
 tdt_rad = Var(
     name='tdt_rad',
-    alt_names=('allradp',),
+    alt_names=('allradp', 'dt_tg_rad'),
     domain='atmos',
     description=('Heating rate due to radiation'),
     def_time=True,

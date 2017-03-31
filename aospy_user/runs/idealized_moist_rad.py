@@ -707,7 +707,8 @@ control_gray = Run(
     default_start_date=datetime(3, 1, 1),
     default_end_date=datetime(6, 12, 31),
     data_loader=DictDataLoader(file_map('control_gray',
-                               fre_stem='imr_skc_develop'))
+                               fre_stem='imr_skc_develop',
+                               iteration='5'))
 )
 
 control_gray_solar = Run(
@@ -721,5 +722,18 @@ control_gray_solar = Run(
     default_end_date=datetime(6, 12, 31),
     data_loader=DictDataLoader(file_map('control_gray_solar',
                                fre_stem='imr_skc_develop',
+                               iteration='7'))
+)
+
+control_raw = Run(
+    name='control_raw',
+    description=(
+        'Case with as few code modifications as possible. '
+        'This is meant as a test on the swdn_toa diagnostic.'
+    ),
+    default_start_date=datetime(3, 1, 1),
+    default_end_date=datetime(6, 12, 31),
+    data_loader=DictDataLoader(file_map('control',
+                               fre_stem='imr_skc_working_base',
                                iteration='2'))
 )

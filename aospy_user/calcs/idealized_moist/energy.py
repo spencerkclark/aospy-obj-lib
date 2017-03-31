@@ -177,3 +177,22 @@ def aht(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe):
     """
     Q_diff_ = Q_diff(swdn_sfc, olr, lwdn_sfc, lwup_sfc, flux_t, flux_lhe)
     return skcint.meridional_integral(Q_diff_)
+
+
+def lwup_sfc(net_lw_sfc, lwdn_sfc):
+    """Returns the upward flux of longwave radiation at the surface in the
+    idealized moist model with gray radiation.
+
+    Parameters
+    ----------
+    net_lw_sfc : DataArray
+        Net longwave radiation at the surface
+    lwdn_sfc : DataArray
+        Downward flux of longwave radiation at the surface
+
+    Returns
+    -------
+    lwup_sfc : DataArray
+        Upward flux of longwave radiation at the surface
+    """
+    return net_lw_sfc + lwdn_sfc

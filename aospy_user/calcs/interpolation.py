@@ -13,7 +13,7 @@ def sorted_coords(da):
     order = {coord:
              da.reset_coords(drop=True).get_axis_num(coord)
              for coord in da.reset_coords(drop=True).coords}
-    return zip(*sorted(order.items(), key=lambda (k, v): v))[0]
+    return zip(*sorted(order.items(), key=lambda k, v: v))[0]
 
 
 def replace_dim(da, dim, values):

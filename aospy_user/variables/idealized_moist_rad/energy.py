@@ -1,7 +1,7 @@
 from aospy.var import Var
 from aospy.constants import r_e
 from aospy_user import calcs, units
-from aospy_user.variables import (flux_lhe, flux_t, swdn_sfc,
+from aospy_user.variables import (flux_lhe, flux_t, swdn_sfc, lwdn_sfc,
                                   temp, height_full, sphum,
                                   ucomp, vcomp, condensation_rain,
                                   convection_rain, ps, dp, pk, bk)
@@ -23,7 +23,7 @@ vert_int_tdt_rad_imr = Var(
     description=('Vertically integrated heating rate'
                  ' due to all radiation'),
     def_time=True,
-    def_vert=True,
+    def_vert=False,
     def_lat=True,
     def_lon=True,
     units=units.W_m2
@@ -35,7 +35,7 @@ vert_int_tdtsw_rad_imr = Var(
     description=('Vertically integrated heating rate '
                  'due to shortwave radiation'),
     def_time=True,
-    def_vert=True,
+    def_vert=False,
     def_lat=True,
     def_lon=True,
     units=units.W_m2
@@ -47,7 +47,7 @@ vert_int_tdtlw_rad_imr = Var(
     description=('Vertically integrated heating rate '
                  'due to longwave radiation'),
     def_time=True,
-    def_vert=True,
+    def_vert=False,
     def_lat=True,
     def_lon=True,
     units=units.W_m2
@@ -104,6 +104,60 @@ olr_imr = Var(
     func=calcs.idealized_moist_rad.energy.olr,
     units=units.W_m2
 )
+
+lwup_sfc_imr = Var(
+    name='lwup_sfc',
+    domain='atmos',
+    description=('Upward flux of longwave radiation at the surface.'),
+    variables=(swdn_sfc, vert_int_tdtsw_rad_imr, netrad_toa_imr, lwdn_sfc,
+               vert_int_tdtlw_rad_imr),
+    def_time=True,
+    def_vert=False,
+    def_lat=True,
+    def_lon=True,
+    func=calcs.idealized_moist_rad.energy.lwup_sfc,
+    units=units.W_m2
+)
+
+# Diagnostics from radiation module itself.  Not valid.
+# olr_diag_imr = Var(
+#     name='olr_diag',
+#     alt_names=('olr',),
+#     domain='atmos',
+#     description=('Outgoing longwave radiation diagnostic '
+#                  'I am wary of this diagnostic and would like to test it out'),
+#     def_time=True,
+#     def_vert=False,
+#     def_lat=True,
+#     def_lon=True,
+#     units=units.W_m2
+# )
+
+# lwdn_sfc_imr = Var(
+#     name='lwdn_sfc_diag',
+#     alt_names=('lwdn_sfc',),
+#     domain='atmos',
+#     description=('LW down surface diagnostic '
+#                  'I am wary of this diagnostic and would like to test it out'),
+#     def_time=True,
+#     def_vert=False,
+#     def_lat=True,
+#     def_lon=True,
+#     units=units.W_m2
+# )
+
+# lwup_sfc_imr = Var(
+#     name='lwup_sfc_diag',
+#     alt_names=('lwup_sfc',),
+#     domain='atmos',
+#     description=('LW up surface diagnostic '
+#                  'I am wary of this diagnostic and would like to test it out'),
+#     def_time=True,
+#     def_vert=False,
+#     def_lat=True,
+#     def_lon=True,
+#     units=units.W_m2
+# )
 
 # SAH MSE budget variables
 # energy_column_divg_adj_eddy = Var(
